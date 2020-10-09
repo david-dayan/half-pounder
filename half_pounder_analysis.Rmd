@@ -1160,7 +1160,7 @@ First we need to get phased genotypic data in order to identify haplotypes.
 
 We will use fastPHASE. First lets get data in the fastphase format
 
-```{r, eval = FALSE}
+```{r}
 # the fast phase format's genotype data for an individual is expressed on two rows with each row representing an unphased haploid genotype. There is also some metadata added into header rows. the main gt matrix  is very similar to the structure format so we'll use the same approach to reformat the data as we used to convert from genind to structure
 
 chr28_genind <- genind_2.0[loc=run_timing_loci_names]
@@ -1247,15 +1247,20 @@ There are 2 unique haplotypes in summer sample, 9 in winter, 44 in fall and 73 i
 
 We constructed a haplotype network using the minimum spanning approach in Popart v1.7 (also tried to use pegas, but data import and conversion kept unphasing the data or and scrambling the sample ids across the different haplotypes)
 
-Below is the minimum spanning network of the 84 different haplotypes among greb1l region SNPS inferred using fastphase and popart (msn)
+Below is the minimum spanning network of the 84 different haplotypes among greb1l region SNPS inferred using fastphase and popart (msn). Log in code chunk below
 
 ```{r}
 knitr::include_graphics('phasing/phased_genos2.phylip.svg')
+# log
+
+# this network was produced outside of r using popart 1.7. briefly, raw phased genotypes were converted to a phylip format (./phasing/phased_genos2.phylip) and run type was formatted as the popart trait data format (see ./phasing/traits2.txt), then we imported both, set the colors according to the viridis pallete used throughout the notebook, and ran the minimum spanning network algorithm to infer a graph/network
 ```
 
 
 
 ```{r, eval = FALSE}
+### DID NOT USE THIS ###
+
 # didn't use any of this because row ids and haplotype assignments keep getting scrambled and producing misleading results
 
 phased_loci <- read.loci("phasing/phased_genos_run.txt", header = FALSE, col.pop = 1, col.loci = 2:15)
@@ -1311,6 +1316,7 @@ legend(50,50,colnames(countHap()), col=rainbow(ncol(countHap())), pch=20)
 
 ## haplotype plots
 
+Here we make a couple rough plots to see if the haplotypes make sense. 
 ```{r, message=FALSE, warning=FALSE}
 phased_genos <- read_tsv("phasing/phased_genos_run.txt")
 
@@ -1322,7 +1328,7 @@ phased_genos %>%
   count(Chr28_11667578, Omy_GREB1_09, Chr28_11607954, Omy_GREB1_05, Chr28_11625241, Chr28_11632591, Chr28_11658853, `Omy_RAD47080-54`, `Omy_RAD15709-53`, Chr28_11671116, Chr28_11676622, Chr28_11683204, Chr28_11773194, Chr28_11702210) %>%
   slice(which.max(n))
 
-#convert to polarized counts
+#convert to polarized counts, just did this manually because there are only 14 of them and it was faster (sorry for the hardcoding later David...)
 phased_genos <- phased_genos %>%
   mutate(Chr28_11667578 = if_else(Chr28_11667578 == "C", 1, 0)) %>%
   mutate(Omy_GREB1_09 = if_else(Omy_GREB1_09 == "G", 1, 0)) %>%
@@ -1356,28 +1362,36 @@ c = pheatmap(fall_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, ma
 d = pheatmap(halfpounder_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "halfpounder")
 
 #now without the uninformative markers (i.e. only keep diagnostic + greb05)
+#skipped this and made better figures in the next code chunk
 
-phased_genos <- phased_genos %>%
- select(-one_of(c("Chr28_11607954","Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194")))
-
-winter_pac <- filter(phased_genos, run == "Winter")
-summer_pac <- filter(phased_genos, run == "Summer")
-fall_pac <- filter(phased_genos, run == "fall")
-halfpounder_pac <- filter(phased_genos, run == "halfpounder")
-
-a = pheatmap(winter_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "winter")
-#b = pheatmap(summer_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "summer")
-c = pheatmap(fall_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "fall")
-d = pheatmap(halfpounder_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "halfpounder")
+# 
+# phased_genos <- phased_genos %>%
+#  select(-one_of(c("Chr28_11607954","Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194")))
+# 
+# winter_pac <- filter(phased_genos, run == "Winter")
+# summer_pac <- filter(phased_genos, run == "Summer")
+# fall_pac <- filter(phased_genos, run == "fall")
+# halfpounder_pac <- filter(phased_genos, run == "halfpounder")
+# 
+# #note that b won't run now because there is no variation
+# a = pheatmap(winter_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "winter")
+# #b = pheatmap(summer_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "summer")
+# c = pheatmap(fall_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "fall")
+# d = pheatmap(halfpounder_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "halfpounder")
 
 ```
 
 
 Next let's make some publication quality figures that more clearly express what is going on here. Goals: separate run types, within fall and half pounders separate into assignments groups, so that we can examine what types of haplotypes contribute to each, also within each plot make sure it is clustered 
 
+Plot below shows indiviudal haplotypes (from only informative loci) in the greb1L/rock1 region, haplotypes (rows) are hierarchically clustered, individual snps contributing to haplotypes (columns) are in genomic order, color is polarized so early summer is purple and winter is yellow. 
+```{r fig1, fig.height = 20, fig.width = 8, message=FALSE, warning=FALSE}
+#prepackaged heatmap tools are unlikely to work well given all the weird things we want to do, so lets just build our own ggplot output group by group (winter + summer + 3 each of fall and halfpounder)
 
-```{r}
-#prepackaged heatmap tools are unlikely to work well given all the weird things we want to do, so lets just build our own ggplot output
+#remove uninformative snps
+phased_genos <- phased_genos %>%
+  select(-one_of(c("Chr28_11607954","Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194")))
+
 
 #get assignment results
 
@@ -1436,7 +1450,7 @@ dendro_halfpounder_w <- as.dendrogram(hclust(d = dist(halfpounder_w[,-c(1,2,13)]
 dendro_halfpounder_s <- as.dendrogram(hclust(d = dist(halfpounder_s[,-c(1,2,13)])))
 dendro_halfpounder_u <- as.dendrogram(hclust(d = dist(halfpounder_u[,-c(1,2,13)])))
 
-#reorder into dendro orders
+#add row ids for ordering later
 winter_pac <- rowid_to_column(winter_pac, "row_id")
 summer_pac <- rowid_to_column(summer_pac, "row_id")
 fall_w <- rowid_to_column(fall_w, "row_id")
@@ -1446,8 +1460,10 @@ halfpounder_w <- rowid_to_column(halfpounder_w, "row_id")
 halfpounder_s <- rowid_to_column(halfpounder_s, "row_id")
 halfpounder_u <- rowid_to_column(halfpounder_u, "row_id")
 
+#############
+# convert to long format, retain dendrogram order and snp order
+##############
 
-# convert to long format, with dendrogram order
 long_winter <- winter_pac %>%
   pivot_longer(cols = !(c("run", "sample", "row_id")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(winter_pac$row_id[order.dendrogram(dendro_winter)]), ordered = TRUE)) %>%
@@ -1488,12 +1504,15 @@ long_half_s <- halfpounder_s %>%
   mutate(row_id = factor(row_id, levels=unique(halfpounder_s$row_id[order.dendrogram(dendro_halfpounder_s)]), ordered = TRUE)) %>%
   mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
+############
 #build heatmaps
+############
+
 heatmap_w <- ggplot(data = filter(long_winter), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Winter")
+  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Winter\n ")
 
 heatmap_s <- ggplot(data = filter(long_summer), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+theme_classic()+scale_fill_gradient(low = "#440154FF", high = "#440154FF")+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Early-Summer")
+  geom_tile(aes(fill = allele_count))+theme_classic()+scale_fill_gradient(low = "#440154FF", high = "#440154FF")+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Early-Summer\n ")
 
 heatmap_fw <- ggplot(data = filter(long_fall_w), aes(x = snp, y = row_id)) +
   geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Late-Summer\nWinter Assigned")
@@ -1515,20 +1534,28 @@ heatmap_hu <- ggplot(data = filter(long_half_u), aes(x = snp, y = row_id)) +
 
 
 #make the final plot
-require(grid)
-grid.newpage()
-print(heatmap_hu, vp = viewport(x = 0.4, y = 0.5, width = 0.8, height = 1.0))
-print(ggdendrogram(data = dendro_halfpounder_u, rotate = TRUE, labels = FALSE, leaf_labels = FALSE), vp = viewport(x = 0.90, y = 0.60, width = 0.2, height = 0.75))
+require(gridExtra)
+grid.arrange(heatmap_s, heatmap_w, heatmap_fs, heatmap_fw, heatmap_fu, heatmap_hs, heatmap_hw, heatmap_hu,  ncol = 1, heights = c(3,3,3,3,3,3,3,7), clip = FALSE)
 
 
 
 ```
 
+## haplotype network 2
+
+Let's also build a haplotype network only for the informative markers.
+
+This involves removing the uninformative markers from the .phylip file and running popart again (See above)
+
+```{r}
+#ran popart on phased_genos3.phylip and traits2.txt
+knitr::include_graphics('phasing/phased_genos3.phylip.svg')
+```
 
 
 ## summary
 
-The density of markers in greb1L/rock1 region in our GTseq dataset allows us to identify characteristic winter and early-summer run haplotypes from our samples. if we focus on only the sites that vary strongly between winter and summer runs, there is a single summer haplotype (note there are multiple haps within this group when considering all sites, not just the diagnostic + heavily weighted ones), and two haplotypes within winter run. 
+The density of markers in greb1L/rock1 region in our GTseq dataset allows us to identify characteristic winter and early-summer run haplotypes from our samples. if we focus on only the sites that vary strongly between winter and summer runs, there is a single summer haplotype (note there are multiple haps within this group when considering all sites, not just the diagnostic + heavily weighted ones), and a handful (5?) haplotypes within winter run. 
 
 summer and winter assigned halfpounder and fall run fish possess largely winter and summer run haplotypes. unassigned halfpounders and fall run fish also possess 1 copy each of winter and summer run haplotypes, suggesting many unassigned fish are first generation hybrids between winter and summer runs, however, there are also many highly recombined haplotypes among the unassigned halfpounders and fall run fish. evidence of recombination within the greb1L/rock1 region haplotypes suggests gene flow between winter and summer run fish occurs beyond first generation hybrids. however we did not observe any recombined greb1L/rock1 region haplotypes within our sample of winter and summer run fish. 
 
