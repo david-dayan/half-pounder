@@ -24,6 +24,7 @@ require(genepop)
 require(graph4lg)
 require(knitr)
 require(pegas)
+require(cowplot)
 ```
 
 
@@ -164,6 +165,16 @@ ggplot(data=marker_divs[marker_divs$neutral=="adaptive",])+geom_boxplot(aes(x=ru
 
 
 ggplot(data=marker_divs[marker_divs$run_timing_marker=="run",])+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d()+theme_classic()+ggtitle("run-timing markers")
+
+#publication plot fig. 1
+#ggplot(data=drop_na(marker_divs[marker_divs$run_timing_marker=="run",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
+
+#publication plot suppl fig. 1
+# a <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="neutral",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme(legend.position = "none")
+# 
+# b <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="adaptive",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+ylim(0,0.68)
+# 
+# plot_grid(a,b, rel_widths = c(0.83,1), labels = c("(a)", "(b)"))
 
 ```
 
@@ -573,7 +584,7 @@ plot_data <- k5 %>%
 
 d <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
   geom_col(width=1.0) +
-  facet_grid(~pop, scales = 'free', space = 'free', switch = "x") +
+  facet_grid(~pop, scales = 'free', space = 'free', switch = "x", labeller = labeller( pop =  c("fall" ="Late-Summer",  "half"= "Half-Pounder", "summer" =  "Early-Summer", "winter" =  "Winter"))) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(expand = expand_scale(add = 1)) +
   theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white")) +
@@ -648,7 +659,7 @@ plot_data <- k5 %>%
 
 d <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
   geom_col(width=1.0) +
-  facet_grid(~pop, scales = 'free', space = 'free', switch = "x") +
+  facet_grid(~pop, scales = 'free', space = 'free', switch = "x", labeller = labeller( pop =  c("fall" ="Late-Summer",  "half"= "Half-Pounder", "summer" =  "Early-Summer", "winter" =  "Winter"))) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(expand = expand_scale(add = 1)) +
   theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white")) +
@@ -743,7 +754,7 @@ clusts <- find.clusters(genind_2.0, n.pca = 330, n.clust = 4)
 kable(table(pop(genind_2.0), clusts$grp), caption = "a priori population vs genetic cluster" )
 ```
 
-The model fit is best at k=6, however, only minor improvements in fit are beyond k=4. BIC tends to decrease until best fit only in a perfect island model, in practice, best K is often found at the lowest K that is a substantial improvement from the last. Here we use k=4, but when other k were used, generally the same result: Never any overlap between winter and summer run fish, fall and halfpounders always distributed among the 4 groups.  
+The model fit is best at k=5, however, only minor improvements in fit are beyond k=4. BIC tends to decrease until best fit only in a perfect island model, in practice, best K is often found at the lowest K that is a substantial improvement from the last. Here we use k=4, but when other k were used, generally the same result: Never any overlap between winter and summer run fish, fall and halfpounders always distributed among the 4 groups.  
 
 This result fits with our previous findings, there is structure and high diversity within fall and halfpounders (see heterozygosity section) and substantial overlap between fall-halfpounders and both winter and summer fish, but not between winter and summer fish. 
 
@@ -770,12 +781,16 @@ ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=grp))+scale_color_viri
 marker_loadings1 <- loadingplot(dapc_full_denovo$var.contr, axis=1,thres=.005, lab.jitter=1, main = "DA axis 1 loading plot")
 markers1 <- unique(substr(names(marker_loadings1$var.values),1,nchar(names(marker_loadings1$var.values))-2))
 
-marker_loadings2 <- loadingplot(dapc_full_denovo$var.contr, axis=2,thres=.005, lab.jitter=1, main = "DA axis 2 loading plot")
+marker_loadings2 <- loadingplot(dapc_full_denovo$var.contr, axis=2,thres=.02, lab.jitter=1, main = "DA axis 2 loading plot")
 markers2 <- unique(substr(names(marker_loadings2$var.values),1,nchar(names(marker_loadings2$var.values))-2))
 
 kable(marker_mapping2 %>%
-  filter(marker %in% markers1 | marker %in% markers2 ) %>%
+  filter(marker %in% markers1 ) %>%
   select(marker, `Presumed Type`), caption = "markers heavily loaded into first discriminant axis")
+
+kable(marker_mapping2 %>%
+  filter(marker %in% markers2 ) %>%
+  select(marker, `Presumed Type`), caption = "markers heavily loaded into second discriminant axis")
 ```
 
 As suspected, given the the fact that fall and halfpounder fish do not fall into a single genetic cluster, de novo assigned genetic cluters do not do a great job of differentiating among a priori assigned run-timing groups. When breaking the fish into four groups these groups are mostly defined by covariation at ~20 markers including run timing markers, neutral markers, and residency markers. Note that the loadings for the run-timing markers are ~2 fold greater than other markers included in the table above and that this cutoff is arbitrary.
@@ -812,7 +827,7 @@ scatter(dapc_full_apriori)
 marker_loadings1 <- loadingplot(dapc_full_apriori$var.contr, axis=1,thres=.01, lab.jitter=1, main = "laoding plot for DA 1")
 markers1 <- unique(substr(names(marker_loadings1$var.values),1,nchar(names(marker_loadings1$var.values))-2))
 
-marker_loadings2 <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.005, lab.jitter=1, main = "laoding plot for DA 2")
+marker_loadings2 <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.006, lab.jitter=1, main = "laoding plot for DA 2")
 markers2 <- unique(substr(names(marker_loadings2$var.values),1,nchar(names(marker_loadings2$var.values))-2))
 
 kable(marker_mapping2 %>%
@@ -821,7 +836,7 @@ kable(marker_mapping2 %>%
 
 kable(marker_mapping2 %>%
   filter(marker %in% markers2 ) %>%
-  select(marker, `Presumed Type`), caption = "Markers that load strongly onto the second DA")
+  select(marker, `Presumed Type`, chr, start), caption = "Markers that load strongly onto the second DA")
 ```
 
 
@@ -1121,7 +1136,66 @@ d = pheatmap(halfpounder_pac[,-15], cluster_cols = FALSE, show_rownames = FALSE,
 ```
 
 
+# Omy05 Markers
 
+The second DA in the a priori DAPC captures less among group variation than the first, however, it is oriented along a large axis of genetic variation within both the fall run and halfpounders. Part of this axis is driven by snps with known association with residency vs anadromy. Let's explore this briefly:
+
+First let's take a look at the allele frequencies at residency vs anadromy alleles on chromosome 5
+```{r}
+residency_loci_names <- marker_mapping %>%
+  filter(chr == "5" | CRITFC_chromosome == "5") %>%
+  filter(str_detect(`Presumed Type`, 'residency|Residency')) %>%
+  select(marker)
+
+residency_loci_names <- residency_loci_names$marker
+
+#one of these is not in e final dataset, remove
+residency_loci_names <- residency_loci_names[-6]
+
+# get summary info
+residency_counts <- allele.dist(genind_2.0[loc=residency_loci_names], mk.figures = FALSE)$count
+#make into a dataframe
+residency_counts <- as.data.frame(do.call(rbind, residency_counts))
+colnames(residency_counts) <- c("fall_count", "half_count", "summer_count", "winter_count")
+residency_counts$sum <- rowSums(residency_counts, na.rm = TRUE)
+
+residency_freqs <- allele.dist(genind_2.0[loc=residency_loci_names], mk.figures = FALSE)$frequency
+#make into a dataframe
+residency_freqs <- as.data.frame(do.call(rbind, residency_freqs))
+
+residency_freqs <- as.data.frame(cbind(residency_freqs, residency_counts))
+
+##### get only minor allele
+#then put the marker names in the same order as the allele.dist (exlude the missing marker first)
+residency_freqs$marker <- rep(residency_loci_names[order(residency_loci_names)], each = 2)
+#now group by marker and keep the minor allele, then convert counts to 
+residency_maf <- residency_freqs %>%
+  group_by(marker) %>%
+  slice_min(sum) %>%
+  replace(., is.na(.), 0)
+
+#plot as a heatmap
+col_pal<- colorRampPalette(c("red", "white", "blue"))(256)
+tmat <- t(as.matrix(residency_maf[,1:4]))
+colnames(tmat) <- residency_maf$marker
+pheatmap(tmat)
+```
+
+Fall and winter fish vary (somewhat: p = 0.3 vs 0.6) at these residency alleles, with summer and halfpounder intermediate. 
+
+Let's look at allele frequency variance at these alleles as well:
+```{r}
+res_divs <- filter(marker_divs, marker %in% residency_loci_names)
+res_divs <- pivot_wider(res_divs, names_from = obs_exp, values_from = H)
+
+ggplot(data=res_divs)+geom_point(aes(He, Ho, color = run), size = 3, alpha = 0.8)+scale_color_viridis_d()+theme_classic()+geom_abline(aes(slope =1, intercept = 0))+xlim(0,0.5)+ylim(0,0.5)
+```
+
+So variation is high within all the runs (least so at fall run), with expected heterozygosity all the way near 0.5. Interestingly there is a dearth of heterozygotes in all but summer run, however, this is significant only for halfpounder where it is the strongest. This pattern suggests that there is some structuring with the halfpounders and to a lesser extent fall run (but not summer and winter run fish), with reduced interbreeding between individuals expressing alternative residency alleles. interpreting the differences across populations suggests there's varying degrees of introgression between anadromous and resident fish across the run types. this may be explained by the temporal and spatial variation in spawning between run types. 
+
+also something to think about here is that there is an observed tendency of hatchery released smolts to residualize over the summer, winter fish are graded (i.e. precocially mature males are not released) so it is likely to be the summer hatchery fish contributing the residuals.
+
+also of note here is that our winter sample includes both hatchery and natural origin fihs, while our other samples contain only natural origin, so the pattern here could be due to hatchery alleles.
 
 # LD
 
@@ -1137,13 +1211,63 @@ chr28_genind <- genind_2.0[loc = run_timing_loci_names]
 
 #this command is breaking when running on the subset datasets (no variance to do the calcs on), lets settle on poppr's tools for now (eventually will need a better LD estimate)
 
-poppr::pair.ia(chr28_genind[pop = c("Summer", "Winter")], limits = c(-0.1, 1.1))
-poppr::pair.ia(chr28_genind[pop = c("fall", "halfpounder")], limits = c(-0.1, 1.1))
+invisible(ldr <- poppr::pair.ia(chr28_genind[pop = c("Summer", "Winter")], limits = c(-0.1, 1.1)))
+invisible(ldr_f <- poppr::pair.ia(chr28_genind[pop = c("fall", "halfpounder")], limits = c(-0.1, 1.1)))
 
+# reorder winter / summer
+ldr_f <- rownames_to_column(as.data.frame(ldr_f), var = "rowid")
+ldr_f <- ldr_f %>%
+  separate(rowid, into = c("snp1", "snp2"), sep = ":")
+
+ldr_f$snp1 <- factor(ldr_f$snp1, levels = marker_pos$marker[order(marker_pos$CRITFC_SNP_pos_genome)], ordered = TRUE)
+ldr_f$snp2 <- factor(ldr_f$snp2, levels = marker_pos$marker[order(marker_pos$CRITFC_SNP_pos_genome)], ordered = TRUE)
+
+ldr_f_opposite_tri <- ldr_f
+colnames(ldr_f_opposite_tri) <- c("snp2", "snp1", "rbarD")
+ldr_f <- ldr_f %>%
+  bind_rows(ldr_f_opposite_tri)
+
+ggplot(ldr_f)+geom_tile(aes(snp1, snp2, fill=rbarD))+theme_classic()+theme(axis.text.x = element_text(angle = 90))+scale_fill_gradient(low = "#bdc3c7", high= "#2c3e50")
+
+# reorder fall_halfpounder
+ldr <- rownames_to_column(as.data.frame(ldr), var = "rowid")
+ldr <- ldr %>%
+  separate(rowid, into = c("snp1", "snp2"), sep = ":")
+
+ldr$snp1 <- factor(ldr$snp1, levels = marker_pos$marker[order(marker_pos$CRITFC_SNP_pos_genome)], ordered = TRUE)
+ldr$snp2 <- factor(ldr$snp2, levels = marker_pos$marker[order(marker_pos$CRITFC_SNP_pos_genome)], ordered = TRUE)
+
+ldr_opposite_tri <- ldr
+colnames(ldr_opposite_tri) <- c("snp2", "snp1", "rbarD")
+ldr <- ldr %>%
+  bind_rows(ldr_opposite_tri)
+
+ggplot(ldr)+geom_tile(aes(snp1, snp2, fill=rbarD))+theme_classic()+theme(axis.text.x = element_text(angle = 90))+scale_fill_gradient(low = "#bdc3c7", high= "#2c3e50")
 
 ```
 
-Yes, LD is weaker among fall and half pounder than winter/summer
+now let's do the same but skip the uninformative markers for better visualization
+```{r}
+uninf_markers <- c("Chr28_11607954","Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194")
+
+ldr <- ldr %>%
+  filter(!(snp1 %in%  uninf_markers)) %>%
+  filter(!(snp2 %in%  uninf_markers))
+
+
+ggplot(ldr)+geom_tile(aes(snp1, snp2, fill=rbarD))+theme_classic()+theme(axis.text.x = element_text(angle = 90))+scale_fill_gradient(low = "#FFFFFF", high= "#2c3e50", limits = c(0,1))
+
+ldr_f <- ldr_f %>%
+  filter(!(snp1 %in%  uninf_markers)) %>%
+  filter(!(snp2 %in%  uninf_markers))
+
+ggplot(ldr_f)+geom_tile(aes(snp1, snp2, fill=rbarD))+theme_classic()+theme(axis.text.x = element_text(angle = 90))+scale_fill_gradient(low = "#FFFFFF", high= "#2c3e50", limits = c(0,1))
+
+```
+
+Yes, LD is weaker among fall and half pounder than winter/summer.
+
+LD is also about equally strong over the entire length of the region, there are no clear ld blocks within the region.
 
 # haplotypes
 
@@ -1547,6 +1671,22 @@ Let's also build a haplotype network only for the informative markers.
 
 This involves removing the uninformative markers from the .phylip file and running popart again (See above)
 
+Let's also collect the same stats again
+
+```{r, message = FALSE, warning=FALSE}
+ph_geno <- read_tsv("phasing/phased_genos3_r.txt")
+
+ph_geno <- genos_2.2 %>%
+  select(Sample, run) %>%
+  left_join(ph_geno, by = c("Sample" = "ind"))
+
+ph_geno %>%
+  group_by(run) %>% 
+  summarise(count = n_distinct(hap))
+
+```
+
+
 ```{r}
 #ran popart on phased_genos3.phylip and traits2.txt
 knitr::include_graphics('phasing/phased_genos3.phylip.svg')
@@ -1589,7 +1729,7 @@ Inference of structure within both fall and half-pounder fish comes from several
 
 Indeed, when we attempt to classify both half-pounder and late-summer run fish as winter-like or early-summer like using a linear combination of alleles that strongly discriminate winter and early summer run fish (discriminant axis 1), we observe a group of strongly winter-like fish, a second group of intermeditate fish and a small number of early-summer-like fish. Direct examination of genotypes at known-run timing markers reveals the same pattern.   _One caveat here that might be worth including in anything published for a wider audience: Methods like the DAPC, and even the association analyses that are the basis of the annotations for our panel, operate under an assumption of additivity. Without a clear, mechaninistic understanding of the g -> p map for run timing, we can not predict run-timing phenotypes from such heterozygous and discordant genotypes at run-timing associated markers. Variation in effect size among loci, dominance, epistasis, the effects of un-genotyped causal loci and plasticity all may be at play here._
 
-_add discussion about diagnostic vs highly weighted in DAPC and about difference in phenotypes used for annotation (CRITFC annotations are for interior pops and the phenotype is arrival timing on spawning grounds, whereas prince et al annotations are for freshwater entry)_
+_add discussion about diagnostic vs highly weighted in DAPC and about difference in phenotypes used for annotation (CRITFC annotations are for interior pops and the phenotype is arrival timing on spawning grounds, whereas prince et al annotations are for freshwater entry) compare our resutls with those from the latest critfc paper and the coastal lineages_
 
 _also add discussion about how some markers with known annotations are not diagnostic or not even informative, and this could have somehting to do with divergence in the summer haplotype as it spread (assuming a single origin)_
 
@@ -1694,7 +1834,7 @@ also look within halfpounders
 
 ## other
 
-### interannual variation__  
+### interannual variation  
 
 let's check to make sure there are no interesting patterns / structure among halfpounder years
 
@@ -1712,6 +1852,8 @@ scatter.dapc(half_dapc_year)
 ```
 
 Even with DAPC, very little structure year to year in halfpounders.
+
+
 
 ### data export  
 
