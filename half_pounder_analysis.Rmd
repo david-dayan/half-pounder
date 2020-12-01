@@ -70,6 +70,20 @@ genos_2.2 <- ungroup(genos_2.2)
 kable(genos_2.2 %>%
   group_by(run, year) %>%
   tally(), caption = "Final Filtered Dataset")
+
+#save a file with this info
+progeny <- readxl::read_xlsx("../meta_data/2019_summer/Omy Rogue2019 steelhead datasheets.xlsx", sheet = 4) 
+progeny <- progeny %>%
+  select(SFGL_ID, Origin)
+select(genos_2.2, Sample, run, year, Date) %>%
+  left_join(progeny, by = c("Sample" = "SFGL_ID")) %>%
+  mutate(Origin = replace(Origin, Origin == "AD", "HOR")) %>%
+  mutate(Origin = replace(Origin, Origin == "1", "NOR")) %>%
+  replace_na(list(Origin = "NOR")) %>%
+  write_tsv("sample_metadata.txt")#convert AD (HOR) and 1 (NOR)
+
+
+
 ```
 
 
@@ -175,6 +189,12 @@ ggplot(data=marker_divs[marker_divs$run_timing_marker=="run",])+geom_boxplot(aes
 # b <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="adaptive",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+ylim(0,0.68)
 # 
 # plot_grid(a,b, rel_widths = c(0.83,1), labels = c("(a)", "(b)"))
+
+#supplemental table
+marker_divs %>%
+  group_by(neutral, run, obs_exp) %>%
+  summarise(mean = mean(H)) %>%
+  print(n = 24)
 
 ```
 
@@ -662,12 +682,11 @@ d <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
   facet_grid(~pop, scales = 'free', space = 'free', switch = "x", labeller = labeller( pop =  c("fall" ="Late-Summer",  "half"= "Half-Pounder", "summer" =  "Early-Summer", "winter" =  "Winter"))) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(expand = expand_scale(add = 1)) +
-  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white")) +
+  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white"), strip.text.x = element_text(angle = 90)) +
   scale_fill_manual(values = viridisLite::viridis(5))
 
 
-
-cowplot::plot_grid(a,b,c,d, ncol=1)
+cowplot::plot_grid(a,b,c,d, rel_heights = c(1,1,1,1.5) ,ncol=1)
 ```
 
 __STRUCTURE Results Summary__
@@ -686,14 +705,36 @@ first we run pca only on the neutral dataset
 ```{r, message=FALSE, warning=FALSE}
 neutral_genind <- genind_2.0[loc=neutral_loci_names]
 
+#rename pops for mpublication quality figure
+neutral_genind$pop <- as.factor(str_replace(neutral_genind$pop, "Summer", "Early-Summer"))
+neutral_genind$pop <- as.factor(str_replace(neutral_genind$pop, "fall", "Late-Summer")) 
+neutral_genind$pop <- as.factor(str_replace(neutral_genind$pop, "halfpounder", "Half-Pounder")) 
+
+#reorder pop factor
+neutral_genind$pop <- factor(neutral_genind$pop, levels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
+
 #replace missing data using mean allele frequency
 neutral_genind_scale <- scaleGen(neutral_genind, NA.method="mean")
 
 # run the PCA, dudi.pca uses an interactive prompt to choose pcs to retain, we retain all in order to run some analyses on eigenvalues
 pca1 <- dudi.pca(neutral_genind_scale,cent=FALSE,scale=FALSE, scannf = FALSE, nf = 332)
 barplot(pca1$eig[1:332],main="PCA eigenvalues")
+
 s.class(pca1$li, pop(neutral_genind),xax=1,yax=2, col=transp(viridisLite::viridis(4),0.7), axesell=FALSE, cstar=0, cpoint=1, grid=FALSE)
-add.scatter.eig(pca1$eig[1:10],nf=3,xax=1,yax=2)
+add.scatter.eig(pca1$eig[1:10],nf=3,xax=1,yax=2, posi = "bottomright" )
+
+#publication quality figure
+# pca_vals <- pca1$li[,c(1:2)]
+# pca_vals <- pca_vals %>%
+#   rownames_to_column(var = "Sample") %>%
+#   left_join(select(genos_2.2, Sample, run)) %>%
+#   mutate(run = if_else(run == "fall", "Late-Summer", run)) %>%
+#   mutate(run = if_else(run == "halfpounder", "Half-Pounder", run)) %>%
+#   mutate(run = if_else(run == "Summer", "Early-Summer", run))
+# 
+# ggplot(data = pca_vals, aes(Axis1, Axis2, color = run))+geom_point(alpha = 0.5)+stat_ellipse()+theme_classic()+scale_color_viridis_d()+xlab("Principal Component 1")+ylab("Principal Component 2")
+# barplot(pca1$eig[1:10],main="PCA eigenvalues")
+
 
 ```
 
@@ -711,10 +752,21 @@ Also note that the primary axis (1 / X) captures variation within fall and half 
 #replace missing data using mean allele frequency
 genind_scale <- scaleGen(genind_2.0, NA.method="mean")
 
+genind_2.1 <- genind_2.0
+
+#rename pops for mpublication quality figure
+genind_2.1$pop <- as.factor(str_replace(genind_2.1$pop, "Summer", "Early-Summer"))
+genind_2.1$pop <- as.factor(str_replace(genind_2.1$pop, "fall", "Late-Summer")) 
+genind_2.1$pop <- as.factor(str_replace(genind_2.1$pop, "halfpounder", "Half-Pounder")) 
+
+#reorder pop factor
+genind_2.1$pop <- factor(genind_2.1$pop, levels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
+
+
 # run the PCA, dudi.pca uses an interactive prompt to choose pcs to retain, we retain all in order to run some analyses on eigenvalues
 pca1 <- dudi.pca(genind_scale,cent=FALSE,scale=FALSE, scannf = FALSE, nf = 332)
 barplot(pca1$eig[1:332],main="PCA eigenvalues")
-s.class(pca1$li, pop(genind_2.0),xax=1,yax=2, col=transp(viridisLite::viridis(4),0.7), axesell=FALSE, cstar=0, cpoint=1, grid=FALSE)
+s.class(pca1$li, pop(genind_2.1),xax=1,yax=2, col=transp(viridisLite::viridis(4),0.7), axesell=FALSE, cstar=0, cpoint=1, grid=FALSE)
 add.scatter.eig(pca1$eig[1:10],nf=3,xax=1,yax=2)
 
 ```
@@ -774,9 +826,9 @@ colnames(plot_data) <- c("LD1", "LD2", "LD3", "pop", "grp")
 plot_data$pop <- as.factor(plot_data$pop)
 plot_data$grp <- as.factor(plot_data$grp)
 
-ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=pop))+scale_color_viridis_d()+theme_classic()+ggtitle("DAPC by k-means cluster, color by a priori population")
+ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=pop))+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("DAPC by k-means cluster, color by a priori population")+guides(color=guide_legend("Run-Type")) 
 
-ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=grp))+scale_color_viridis_d()+theme_classic()+ggtitle("DAPC by cluster, colored by k-means cluster")
+ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=grp))+scale_color_viridis_d()+theme_classic()+ggtitle("DAPC by cluster, colored by k-means cluster")+guides(color=guide_legend("K-means cluster")) 
 
 marker_loadings1 <- loadingplot(dapc_full_denovo$var.contr, axis=1,thres=.005, lab.jitter=1, main = "DA axis 1 loading plot")
 markers1 <- unique(substr(names(marker_loadings1$var.values),1,nchar(names(marker_loadings1$var.values))-2))
@@ -827,7 +879,7 @@ scatter(dapc_full_apriori)
 marker_loadings1 <- loadingplot(dapc_full_apriori$var.contr, axis=1,thres=.01, lab.jitter=1, main = "laoding plot for DA 1")
 markers1 <- unique(substr(names(marker_loadings1$var.values),1,nchar(names(marker_loadings1$var.values))-2))
 
-marker_loadings2 <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.006, lab.jitter=1, main = "laoding plot for DA 2")
+marker_loadings2 <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.00713, lab.jitter=1, main = "laoding plot for DA 2")
 markers2 <- unique(substr(names(marker_loadings2$var.values),1,nchar(names(marker_loadings2$var.values))-2))
 
 kable(marker_mapping2 %>%
@@ -837,6 +889,15 @@ kable(marker_mapping2 %>%
 kable(marker_mapping2 %>%
   filter(marker %in% markers2 ) %>%
   select(marker, `Presumed Type`, chr, start), caption = "Markers that load strongly onto the second DA")
+
+# for ms figures
+
+# ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, size = 2)+theme_classic()+scale_color_viridis_d(name = "Run",labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter" ))+stat_ellipse(aes(x=LD1, y=LD2, color = pop))
+
+#for ms tables with loading value
+#marker_loadings2a <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.00000001, lab.jitter=1, main = "laoding plot for DA 2")
+#write.table(as.data.frame(marker_loadings2a$var.values), "load.txt", quote = FALSE, sep = "\t" )
+#write.table(select(marker_mapping2, marker, `Presumed Type`, chr), "map.txt", quote=FALSE, sep = "\t")  
 ```
 
 
@@ -877,7 +938,7 @@ ld1_2 <- as.data.frame(dapc_full_apriori$ind.coord) %>%
 #plot
 ggplot(data=ld1)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d()+scale_fill_viridis_d()+theme_classic()+ggtitle("True Classifier")
 
-ggplot(data=ld1_2)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d()+scale_fill_viridis_d()+theme_classic()+ggtitle("A priori DAPC results")
+ggplot(data=ld1_2)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("A priori DAPC results")+labs(color = "Run", fill = "Run")
 
 # assignments using classifier
 CIs <- ld1 %>%
@@ -944,11 +1005,12 @@ invisible(neutraldapc <- dapc(neutral_genind, n.pca = 60, n.da = 3 ))
 plot_data <- as.data.frame(neutraldapc$ind.coord)
 plot_data$pop <- as.character(genind_2.0$pop)
 
-scatter.dapc(neutraldapc)
+#scatter.dapc(neutraldapc)
 
 plot_ly(x=plot_data$LD1, y=plot_data$LD2, z=plot_data$LD3, type="scatter3d", mode="markers", color=genind_2.0$pop, alpha = 0.8)
 
-
+#pub quality figure
+ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, size = 2)+theme_classic()+scale_color_viridis_d(name = "Run",labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter" ))+stat_ellipse(aes(x=LD1, y=LD2, color = pop))
 
 ```
 
@@ -1032,7 +1094,7 @@ pheatmap(tmat, show_colnames  = F)
 col_pal<- colorRampPalette(c("red", "white", "blue"))(256)
 tmat <- t(as.matrix(diagmaf[,1:4]))
 colnames(tmat) <- diagmaf$marker
-pheatmap(tmat)
+pheatmap(tmat, cluster_cols = FALSE)
 ```
 
 
@@ -1064,7 +1126,28 @@ run_timing_maf <- run_timing_freqs %>%
 col_pal<- colorRampPalette(c("red", "white", "blue"))(256)
 tmat <- t(as.matrix(run_timing_maf[,1:4]))
 colnames(tmat) <- run_timing_maf$marker
+pheatmap(tmat, cluster_cols = FALSE)
+
+#repolarize greb05 and 7080-54
+repol <- run_timing_maf %>%
+  mutate(fall = ifelse(marker == "Omy_GREB1_05", (1 - fall), fall)) %>%
+  mutate(halfpounder = ifelse(marker == "Omy_GREB1_05", (1 - halfpounder), halfpounder)) %>%
+  mutate(Summer = ifelse(marker == "Omy_GREB1_05", (1 - Summer), Summer)) %>%
+  mutate(Winter = ifelse(marker == "Omy_GREB1_05", (1 - Winter), Winter)) %>%
+  mutate(fall = ifelse(marker == "Omy_RAD47080-54", (1 - fall), fall)) %>%
+  mutate(halfpounder = ifelse(marker == "Omy_RAD47080-54", (1 - halfpounder), halfpounder)) %>%
+  mutate(Summer = ifelse(marker == "Omy_RAD47080-54", (1 - Summer), Summer)) %>%
+  mutate(Winter = ifelse(marker == "Omy_RAD47080-54", (1 - Winter), Winter))
+
+repol <- repol %>%
+  select(fall, halfpounder, Winter, Summer, marker) %>%
+  rename("Late-Summer" = fall, "Half-Pounder" = halfpounder, "Early-Summer" = Summer)
+
+col_pal<- colorRampPalette(c("red", "white", "blue"))(256)
+tmat <- t(as.matrix(repol[,1:4]))
+colnames(tmat) <- repol$marker
 pheatmap(tmat)
+  
 ```
 
 Of the 14 markers with known run-timing associations, 9 are fixed or nearly fixed for alternative alleles in winter and summer run fish. One additional marker (greb1_05) is highly informative, but is not fixed in winter run fish. Fall run fish and half pounder demonstrate intermediate genotypes and very little differentiation from one another.
@@ -1175,6 +1258,8 @@ residency_maf <- residency_freqs %>%
   replace(., is.na(.), 0)
 
 #plot as a heatmap
+residency_maf <- residency_maf %>%
+  rename("Half-pounder" = "halfpounder", "Early-Summer" = "Summer", "Late-Summer" = "fall")
 col_pal<- colorRampPalette(c("red", "white", "blue"))(256)
 tmat <- t(as.matrix(residency_maf[,1:4]))
 colnames(tmat) <- residency_maf$marker
@@ -1255,13 +1340,13 @@ ldr <- ldr %>%
   filter(!(snp2 %in%  uninf_markers))
 
 
-ggplot(ldr)+geom_tile(aes(snp1, snp2, fill=rbarD))+theme_classic()+theme(axis.text.x = element_text(angle = 90))+scale_fill_gradient(low = "#FFFFFF", high= "#2c3e50", limits = c(0,1))
+ggplot(ldr)+geom_tile(aes(snp1, snp2, fill=rbarD))+theme_classic()+theme(axis.text.x = element_text(angle = 90))+scale_fill_viridis_c( limits = c(0,1))
 
 ldr_f <- ldr_f %>%
   filter(!(snp1 %in%  uninf_markers)) %>%
   filter(!(snp2 %in%  uninf_markers))
 
-ggplot(ldr_f)+geom_tile(aes(snp1, snp2, fill=rbarD))+theme_classic()+theme(axis.text.x = element_text(angle = 90))+scale_fill_gradient(low = "#FFFFFF", high= "#2c3e50", limits = c(0,1))
+ggplot(ldr_f)+geom_tile(aes(snp1, snp2, fill=rbarD))+theme_classic()+theme(axis.text.x = element_text(angle = 90))+scale_fill_viridis_c(limits = c(0,1))
 
 ```
 
@@ -1562,6 +1647,11 @@ halfpounder_s <- half_fall_ph %>%
 halfpounder_u <- half_fall_ph %>%
   filter(run == "halfpounder" & assignment == "unassigned")
 
+winter_pac <- phased_genos %>%
+  filter(run == "Winter")
+
+summer_pac <- phased_genos %>%
+  filter(run == "Summer")
 
 # get by group clustering results
 require(ggdendro)
@@ -1633,25 +1723,25 @@ long_half_s <- halfpounder_s %>%
 ############
 
 heatmap_w <- ggplot(data = filter(long_winter), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Winter\n ")
+  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Winter\n ")+xlab(element_blank())
 
 heatmap_s <- ggplot(data = filter(long_summer), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+theme_classic()+scale_fill_gradient(low = "#440154FF", high = "#440154FF")+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Early-Summer\n ")
+  geom_tile(aes(fill = allele_count))+theme_classic()+scale_fill_gradient(low = "#440154FF", high = "#440154FF")+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Early-Summer\n ")+xlab(element_blank())
 
 heatmap_fw <- ggplot(data = filter(long_fall_w), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Late-Summer\nWinter Assigned")
+  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Late-Summer\nWinter Assigned")+xlab(element_blank())
 
 heatmap_fs <- ggplot(data = filter(long_fall_s), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Late-Summer\nEarly-Summer ssigned")
+  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Late-Summer\nEarly-Summer ssigned")+xlab(element_blank())
 
 heatmap_fu <- ggplot(data = filter(long_fall_u), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Late-Summer\nUnassigned")
+  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Late-Summer\nUnassigned")+xlab(element_blank())
 
 heatmap_hw <- ggplot(data = filter(long_half_w), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Halfpounder\nWinter Assigned")
+  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Halfpounder\nWinter Assigned")+xlab(element_blank())
 
 heatmap_hs <- ggplot(data = filter(long_half_s), aes(x = snp, y = row_id)) +
-  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Halfpounder\nSummer Assigned")
+  geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme( axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none", axis.text.x = element_blank())+ylab("Halfpounder\nSummer Assigned")+xlab(element_blank())
 
 heatmap_hu <- ggplot(data = filter(long_half_u), aes(x = snp, y = row_id)) +
   geom_tile(aes(fill = allele_count))+scale_fill_viridis_c()+theme_classic()+theme(axis.text.x = element_text(angle = 90), axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.line.y = element_blank(), legend.position = "none")+ylab("Halfpounder\nUnassigned")
@@ -1824,6 +1914,11 @@ cor_data$jdate <- format(as.POSIXlt(cor_data$Date, format = "%y-%m-%d"), "%j")
 
 
 summary(lm(LD1~as.numeric(jdate), data=cor_data[cor_data$run=="fall",]))
+
+summary(lm(LD1~as.numeric(jdate), data=cor_data[cor_data$run=="halfpounder",]))
+
+ggplot(cor_data[cor_data$run=="halfpounder",])+geom_point(aes(jdate,LD1))+theme_classic()+geom_smooth(aes(jdate,LD1), method = "lm")
+
 
 ```
 
