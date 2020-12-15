@@ -57,7 +57,7 @@ For brevity and easy code comprehension, throughout the notebook early-summer ru
 
 45 winter and 45 early-run summer run fish. Adult summer steelhead were sampled at the Cole River Hatchery sorting pond on 6/26/2019 and (b) adult winter steelhead were sampled at Cole Rivers Hatchery (Rogue River) and the Applegate River from adult brood stock for 2019. Finally 166 additional late-summer run fish (fall run) were sampled at the Huntley Park seine on the lower Rogue.
 
-All late-summer run adults are unmarked and assumed to natural origin fish. Winter run fish include NOR and HOR fish. After filtering the final dataset contains 18 HOR and 22 NOR fish. Early summer run fish are all unmarked and assumed NOR.
+All but 4 early-summer run adults are marked and assumed to hatchery origin fish. The final filtered dataset contained 1 natural origin and 41 hatchery origin fish. Winter run fish include NOR and HOR fish. After filtering the final dataset contains 18 HOR and 22 NOR fish. Early summer run fish are all unmarked and assumed NOR. All late-summer fish were unmarked and assumed NOR.
 
 ## Genotype Data
 
