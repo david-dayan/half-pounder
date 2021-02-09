@@ -1182,7 +1182,7 @@ genos_2.0 %>%
 
 Let's get some usable file formats
 
-```{r, eval=FALSE}
+```{r}
 
 # import into adegenet
 
@@ -1210,4 +1210,44 @@ genind_2.0 <- genind_1.0
 save(genos_2.2, file ="./genotype_data/genotypes_2.2.R")
 save(genind_2.0, file= "./genotype_data/genind_2.0.R")
 ```
+
+## Conversion 2
+
+Removed two further loci from the genotype data. Here we remove these markers and save to a new set of files. 
+
+__Two markers:__  
+- Omy_RAD47080-54: removed because redundant with Omy_RAD15709-53, but had lower coverage.  
+- Chr28_11671116: Removed because it had a lot of missing data in one of the baseline samples (early summer ~30% missing vs 2% missing in winter)  
+
+
+__Differences in missingness__
+
+The observation that Chr28_11671116 had different levels of missing data among our baseline samples (winter and summer) opens up the possibility that other markers may behave similarly. We should not arbitrarily restrict this type of filtering to the run-timing markers, so lets take a look across the whole dataset.
+
+```{r, message = FALSE, warning = FALSE}
+
+diff_miss <- colSums((genos_2.2[genos_2.2$run == "Winter",8:362] == "00")/nrow(genos_2.2[genos_2.2$run == "Winter",]))-colSums((genos_2.2[genos_2.2$run == "Summer",8:362] == "00")/nrow(genos_2.2[genos_2.2$run == "Summer",]))
+diff_miss <- as.data.frame(diff_miss)
+diff_miss$marker <- row.names(diff_miss)
+ggplot(diff_miss) + geom_histogram(aes(x=diff_miss))+geom_vline(aes(xintercept= 0.2), color="red")+geom_vline(aes(xintercept= 0.1), color="blue")+theme_classic()+xlab("missingness (loci)")
+
+diff_miss[abs(diff_miss$diff_miss) >= 0.25,]
+```
+
+As it turns out, Chr28_11671116 has the biggest difference in missingness between winter and summer samples of all markers! I feel comfortable setting a threshold of 25% difference in missingness, which will only remove Chr28_11671116. Although there are two additional markers that are also not great. 
+
+__Save files__
+
+Now we'll save some files to run analyses on later.
+
+```{r, eval = FALSE}
+genos_2.3 <- genos_2.2 %>%
+  select(-c("Omy_RAD47080-54", "Chr28_11671116"))
+
+genind_2.1 <- genind_2.0[loc=- c(232, 6)] #these are the same as the two above
+
+save(genos_2.3, file ="./genotype_data/genotypes_2.3.R")
+save(genind_2.1, file= "./genotype_data/genind_2.1.R")
+```
+
 

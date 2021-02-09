@@ -64,10 +64,10 @@ All but 4 early-summer run adults are marked and assumed to hatchery origin fish
 Information about sequencing data, genotype calling and filtering is available in the relevant R notebook (half_pounder_genotyping_notebook.Rmd) in this repository. 
 
 ```{r}
-load("./genotype_data/genind_2.0.R")
-load("./genotype_data/genotypes_2.2.R")
-genos_2.2 <- ungroup(genos_2.2)
-kable(genos_2.2 %>%
+load("./genotype_data/genind_2.1.R")
+load("./genotype_data/genotypes_2.3.R")
+genos_2.3 <- ungroup(genos_2.3)
+kable(genos_2.3 %>%
   group_by(run, year) %>%
   tally(), caption = "Final Filtered Dataset")
 
@@ -75,7 +75,7 @@ kable(genos_2.2 %>%
 progeny <- readxl::read_xlsx("../meta_data/2019_summer/Omy Rogue2019 steelhead datasheets.xlsx", sheet = 4) 
 progeny <- progeny %>%
   select(SFGL_ID, Origin)
-select(genos_2.2, Sample, run, year, Date) %>%
+select(genos_2.3, Sample, run, year, Date) %>%
   left_join(progeny, by = c("Sample" = "SFGL_ID")) %>%
   mutate(Origin = replace(Origin, Origin == "AD", "HOR")) %>%
   mutate(Origin = replace(Origin, Origin == "1", "NOR")) %>%
@@ -103,7 +103,7 @@ marker_mapping <- readxl::read_xlsx("./metadata/final_mapping_results.xlsx", she
 
 marker_summary <- marker_mapping %>%
   mutate(marker = str_replace(marker, "Omy(\\d+)", "Chr\\1")) %>%
-  filter(marker %in% colnames(genos_2.2)) %>%
+  filter(marker %in% colnames(genos_2.3)) %>%
   mutate(neutral = if_else(str_detect(`Presumed Type`, 'neutral|Neutral'), "neutral", "adaptive")) %>%
   mutate(run_timing = if_else(str_detect(`Presumed Type`, 'run|Run'), "run_timing", "non-run_timing")) %>%
   dplyr::select(marker, chr, start, 'Presumed Type', neutral, run_timing, Source)
@@ -132,7 +132,7 @@ Here we calculate both per-marker and per-population diversity metrics (Ho He HW
 
 ```{r, message=FALSE, warning=FALSE}
 # first Ho and He
-n.pop <- seppop(genind_2.0)
+n.pop <- seppop(genind_2.1)
 
 hobs <- lapply(n.pop, function(x) (summary(x)$Hobs))
 hobs <- as.data.frame(t(do.call(rbind, hobs)))
@@ -196,6 +196,11 @@ marker_divs %>%
   summarise(mean = mean(H)) %>%
   print(n = 24)
 
+marker_divs %>%
+  group_by(run_timing_marker, run, obs_exp) %>%
+  summarise(mean = mean(H)) %>%
+  print(n = 24)
+
 ```
 
 ### Significance Testing
@@ -223,7 +228,7 @@ run_timing_loci_names <- str_replace(run_timing_loci_names$marker, "Omy28", "Chr
 
 ## test for all pairwise differences at run-timing markers
 #make a pop separted genind at run timing markers
-chr28_seppop  <- seppop(genind_2.0[loc=run_timing_loci_names])
+chr28_seppop  <- seppop(genind_2.1[loc=run_timing_loci_names])
 
 
 # fall-half
@@ -250,7 +255,7 @@ colnames(df) <- c("pop1", "pop2","p-value")
 kable(df, caption = "Monte-Carlo p-value for difference in observed Heterozygosity at run-timing markers")
 
 ## Next lets look if there is increased/decreased diversity within a population at these markers compared to neutral
-neutral_seppop  <- seppop(genind_2.0[loc=neutral_loci_names])
+neutral_seppop  <- seppop(genind_2.1[loc=neutral_loci_names])
 
 
 #fall
@@ -297,6 +302,11 @@ hwe_exceed <- p.adj %>% rownames_to_column(var="marker") %>%
   pivot_longer(-marker, names_to = "run", values_to = "fdr") %>%
   filter(fdr < 0.1)
 
+hwe_exceed <- hwe_exceed %>%
+  left_join(pivot_wider(marker_divs, names_from = obs_exp, values_from = H)) %>%  
+  mutate(direction = if_else(He > Ho, "excess_homo", "excess_hetero")) %>%
+  filter(direction == "excess_homo")
+
 a <- hwe_exceed%>%
   group_by(run) %>%
   tally()
@@ -309,13 +319,12 @@ Yes, see table above for number of SNPs outside of HWE (fdr < 0.1) per "populati
 
 ```{r , warning=FALSE, message=FALSE}
 #lets check if there is an enrichment of run-timing and adaptive markers in markers out of HWE in fall and half-pounders
-hwe_exceed <- hwe_exceed %>%
-  left_join(pivot_wider(marker_divs, names_from = obs_exp, values_from = H))
+  
 
 #lets get marker info, but only for markers in the panel
 marker_mapping2 <- marker_mapping %>%
   mutate(marker = str_replace(marker, "Omy(\\d+)", "Chr\\1")) %>%
-  filter(marker %in% colnames(genos_2.2))
+  filter(marker %in% colnames(genos_2.3))
 
 # halfpunder enriched for run timing markers
 a <- nrow(hwe_exceed[hwe_exceed$run=="halfpounder" & hwe_exceed$run_timing_marker=="run",])
@@ -349,6 +358,16 @@ d <- nrow(marker_mapping2)-b
 
 fa <- fisher.test(matrix(c(a,b,c,d), nrow=2), alternative = "less")
 
+
+
+# summer enriched for run timing markers
+a <- nrow(hwe_exceed[hwe_exceed$run=="Summer" & hwe_exceed$run_timing_marker=="run",])
+c <- nrow(marker_mapping2)-a
+b <- nrow(hwe_exceed[hwe_exceed$run=="Summer" & hwe_exceed$run_timing_marker!="run",])
+d <- nrow(marker_mapping2)-b
+
+sr <- fisher.test(matrix(c(a,b,c,d), nrow=2), alternative = "less")
+
 #make a nice table
 df <- as.data.frame(cbind(c("fall", "fall", "half", "half"),c("run", "all adaptive", "run", "all adaptive"),c(fr$p.value, fa$p.value, hr$p.value, ha$p.value), c(fr$estimate, fa$estimate, hr$estimate, ha$estimate)))
 colnames(df) <- c("pop", "marker type", "p-val", "fold-enrichment")
@@ -373,11 +392,11 @@ plot_data_fall <- marker_divs %>%
 ggplot(plot_data_fall)+geom_point(aes(He, Ho, color = run_timing_marker))+geom_abline(aes(intercept=0, slope=1))+coord_equal(ratio=1)+ylim(0,0.6)+scale_color_viridis_d()+theme_classic()+ggtitle("fall")
 ```
 
-It's surprising that there is enrichment of run timing markers among markers out of HWE in the fall run from these figures, but double checked the code, still significant enriched... Meanwhile the results in halfpounders are very clear.
+It's surprising that there is enrichment of run timing markers among markers out of HWE in the fall run from these figures, but double checked the code, still significant enriched... Meanwhile the results in halfpounders are very clear. Wait! the hwe test was two sided, the enrichment of run-timing markers in the fall run is actually due a marker with MORE heterozygosity than expected. 
 
 ### Heterozygosity results summary
 
-At neutral markers, there is a slight reduction of observed from expected heterozygosity, most pronounced among summer run fish. At run timing markers, there is a significant reduction in diversity (Ho) relative to neutral markers among the summer run and winter run fish (one-sided t-test), and increased diversity at fall run and half-pounders (not significant). Furthermore, there is an excess of homozygosity at run timing associated SNPs in the half-pounders (but not fall fish) suggesting some structure within this group. Among markers with significant departures from HWE within fall and half-pounders, there is a significant enrichment of run-timing associated markers (p = p-value = 1.707e-10 and p = p-value = 0.02129, odds ratios 6.513 and 5.63, respectively fisher's exact test), but not significant enrichment for markers annotated as adaptive overall.
+At neutral markers, there is a slight reduction of observed from expected heterozygosity, most pronounced among summer run fish. At run timing markers, there is a significant reduction in diversity (Ho) relative to neutral markers among the summer run and winter run fish (one-sided t-test), and increased diversity at fall run and half-pounders (not significant). Furthermore, there is an excess of homozygosity at run timing associated SNPs in the half-pounders (but not fall fish) suggesting some structure within this group. Among markers with significant departures from HWE within fall and half-pounders, there is a significant enrichment of run-timing associated markers ( p-value = 0.0016 and p-value = 7.88e-12, odds ratios 12.4 and 8.0, respectively fisher's exact test), but not significant enrichment for markers annotated as adaptive overall.
 
 
 ## Fst
@@ -385,13 +404,13 @@ At neutral markers, there is a slight reduction of observed from expected hetero
 Let's move on to f-statistics. We'll use hierfstats for most of this work, so the first step is to convert to a hierfstat format. Then we'll calculate some basic statists and Fst (Nei)
 
 ```{r, warning=FALSE, message=FALSE}
-fstat <- genind2hierfstat(genind_2.0)
-colnames(fstat) <- c(pop, names(genind_2.0$loc.n.all))
+fstat <- genind2hierfstat(genind_2.1)
+colnames(fstat) <- c(pop, names(genind_2.1$loc.n.all))
 # and also lets make datasets at different sets of loci, because hierfstat doesn't easily retain loci names for later use
-fstat_neutral <- genind2hierfstat(genind_2.0[loc=neutral_loci_names])
-colnames(fstat_neutral) <- c(pop, names(genind_2.0[loc=neutral_loci_names]$loc.n.all))
-fstat_run_timing <- genind2hierfstat(genind_2.0[loc=run_timing_loci_names])
-colnames(fstat_run_timing) <- c(pop, names(genind_2.0[loc=run_timing_loci_names]$loc.n.all))
+fstat_neutral <- genind2hierfstat(genind_2.1[loc=neutral_loci_names])
+colnames(fstat_neutral) <- c(pop, names(genind_2.1[loc=neutral_loci_names]$loc.n.all))
+fstat_run_timing <- genind2hierfstat(genind_2.1[loc=run_timing_loci_names])
+colnames(fstat_run_timing) <- c(pop, names(genind_2.1[loc=run_timing_loci_names]$loc.n.all))
 
 #calculate datset wide basic stats
 basicstats <- basic.stats(fstat)
@@ -430,13 +449,32 @@ Yes, there are some clear fst outlier loci in the dataset. These outliers are co
 Let's collect genetic distance info on pairs of pops as well (Weir and Cochran 1984). 
 
 First, the full dataset:
-```{r, cache=TRUE}
+```{r}
 genet.dist(fstat, method="WC84")
 ```
 
 Then just neutral loci:
-```{r, cache=TRUE}
+```{r}
 genet.dist(fstat_neutral, method="WC84")
+```
+
+
+Let's split the halfpounders into year classes and run again
+```{r}
+genind_year <- genind_2.1
+
+genind_year@pop <- as.factor(paste(genos_2.3$run, genos_2.3$year, sep = "_"))
+
+fstat_year <- genind2hierfstat(genind_year)
+colnames(fstat_year) <- c(pop, names(genind_year$loc.n.all))
+# and also lets make datasets at different sets of loci, because hierfstat doesn't easily retain loci names for later use
+fstat_neutral_year <- genind2hierfstat(genind_year[loc=neutral_loci_names])
+colnames(fstat_neutral_year) <- c(pop, names(genind_year[loc=neutral_loci_names]$loc.n.all))
+
+
+genet.dist(fstat_year, method="WC84")
+genet.dist(fstat_neutral_year, method="WC84")
+
 ```
 
 
@@ -445,10 +483,10 @@ Next let's test these Fst results to see if they are significant
 To accomplish this we'll randomize over populations 1000 fold and then conduct a monte-carlo test. Note this approach is very computationally intensive, should find another one if we really want a significance test on Fst, skipped for now.
 
 ```{r, cache=TRUE, eval=FALSE}
-mat.obs <- pairwise.WCfst(as.data.frame(cbind((genind_2.0$pop),genind_2.0$tab)))
+mat.obs <- pairwise.WCfst(as.data.frame(cbind((genind_2.1$pop),genind_2.1$tab)))
 
 NBPERM <- 100 # this is the number of permutations used for the p-values; for a publication at least 999 would be required.
-mat.perm <- lapply(1:NBPERM, function(i) pairwise.WCfst(as.data.frame(cbind(sample(genind_2.0$pop, size = 882),genind_2.0$tab))))
+mat.perm <- lapply(1:NBPERM, function(i) pairwise.WCfst(as.data.frame(cbind(sample(genind_2.1$pop, size = 882),genind_2.1$tab))))
 
 
 allTests <- list()
@@ -461,7 +499,7 @@ allTests <- list()
 
 ### Fst Results Summary
 
-Moderate differentiation between most pairwise pop comps (not fall and halfpounder), but as suspected, this is driven mostly by the run timing markers. When examining only neutral annotated loci, differentiation is extremely low (less than 1%). Also of note here is that both the neutral and total estimates of differentiation between early and late summer (fall) populations (4.2% and 0.9%, respectively) is quite high. Mean Fst over all loci is about half the level of differentation between early summer and winter populations (9.7%) and nearly the same when examining only neutral loci (1.1%). Indeed, the late summer run fish  demonstrate lower differentiation from winter run than early summer run fish at both neutral and all loci.
+Moderate differentiation between most pairwise pop comps (not fall and halfpounder), but as suspected, this is driven mostly by the run timing markers. When examining only neutral annotated loci, differentiation is extremely low (less than 1%). Also of note here is that both the neutral and total estimates of differentiation between early and late summer (fall) populations (XX% and XX%, respectively) is quite high. Mean Fst over all loci is about half the level of differentation between early summer and winter populations (XX%) and nearly the same when examining only neutral loci (XX%). Indeed, the late summer run fish  demonstrate lower differentiation from winter run than early summer run fish at both neutral and all loci.
 
 # Population Structure
 
@@ -474,13 +512,13 @@ Here we use a bayesian, model based clustering algorithm (STRUCTURE) to infer po
 First we need to get our dataset ready for structure: remove linked loci, convert to structure format.
 ```{r, cache=TRUE, message=FALSE, warning=FALSE}
 # first lets calculate LD (dartR has a great (fast) ld estimator that works right on genind files, so let's use this)
-ldreport <- dartR::gl.report.ld(genind_2.0, name = NULL, save = FALSE, nchunks = 2, ncores = 3, chunkname = NULL)
+ldreport <- dartR::gl.report.ld(genind_2.1, name = NULL, save = FALSE, nchunks = 2, ncores = 3, chunkname = NULL)
 
 ```
 
 We'll prune (keep one) the dataset of any locus-pairs with r2 > 0.2, then convert to STRUCTURE format
 ```{r, eval=FALSE}
-unlinked_genind <- genind_2.0[loc=-unique(ldreport[ldreport$R2>0.2,]$loc2)]
+unlinked_genind <- genind_2.1[loc=-unique(ldreport[ldreport$R2>0.2,]$loc2)]
 rm(ldreport)
 #note just sort of crashed through this with a text editor, not easily logged, but the general idea was transpose the data, split columns (diploid to dual haploid) then convert data to integers
 df <- genind2df(unlinked_genind)
@@ -492,7 +530,7 @@ write_tsv(as.data.frame(df), "genotype_data/all.str", col_names = FALSE)
 
 ```
 
-This removed 25 highly linked SNPs from the dataset.
+Note that the final structure data file did not differ between when this run the first time (without removing the 2 redundant and missingness loci). So structure did not need to be run a second time. This removed 23 highly linked SNPs from the dataset. (25 the first time, but two of these were filtered out at an earlier stage in this run)
 
 ### Run Log  
 
@@ -703,7 +741,7 @@ Below we perform an unconstrained ordination of genetic data for both the neutra
 ### Neutral PCA
 first we run pca only on the neutral dataset
 ```{r, message=FALSE, warning=FALSE}
-neutral_genind <- genind_2.0[loc=neutral_loci_names]
+neutral_genind <- genind_2.1[loc=neutral_loci_names]
 
 #rename pops for mpublication quality figure
 neutral_genind$pop <- as.factor(str_replace(neutral_genind$pop, "Summer", "Early-Summer"))
@@ -727,7 +765,7 @@ add.scatter.eig(pca1$eig[1:10],nf=3,xax=1,yax=2, posi = "bottomright" )
 # pca_vals <- pca1$li[,c(1:2)]
 # pca_vals <- pca_vals %>%
 #   rownames_to_column(var = "Sample") %>%
-#   left_join(select(genos_2.2, Sample, run)) %>%
+#   left_join(select(genos_2.3, Sample, run)) %>%
 #   mutate(run = if_else(run == "fall", "Late-Summer", run)) %>%
 #   mutate(run = if_else(run == "halfpounder", "Half-Pounder", run)) %>%
 #   mutate(run = if_else(run == "Summer", "Early-Summer", run))
@@ -750,30 +788,30 @@ Also note that the primary axis (1 / X) captures variation within fall and half 
 ### Full PCA
 ```{r, message=FALSE, warning=FALSE}
 #replace missing data using mean allele frequency
-genind_scale <- scaleGen(genind_2.0, NA.method="mean")
+genind_scale <- scaleGen(genind_2.1, NA.method="mean")
 
-genind_2.1 <- genind_2.0
+genind_2.3 <- genind_2.1
 
 #rename pops for mpublication quality figure
-genind_2.1$pop <- as.factor(str_replace(genind_2.1$pop, "Summer", "Early-Summer"))
-genind_2.1$pop <- as.factor(str_replace(genind_2.1$pop, "fall", "Late-Summer")) 
-genind_2.1$pop <- as.factor(str_replace(genind_2.1$pop, "halfpounder", "Half-Pounder")) 
+genind_2.3$pop <- as.factor(str_replace(genind_2.3$pop, "Summer", "Early-Summer"))
+genind_2.3$pop <- as.factor(str_replace(genind_2.3$pop, "fall", "Late-Summer")) 
+genind_2.3$pop <- as.factor(str_replace(genind_2.3$pop, "halfpounder", "Half-Pounder")) 
 
 #reorder pop factor
-genind_2.1$pop <- factor(genind_2.1$pop, levels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
+genind_2.3$pop <- factor(genind_2.3$pop, levels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
 
 
 # run the PCA, dudi.pca uses an interactive prompt to choose pcs to retain, we retain all in order to run some analyses on eigenvalues
-pca1 <- dudi.pca(genind_scale,cent=FALSE,scale=FALSE, scannf = FALSE, nf = 332)
-barplot(pca1$eig[1:332],main="PCA eigenvalues")
-s.class(pca1$li, pop(genind_2.1),xax=1,yax=2, col=transp(viridisLite::viridis(4),0.7), axesell=FALSE, cstar=0, cpoint=1, grid=FALSE)
+pca1 <- dudi.pca(genind_scale,cent=FALSE,scale=FALSE, scannf = FALSE, nf = 353)
+barplot(pca1$eig[1:353],main="PCA eigenvalues")
+s.class(pca1$li, pop(genind_2.3),xax=1,yax=2, col=transp(viridisLite::viridis(4),0.7), axesell=FALSE, cstar=0, cpoint=1, grid=FALSE)
 add.scatter.eig(pca1$eig[1:10],nf=3,xax=1,yax=2)
 
 ```
 
 Let's also make an interactive 3d plot, since the third PC is not much less informative than the second
 ```{r, message=FALSE, warning=FALSE}
-plot_ly(x=pca1$li$Axis1, y=pca1$li$Axis2, z=pca1$li$Axis3, type="scatter3d", mode="markers", color=genind_2.0$pop, alpha = 0.8)
+plot_ly(x=pca1$li$Axis1, y=pca1$li$Axis2, z=pca1$li$Axis3, type="scatter3d", mode="markers", color=genind_2.3$pop, alpha = 0.8)
 ```
 
 In the first three most important axes of genetic differentiation using the full dataset we observe complete overlap of fall and halfpounder fish, winter and summer fish are clearly separated, but the cloud of fall-halfpounder fish is inclusive of both of these groups. Three clusters of data are present in the data, (1) a winter-like cluster also including some fall run and half pounders, (2) a summer-like cluster also including some fall and half pounder fush and (3) a uniquely half-pounder fall run cluster positioned intermediate between the two. 
@@ -792,21 +830,22 @@ Below are plots of bayesian information criterion across different numbers of cl
 ```{r, message=FALSE, warning=FALSE, cache=TRUE, fig.cap="BIC for k-means clustering across different numbers of genetic clusters"}
 #k means clustering, keep a lot (330 pcs) (kmeans won't overfit with two many pcs)
 #note the number of clusters was chosen interactively, the code below executes the clustering using the best k
-clusts <- find.clusters(genind_2.0, n.pca = 330, choose.n.clust = FALSE)
+
+clusts <- find.clusters(genind_2.3, n.pca = 330, choose.n.clust = FALSE)
 
 #plot BIC
 bic <- as.data.frame(cbind(c(1:length(clusts$Kstat)), clusts$Kstat))
 ggplot(bic)+geom_point(aes(x=V1, y=V2))+geom_line(aes(x=V1, y=V2))+theme_classic()+xlim(c(0, 50))+xlab("k")+ylab("BIC")
 
-clusts <- find.clusters(genind_2.0, n.pca = 330, n.clust = 2)
-kable(table(pop(genind_2.0), clusts$grp),caption = "a priori population vs genetic cluster" )
-clusts <- find.clusters(genind_2.0, n.pca = 330, n.clust = 3)
-kable(table(pop(genind_2.0), clusts$grp),caption = "a priori population vs genetic cluster" ) 
-clusts <- find.clusters(genind_2.0, n.pca = 330, n.clust = 4)
-kable(table(pop(genind_2.0), clusts$grp), caption = "a priori population vs genetic cluster" )
+clusts <- find.clusters(genind_2.3, n.pca = 330, n.clust = 2)
+kable(table(pop(genind_2.3), clusts$grp),caption = "a priori population vs genetic cluster" )
+clusts <- find.clusters(genind_2.3, n.pca = 330, n.clust = 3)
+kable(table(pop(genind_2.3), clusts$grp),caption = "a priori population vs genetic cluster" ) 
+clusts <- find.clusters(genind_2.3, n.pca = 330, n.clust = 4)
+kable(table(pop(genind_2.3), clusts$grp), caption = "a priori population vs genetic cluster" )
 ```
 
-The model fit is best at k=5, however, only minor improvements in fit are beyond k=4. BIC tends to decrease until best fit only in a perfect island model, in practice, best K is often found at the lowest K that is a substantial improvement from the last. Here we use k=4, but when other k were used, generally the same result: Never any overlap between winter and summer run fish, fall and halfpounders always distributed among the 4 groups.  
+The model fit is best at k=4. BIC tends to decrease until best fit only in a perfect island model, in practice, best K is often found at the lowest K that is a substantial improvement from the last. Here we use k=4, but when other k were used, generally the same result: Never any overlap between winter and summer run fish, fall and halfpounders always distributed among the 4 groups.  
 
 This result fits with our previous findings, there is structure and high diversity within fall and halfpounders (see heterozygosity section) and substantial overlap between fall-halfpounders and both winter and summer fish, but not between winter and summer fish. 
 
@@ -816,12 +855,12 @@ This creates a complex scenario for conducting the DAPC, should we use a priori 
 
 ```{r, message=FALSE, warning=FALSE}
 #first optimize the PCs retained based on the a.score, so run dapc on the full pcs
-#invisible(dapc_full_denovo <- dapc(genind_2.0, clusts$grp, n.pca = 330, n.da = 3 ))
+#invisible(dapc_full_denovo <- dapc(genind_2.1, clusts$grp, n.pca = 330, n.da = 3 ))
 #optim.a.score(dapc_full_denovo)
 #nice now we use the optimized a score to run our dapc for real
-dapc_full_denovo <- dapc(genind_2.0, clusts$grp, n.pca = 57, n.da = 3 )
+dapc_full_denovo <- dapc(genind_2.3, clusts$grp, n.pca = 57, n.da = 3 )
 
-plot_data <- as.data.frame(cbind(dapc_full_denovo$ind.coord, genind_2.0$pop, clusts$grp))
+plot_data <- as.data.frame(cbind(dapc_full_denovo$ind.coord, genind_2.3$pop, clusts$grp))
 colnames(plot_data) <- c("LD1", "LD2", "LD3", "pop", "grp")
 plot_data$pop <- as.factor(plot_data$pop)
 plot_data$grp <- as.factor(plot_data$grp)
@@ -845,31 +884,34 @@ kable(marker_mapping2 %>%
   select(marker, `Presumed Type`), caption = "markers heavily loaded into second discriminant axis")
 ```
 
-As suspected, given the the fact that fall and halfpounder fish do not fall into a single genetic cluster, de novo assigned genetic cluters do not do a great job of differentiating among a priori assigned run-timing groups. When breaking the fish into four groups these groups are mostly defined by covariation at ~20 markers including run timing markers, neutral markers, and residency markers. Note that the loadings for the run-timing markers are ~2 fold greater than other markers included in the table above and that this cutoff is arbitrary.
+As suspected, given the the fact that fall and halfpounder fish do not fall into a single genetic cluster, de novo assigned genetic cluters do not do a great job of differentiating among a priori assigned run-timing groups. When breaking the fish into four groups these groups are mostly defined by covariation at ~15 markers including run timing markers, a neutral marker (linked to residency markers), and residency markers. Note that the loadings for the run-timing markers are ~2 fold greater than other markers included in the table above and that this cutoff is arbitrary.
 
 ### DAPC a priori
 
 __A note on the best number of pcs__  
 Given that (a) we are using a priori assigned groups to assess differences among said groups and (b) the number of predictors is only slightly less than the number of object (n = 882 and p= ~350), we have to be really cautious about overfitting here, so we're going to run both cross-fold validation and the "a.score" procedure to determine the correct number of pcs to retain, then we will retain pcs according to which optimization strategy suggests the lower number of pcs. One issue here is that previous results suggest that at least one and potentially two (fall and half pounders) of our a priori groups is a synthetic (i.e. non exclusively genetic) assemblage of individuals. If this is the case, even using approaches such as the a score or cross validation will lead to overfitting w respect to the underlying biology and our choice of n.pc should attempt to limit overfitting by choosing the minimum PCs possible that still strongly discriminate. 
 
-The best pca according to optim.a.score was 112, but there was only extremely slight improvement at each pc beyond 12, where we observed a local maximum. Best pca according to cross validation using overall group assignment success was 16, however cross validation using mean group assignment per group was 121. Similar to the a.score approach, there is not a strong "arc" pattern in the latter as one might suspect for a cross validation procedure, instead fit improves rapidly after the first few pcs, declines, then and continues a gradual improvement. We chose the number of PCs that correspond to this first peak in both the xval and optim.a.score procedure: 12. However, it should be noted that running DAPC with widely varying PCs did not qualitatively change the pattern of results. The degree of discrimination increased with increasing PCs and loadings on individual markers varied, but not the qualitative relationships among a priori assigned populations.  
+These are the results from the original run (with two additional run-timing markers):  
+The best pca according to optim.a.score was 112, but there was only extremely slight improvement at each pc beyond 12, where we observed a local maximum. Best pca according to cross validation using overall group assignment success was 16, however cross validation using mean group assignment per group was 121. Similar to the a.score approach, there is not a strong "arc" pattern in the latter as one might suspect for a cross validation procedure, instead fit improves rapidly after the first few pcs, declines, then and continues a gradual improvement. WE considered this to be a potential example of double descent, as once the number of PCs exceeds the group sample size, the model is overparametized (p > n). We chose the number of PCs that correspond to this first peak in both the xval and optim.a.score procedure: 12. However, it should be noted that running DAPC with widely varying PCs did not qualitatively change the pattern of results. The degree of discrimination increased with increasing PCs and loadings on individual markers varied, but not the qualitative relationships among a priori assigned populations.  
 
+Final results:  
+When we removed the two troublesome markers, the a.score results were nearly exactly the same. Best pca was 113, but there was only extremely slight improvement at each pc beyond 12, where we observed a local maximum. Best pca according to cross validation using overall group assignment success was 12, however cross validation using mean group assignment per group was 122. Similar to the a.score approach, there is not a strong "arc" pattern in the latter as one might suspect for a cross validation procedure, instead fit improves rapidly after the first few pcs, declines, then and continues a gradual improvement. WE considered this to be a potential example of double descent, as once the number of PCs exceeds the group sample size, the model is overparametized (p > n) and this is precisely where the increase in xval success rate began to increase. We chose the number of PCs that correspond to this first peak in both the xval and optim.a.score procedure: 12. However, it should be noted that running DAPC with widely varying PCs did not qualitatively change the pattern of results. The degree of discrimination increased with increasing PCs and loadings on individual markers varied, but not the qualitative relationships among a priori assigned populations.  
 __Now the DAPC__
 ```{r, message=FALSE, warning=FALSE}
 #first optimize the PCs retained based on the a.score, so run dapc on the full pcs
-#invisible(dapc_full_apriori <- dapc(genind_2.0, n.pca = 330, n.da = 3 ))
+#invisible(dapc_full_apriori <- dapc(genind_2.3, n.pca = 330, n.da = 3 ))
 #to speed this up in future knits, we ran optim.a.score once, but not in the notebook
 #optim.a.score(dapc_full_apriori, smart=FALSE)
 #nice now we use the optimized a score to run our dapc for real
-#mat <- as.matrix(scaleGen(genind_2.0, NA.method="mean", scale=FALSE, center=FALSE))
-#xpop <- pop(genind_2.0)
+#mat <- as.matrix(scaleGen(genind_2.3, NA.method="mean", scale=FALSE, center=FALSE))
+#xpop <- pop(genind_2.3)
 #xval <- xvalDapc(mat, xpop, n.pca.max = 200, training.set = 0.9, result = "overall", center = TRUE, scale = FALSE, n.pca = seq(1,300, length.out = 60), n.rep = 50, xval.plot = TRUE)
 
-invisible(dapc_full_apriori <- dapc(genind_2.0, n.pca = 12, n.da = 3 ))
+invisible(dapc_full_apriori <- dapc(genind_2.3, n.pca = 12, n.da = 3 ))
 
 
 plot_data <- as.data.frame(dapc_full_apriori$ind.coord)
-plot_data$pop <- as.character(genind_2.0$pop)
+plot_data$pop <- as.character(genind_2.3$pop)
 
 
 ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, size = 2)+theme_classic()+scale_color_viridis_d()+stat_ellipse(aes(x=LD1, y=LD2, color = pop))
@@ -879,7 +921,7 @@ scatter(dapc_full_apriori)
 marker_loadings1 <- loadingplot(dapc_full_apriori$var.contr, axis=1,thres=.01, lab.jitter=1, main = "laoding plot for DA 1")
 markers1 <- unique(substr(names(marker_loadings1$var.values),1,nchar(names(marker_loadings1$var.values))-2))
 
-marker_loadings2 <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.00713, lab.jitter=1, main = "laoding plot for DA 2")
+marker_loadings2 <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.006, lab.jitter=1, main = "laoding plot for DA 2")
 markers2 <- unique(substr(names(marker_loadings2$var.values),1,nchar(names(marker_loadings2$var.values))-2))
 
 kable(marker_mapping2 %>%
@@ -898,12 +940,13 @@ kable(marker_mapping2 %>%
 #marker_loadings2a <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.00000001, lab.jitter=1, main = "laoding plot for DA 2")
 #write.table(as.data.frame(marker_loadings2a$var.values), "load.txt", quote = FALSE, sep = "\t" )
 #write.table(select(marker_mapping2, marker, `Presumed Type`, chr), "map.txt", quote=FALSE, sep = "\t")  
+
 ```
 
 
 
 
-DAPC largely discriminates among groups along the first discriminant axis. Fall and half pounder fish demonstrate little to no differentiation along any DA. The first DA strongly separates winter and summer run fish, and is driven by by 11 markers including run timing associated markers and a neutral marker (Omy_128996-481). The second da captures much less variation among groups (78% vs 17%), and is driven largely by 5 markers neutral markers and to a lesser extent 19 additional markers including additional neutral markers and several associated with residency/anadromy and other adapative traits. Interstingly one of the "neutral" annotated markers (Omy_LDHB-2...) have been associated with residency vs anadromy in an association study in the klickitat river (doi.org/10.1080/00028487.2011.588131).
+DAPC largely discriminates among groups along the first discriminant axis. Fall and half pounder fish demonstrate little to no differentiation along any DA. The first DA strongly separates winter and summer run fish, and is driven by by 9 markers including 8 run timing associated markers and a neutral marker (Omy_128996-481). The second da captures much less variation among groups (79% vs 16%), and is driven largely by 5 residency markers and 17 additional markers including  neutral markers and several associated with residency/anadromy and other adapative traits. Interstingly one of the "neutral" annotated markers (Omy_LDHB-2...) have been associated with residency vs anadromy in an association study in the klickitat river (doi.org/10.1080/00028487.2011.588131).
 
 
 ### DAPC Classification
@@ -912,8 +955,8 @@ Next we use this a priori DAPC to attempt to classify half pounders into early-s
 
 
 ```{r, warning=FALSE, message=FALSE}
-classifier <- dapc(genind_2.0[pop = c("Winter", "Summer")], n.da = 2, n.pca = 1) #optim a score is 1
-pred.half<- predict.dapc(classifier, newdata=genind_2.0[pop=c("halfpounder" , "fall")])
+classifier <- dapc(genind_2.1[pop = c("Winter", "Summer")], n.da = 2, n.pca = 1) #optim a score is 1
+pred.half<- predict.dapc(classifier, newdata=genind_2.1[pop=c("halfpounder" , "fall")])
 
 preds <- as.data.frame(cbind(pred.half$posterior, pred.half$ind.scores))
 
@@ -1003,18 +1046,18 @@ invisible(neutraldapc <- dapc(neutral_genind, n.pca = 60, n.da = 3 ))
 
 
 plot_data <- as.data.frame(neutraldapc$ind.coord)
-plot_data$pop <- as.character(genind_2.0$pop)
+plot_data$pop <- as.character(genind_2.1$pop)
 
 #scatter.dapc(neutraldapc)
 
-plot_ly(x=plot_data$LD1, y=plot_data$LD2, z=plot_data$LD3, type="scatter3d", mode="markers", color=genind_2.0$pop, alpha = 0.8)
+plot_ly(x=plot_data$LD1, y=plot_data$LD2, z=plot_data$LD3, type="scatter3d", mode="markers", color=genind_2.1$pop, alpha = 0.8)
 
 #pub quality figure
 ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, size = 2)+theme_classic()+scale_color_viridis_d(name = "Run",labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter" ))+stat_ellipse(aes(x=LD1, y=LD2, color = pop))
 
 ```
 
-DA axis 1 separates summer from half pounder, fall and winter. DA 2 separates summer from the rest. DA3 also separates summer from the rest. Interestingly this is the same pattern as obsevred using the full dataset, despite the fact that the first DA was driven almost exclusively by run timing markers. This suggests either LD in our dataset between run timing and neutral markers, or that restricted gene flow tied to run timing leads differentiation at neutral markers. In any case it follows with the neutral Fst a that half pounders and fall run fish are more similar to winter run than summer run across the genome.
+DA axis 1 separates summer from half pounder, fall and winter. DA 2 separates summer from the rest. DA3 also separates summer from the rest. Interestingly this is the same pattern as obsevred using the full dataset, despite the fact that the first DA was driven almost exclusively by run timing markers. This suggests either LD in our dataset between run timing and neutral markers, or that restricted gene flow tied to run timing leads differentiation at neutral markers. In any case it follows with the neutral Fst a that half pounders and fall run fish are more similar to winter run than summer run across the genome. I'll also add that this pattern looks like overfitting to me.
 
 ### DAPC Results Summary
 
@@ -1041,10 +1084,10 @@ run_timing_loci_names <- marker_mapping %>%
 #different naming convention, lets fix
 run_timing_loci_names <- str_replace(run_timing_loci_names$marker, "Omy28", "Chr28")
 
-#run_timing_loci <- genos_2.2 %>%
+#run_timing_loci <- genos_2.3 %>%
 #  select(Sample, Date, run, year, one_of(run_timing_loci_names))
 
-#genind_pop <- seppop(genind_2.0)
+#genind_pop <- seppop(genind_2.1)
 #run_timing_fall <- genind_pop$fall[loc=run_timing_loci_names]
 #run_timing_half <- genind_pop$halfpounder[loc=run_timing_loci_names]
 #run_timing_winter <- genind_pop$Winter[loc=run_timing_loci_names]
@@ -1060,20 +1103,20 @@ Are any markers diagnostic (fixed or nearly fixed within a run-timing group)? Be
 
 ```{r, message =FALSE, warning=FALSE}
 #because adegenet can be so difficult to use, let take advantage of popgenreport to collect our summary data
-all_counts <- allele.dist(genind_2.0, mk.figures = FALSE)$count
+all_counts <- allele.dist(genind_2.1, mk.figures = FALSE)$count
 #make into a dataframe
 all_counts <- as.data.frame(do.call(rbind, all_counts))
 colnames(all_counts) <- c("fall_count", "half_count", "summer_count", "winter_count")
 all_counts$sum <- rowSums(all_counts, na.rm = TRUE)
 
-all_freqs <- allele.dist(genind_2.0, mk.figures = FALSE)$frequency
+all_freqs <- allele.dist(genind_2.1, mk.figures = FALSE)$frequency
 #make into a dataframe
 all_freqs <- as.data.frame(do.call(rbind, all_freqs))
 
 all_freqs <- as.data.frame(cbind(all_freqs, all_counts))
 
 ##### get only minor allele
-all_freqs$marker <- genind_2.0$loc.fac
+all_freqs$marker <- genind_2.1$loc.fac
 
 #now group by marker and keep the minor allele, then convert counts to 
 all_maf <- all_freqs %>%
@@ -1100,13 +1143,13 @@ pheatmap(tmat, cluster_cols = FALSE)
 
 ```{r, warning=FALSE, message=FALSE}
 #because adegenet can be so difficult to use, let take advantage of popgenreport to collect our summary data
-run_timing_counts <- allele.dist(genind_2.0[loc=run_timing_loci_names], mk.figures = FALSE)$count
+run_timing_counts <- allele.dist(genind_2.1[loc=run_timing_loci_names], mk.figures = FALSE)$count
 #make into a dataframe
 run_timing_counts <- as.data.frame(do.call(rbind, run_timing_counts))
 colnames(run_timing_counts) <- c("fall_count", "half_count", "summer_count", "winter_count")
 run_timing_counts$sum <- rowSums(run_timing_counts, na.rm = TRUE)
 
-run_timing_freqs <- allele.dist(genind_2.0[loc=run_timing_loci_names], mk.figures = FALSE)$frequency
+run_timing_freqs <- allele.dist(genind_2.1[loc=run_timing_loci_names], mk.figures = FALSE)$frequency
 #make into a dataframe
 run_timing_freqs <- as.data.frame(do.call(rbind, run_timing_freqs))
 
@@ -1115,7 +1158,7 @@ run_timing_freqs <- as.data.frame(cbind(run_timing_freqs, run_timing_counts))
 ##### get only minor allele
 #then put the marker names in the same order as the allele.dist (exlude the missing marker first)
 run_timing_loci_names <- run_timing_loci_names[run_timing_loci_names != "Omy_RAD52458-17"]
-run_timing_freqs$marker <- rep(run_timing_loci_names[order(run_timing_loci_names)], each = 2)
+run_timing_freqs$marker <- rep(run_timing_loci_names[order(run_timing_loci_names[-c(8,10)])], each = 2)
 #now group by marker and keep the minor allele, then convert counts to 
 run_timing_maf <- run_timing_freqs %>%
   group_by(marker) %>%
@@ -1133,11 +1176,11 @@ repol <- run_timing_maf %>%
   mutate(fall = ifelse(marker == "Omy_GREB1_05", (1 - fall), fall)) %>%
   mutate(halfpounder = ifelse(marker == "Omy_GREB1_05", (1 - halfpounder), halfpounder)) %>%
   mutate(Summer = ifelse(marker == "Omy_GREB1_05", (1 - Summer), Summer)) %>%
-  mutate(Winter = ifelse(marker == "Omy_GREB1_05", (1 - Winter), Winter)) %>%
-  mutate(fall = ifelse(marker == "Omy_RAD47080-54", (1 - fall), fall)) %>%
-  mutate(halfpounder = ifelse(marker == "Omy_RAD47080-54", (1 - halfpounder), halfpounder)) %>%
-  mutate(Summer = ifelse(marker == "Omy_RAD47080-54", (1 - Summer), Summer)) %>%
-  mutate(Winter = ifelse(marker == "Omy_RAD47080-54", (1 - Winter), Winter))
+  mutate(Winter = ifelse(marker == "Omy_GREB1_05", (1 - Winter), Winter)) #%>%
+#  mutate(fall = ifelse(marker == "Omy_RAD47080-54", (1 - fall), fall)) %>%
+#  mutate(halfpounder = ifelse(marker == "Omy_RAD47080-54", (1 - halfpounder), halfpounder)) %>%
+#  mutate(Summer = ifelse(marker == "Omy_RAD47080-54", (1 - Summer), Summer)) %>%
+#  mutate(Winter = ifelse(marker == "Omy_RAD47080-54", (1 - Winter), Winter))
 
 repol <- repol %>%
   select(fall, halfpounder, Winter, Summer, marker) %>%
@@ -1150,7 +1193,7 @@ pheatmap(tmat)
   
 ```
 
-Of the 14 markers with known run-timing associations, 9 are fixed or nearly fixed for alternative alleles in winter and summer run fish. One additional marker (greb1_05) is highly informative, but is not fixed in winter run fish. Fall run fish and half pounder demonstrate intermediate genotypes and very little differentiation from one another.
+Of the 12 markers with known run-timing associations, 7 are fixed for alternative alleles in winter and summer run fish. One additional marker (greb1_05) is highly informative, but is not fixed in winter run fish. Fall run fish and half pounder demonstrate intermediate genotypes and very little differentiation from one another.
 
 
 ```{r, eval=FALSE, include=FALSE}
@@ -1176,10 +1219,10 @@ Sometimes it can be helpful to look at the pattern across individuals and along 
 colSums(chr28_seppop$Winter$tab, na.rm = TRUE)
 
 #bind these together
-polarized_allele_counts <- as.data.frame(chr28_seppop$Winter$tab[,c(1,4,5,8,10,12,14,16,18,19,22,23,25,28)]) %>%
-  bind_rows(as.data.frame(chr28_seppop$Summer$tab[,c(1,4,5,8,10,12,14,16,18,19,22,23,25,28)])) %>%
-  bind_rows(as.data.frame(chr28_seppop$fall$tab[,c(1,4,5,8,10,12,14,16,18,19,22,23,25,28)])) %>%
-  bind_rows(as.data.frame(chr28_seppop$halfpounder$tab[,c(1,4,5,8,10,12,14,16,18,19,22,23,25,28)]))
+polarized_allele_counts <- as.data.frame(chr28_seppop$Winter$tab[,c(1,4,5,8,10,12,14,16,17,20,21,23)]) %>%
+  bind_rows(as.data.frame(chr28_seppop$Summer$tab[,c(1,4,5,8,10,12,14,16,17,20,21,23)])) %>%
+  bind_rows(as.data.frame(chr28_seppop$fall$tab[,c(1,4,5,8,10,12,14,16,17,20,21,23)])) %>%
+  bind_rows(as.data.frame(chr28_seppop$halfpounder$tab[,c(1,4,5,8,10,12,14,16,17,20,21,23)]))
 
 
 #plot heatmap
@@ -1197,7 +1240,7 @@ marker_pos <- map_results %>%
 
 #hmm one marker position is missing, just add it manually
 marker_pos$CRITFC_SNP_pos_genome <- as.numeric(marker_pos$CRITFC_SNP_pos_genome)
-marker_pos[14,2] <- 11702210
+marker_pos[12,2] <- 11702210
 
 #order to columns
 polarized_allele_counts <- polarized_allele_counts %>%
@@ -1211,11 +1254,70 @@ summer_pac <- filter(polarized_allele_counts, pop == "summer")
 fall_pac <- filter(polarized_allele_counts, pop == "fall")
 halfpounder_pac <- filter(polarized_allele_counts, pop == "halfpounder")
 
-a = pheatmap(winter_pac[,-15], cluster_cols = FALSE, show_rownames = FALSE, main = "winter")
-b = pheatmap(summer_pac[,-15], cluster_cols = FALSE, show_rownames = FALSE, main = "summer")
-c = pheatmap(fall_pac[,-15], cluster_cols = FALSE, show_rownames = FALSE, main = "fall")
-d = pheatmap(halfpounder_pac[,-15], cluster_cols = FALSE, show_rownames = FALSE, main = "halfpounder")
+a = pheatmap(winter_pac[,-13], cluster_cols = FALSE, show_rownames = FALSE, main = "winter")
+b = pheatmap(summer_pac[,-13], cluster_cols = FALSE, show_rownames = FALSE, main = "summer")
+c = pheatmap(fall_pac[,-13], cluster_cols = FALSE, show_rownames = FALSE, main = "fall")
+d = pheatmap(halfpounder_pac[,-13], cluster_cols = FALSE, show_rownames = FALSE, main = "halfpounder")
 
+```
+
+
+```{r}
+#same as above but for diag only
+fall_pac_diag <- select(fall_pac, -c("Chr28_11607954", "Omy_GREB1_05", "Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194"))
+
+
+#repolarize the -54 marker
+#fall_pac_diag <- fall_pac_diag %>%
+#  mutate(`Omy_RAD47080-54` = 2 - `Omy_RAD47080-54`)
+
+c = pheatmap(fall_pac_diag[,-8], cluster_cols = FALSE, show_rownames = FALSE, main = "fall")
+
+half_pac_diag <- select(halfpounder_pac, -c("Chr28_11607954", "Omy_GREB1_05", "Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194"))
+
+
+#repolarize the -54 marker
+#fall_pac_diag <- fall_pac_diag %>%
+#  mutate(`Omy_RAD47080-54` = 2 - `Omy_RAD47080-54`)
+
+c = pheatmap(half_pac_diag[,-8], cluster_cols = FALSE, show_rownames = FALSE, main = "halfpounder")
+
+
+# same as above but excluding markers with weird missingness patterns and getting rid of the duplicate (-54)
+
+#fall_pac_diag_mo_miss <- select(fall_pac_diag, -c("Omy_RAD47080-54", "Chr28_11671116"))
+
+#counting all winter fall run
+#sum(rowSums(fall_pac_diag_mo_miss[,-8], na.rm = TRUE) ==14)
+#counting all summer fall run
+#sum(rowSums(fall_pac_diag_mo_miss[,-8], na.rm = TRUE) == 0)
+
+#same for half
+#half_pac_diag_mo_miss <- select(half_pac_diag, -c("Omy_RAD47080-54", "Chr28_11671116"))
+
+#counting all winter fall run
+#sum(rowSums(half_pac_diag_mo_miss[,-8], na.rm = TRUE) ==14)
+#counting all summer fall run
+#sum(rowSums(half_pac_diag_mo_miss[,-8], na.rm = TRUE) == 0)
+
+#again but split by year
+#half_pac_diag_mo_miss_2018 <- half_pac_diag_mo_miss %>%
+#  rownames_to_column(var = "Sample") %>%
+#  left_join(select(genos_2.3, Sample, year)) %>%
+#  filter(year == "2018")
+
+#half_pac_diag_mo_miss_2019 <- half_pac_diag_mo_miss %>%
+#  rownames_to_column(var = "Sample") %>%
+#  left_join(select(genos_2.3, Sample, year)) %>%
+#  filter(year == "2019")
+
+#here we count the number of samples that uncontroversially fall into summer and winter bins (no missing data, only winter/sumer alleles)
+#sum(rowSums(half_pac_diag_mo_miss_2018[,-c(1,9,10)], na.rm = TRUE) ==14)
+#sum(rowSums(half_pac_diag_mo_miss_2018[,-c(1,9,10)], na.rm = TRUE) ==0)
+
+
+#sum(rowSums(half_pac_diag_mo_miss_2019[,-c(1,9,10)], na.rm = TRUE) ==14)
+#sum(rowSums(half_pac_diag_mo_miss_2019[,-c(1,9,10)], na.rm = TRUE) ==0)
 ```
 
 
@@ -1236,13 +1338,13 @@ residency_loci_names <- residency_loci_names$marker
 residency_loci_names <- residency_loci_names[-6]
 
 # get summary info
-residency_counts <- allele.dist(genind_2.0[loc=residency_loci_names], mk.figures = FALSE)$count
+residency_counts <- allele.dist(genind_2.1[loc=residency_loci_names], mk.figures = FALSE)$count
 #make into a dataframe
 residency_counts <- as.data.frame(do.call(rbind, residency_counts))
 colnames(residency_counts) <- c("fall_count", "half_count", "summer_count", "winter_count")
 residency_counts$sum <- rowSums(residency_counts, na.rm = TRUE)
 
-residency_freqs <- allele.dist(genind_2.0[loc=residency_loci_names], mk.figures = FALSE)$frequency
+residency_freqs <- allele.dist(genind_2.1[loc=residency_loci_names], mk.figures = FALSE)$frequency
 #make into a dataframe
 residency_freqs <- as.data.frame(do.call(rbind, residency_freqs))
 
@@ -1251,11 +1353,29 @@ residency_freqs <- as.data.frame(cbind(residency_freqs, residency_counts))
 ##### get only minor allele
 #then put the marker names in the same order as the allele.dist (exlude the missing marker first)
 residency_freqs$marker <- rep(residency_loci_names[order(residency_loci_names)], each = 2)
+
+# the residency markers were switched on the probe seqs file during genotype calling, let's fix this here, since none of the published results share marker names up to this point, let's leave the analysis as is and fix at this stage. 
+# here the info from the corrections
+"
+R40252 and R40319 are correct.
+What I labeled R19198 is actually R14589.
+What I labeled R14589 is actually R33562.
+What I labeled R33562 is actually R24370.
+What I labeled R24370 is actually R19198.
+"
+#and here we rename
+residency_freqs$marker[c(3,4)] <- "OmyR14589"
+residency_freqs$marker[c(1,2)] <- "OmyR33562"
+residency_freqs$marker[c(7,8)] <- "OmyR24370"
+residency_freqs$marker[c(5,6)] <- "OmyR19198"
+
 #now group by marker and keep the minor allele, then convert counts to 
 residency_maf <- residency_freqs %>%
   group_by(marker) %>%
   slice_min(sum) %>%
   replace(., is.na(.), 0)
+
+
 
 #plot as a heatmap
 residency_maf <- residency_maf %>%
@@ -1276,7 +1396,23 @@ res_divs <- pivot_wider(res_divs, names_from = obs_exp, values_from = H)
 ggplot(data=res_divs)+geom_point(aes(He, Ho, color = run), size = 3, alpha = 0.8)+scale_color_viridis_d()+theme_classic()+geom_abline(aes(slope =1, intercept = 0))+xlim(0,0.5)+ylim(0,0.5)
 ```
 
-So variation is high within all the runs (least so at fall run), with expected heterozygosity all the way near 0.5. Interestingly there is a dearth of heterozygotes in all but summer run, however, this is significant only for halfpounder where it is the strongest. This pattern suggests that there is some structuring with the halfpounders and to a lesser extent fall run (but not summer and winter run fish), with reduced interbreeding between individuals expressing alternative residency alleles. interpreting the differences across populations suggests there's varying degrees of introgression between anadromous and resident fish across the run types. this may be explained by the temporal and spatial variation in spawning between run types. 
+We also know what alleles are the resident alleles. Let's repolarize the figure above so that higher freq indicates more resident allele dosage
+```{r}
+#we'll go row by row in the resident freqs dataframe and choose the resident allele
+pol_res_freq <- residency_freqs[c(1,4,6,8,10),]
+
+
+#plot as a heatmap
+pol_res_freq2 <- pol_res_freq %>%
+  rename("Half-pounder" = "halfpounder", "Early-Summer" = "Summer", "Late-Summer" = "fall")
+col_pal<- colorRampPalette(c("red", "white", "blue"))(256)
+tmat <- t(as.matrix(pol_res_freq2[,1:4]))
+colnames(tmat) <- pol_res_freq$marker
+pheatmap(tmat)
+```
+
+
+So variation is high within all the runs (least so at fall run), with expected heterozygosity all the way near 0.5. Interestingly there is a dearth of heterozygotes in all but summer run, however, this is significant only for halfpounder where it is the strongest. This pattern suggests that there is some structuring with the halfpounders and to a lesser extent fall run (but not summer and winter run fish), with reduced interbreeding between individuals expressing alternative residency alleles. interpreting the differences across populations suggests there's varying degrees of introgression between anadromous and resident fish across the run types, with the highest proportion of resident alleles in the late-summer run samples. this may be explained by the temporal and spatial variation in spawning between run types. 
 
 also something to think about here is that there is an observed tendency of hatchery released smolts to residualize over the summer, winter fish are graded (i.e. precocially mature males are not released) so it is likely to be the summer hatchery fish contributing the residuals.
 
@@ -1288,7 +1424,7 @@ also of note here is that our winter sample includes both hatchery and natural o
 Quick LD plot using r(bar)D of winter and summer runs (first plot) vs fall and half pounder (second) plot. Will come back and clean this up later. Absence of variation within some runs is causing code to break for plotting and estimating LD in a lot of packages. If we want formal LD, I think I'll need to manually convert to a plink or vcf format and estimate D or r2 with plink/tassel or other
 .
 ```{r, cache=TRUE, message=FALSE, warning=FALSE}
-chr28_genind <- genind_2.0[loc = run_timing_loci_names]
+chr28_genind <- genind_2.1[loc = run_timing_loci_names]
 
 # first lets calculate LD (dartR has a great (fast) ld estimator that works right on genind files, so let's use this)
 #ldreport_winter <- dartR::gl.report.ld(chr28_genind[pop = c("Summer", "Winter")], name = NULL, save = FALSE )
@@ -1369,10 +1505,12 @@ First we need to get phased genotypic data in order to identify haplotypes.
 
 We will use fastPHASE. First lets get data in the fastphase format
 
-```{r}
+```{r, eval = FALSE}
+#when I reran the analysis after removing the redudant marker and the marker with population specific missingness, instead of making these input files from scratch I simply deleted the rows from the input file for fastphase. 
+
 # the fast phase format's genotype data for an individual is expressed on two rows with each row representing an unphased haploid genotype. There is also some metadata added into header rows. the main gt matrix  is very similar to the structure format so we'll use the same approach to reformat the data as we used to convert from genind to structure
 
-chr28_genind <- genind_2.0[loc=run_timing_loci_names]
+chr28_genind <- genind_2.1[loc=run_timing_loci_names]
 
 #note just sort of crashed through this with a text editor, not easily logged, but the general idea was transpose the data, split columns (diploid to dual haploid by adding a tab between the values), then convert N to ?, then read the result into R and transpose again
 
@@ -1434,13 +1572,13 @@ fastphase was run using default setting and attempting to minimize the switch er
 Here we will examine the diversity and putative evolutionary history of the haplotypes.
 
 ```{r, message=FALSE, warning=FALSE}
-ph_geno <- read_tsv("phasing/phased_genos2_r.txt")
+ph_geno <- read_tsv("phasing/phased_genos4_r.txt")
 ```
 
 First lets collect some summary info:
 
 ```{r}
-ph_geno <- genos_2.2 %>%
+ph_geno <- genos_2.3 %>%
   select(Sample, run) %>%
   left_join(ph_geno, by = c("Sample" = "ind"))
 
@@ -1556,8 +1694,13 @@ phased_genos <- phased_genos %>%
 
 #lets get rid of the markers that are not diagnostic or heaviliy weighted in the a priori DAPC
 
-#phased_genos <- phased_genos %>%
-# select(-one_of(c("Chr28_11607954","Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194")))
+phased_genos <- phased_genos %>%
+ select(-one_of(c("Chr28_11607954","Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194")))
+
+#lets get rid of the "problem markers"
+phased_genos <- phased_genos %>%
+ select(-one_of(c("Omy_RAD47080-54", "Chr28_11671116")))
+
 
 
 winter_pac <- filter(phased_genos, run == "Winter")
@@ -1566,7 +1709,7 @@ fall_pac <- filter(phased_genos, run == "fall")
 halfpounder_pac <- filter(phased_genos, run == "halfpounder")
 
 a = pheatmap(winter_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "winter")
-b = pheatmap(summer_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "summer")
+# b = pheatmap(summer_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "Summer") # this wont plot as there's no variation
 c = pheatmap(fall_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "fall")
 d = pheatmap(halfpounder_pac[,-c(1,2)], cluster_cols = FALSE, show_rownames = FALSE, main = "halfpounder")
 
@@ -1598,8 +1741,8 @@ Plot below shows indiviudal haplotypes (from only informative loci) in the greb1
 #prepackaged heatmap tools are unlikely to work well given all the weird things we want to do, so lets just build our own ggplot output group by group (winter + summer + 3 each of fall and halfpounder)
 
 #remove uninformative snps
-phased_genos <- phased_genos %>%
-  select(-one_of(c("Chr28_11607954","Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194")))
+#phased_genos <- phased_genos %>%
+#  select(-one_of(c("Chr28_11607954","Omy_GREB1_09", "Chr28_11632591", "Chr28_11773194")))
 
 
 #get assignment results
@@ -1657,12 +1800,12 @@ summer_pac <- phased_genos %>%
 require(ggdendro)
 dendro_winter <- as.dendrogram(hclust(d = dist(winter_pac[,-c(1,2)])))
 dendro_summer <- as.dendrogram(hclust(d = dist(summer_pac[,-c(1,2)])))
-dendro_fall_w <- as.dendrogram(hclust(d = dist(fall_w[,-c(1,2,13)])))
-dendro_fall_s <- as.dendrogram(hclust(d = dist(fall_s[,-c(1,2,13)])))
-dendro_fall_u <- as.dendrogram(hclust(d = dist(fall_u[,-c(1,2,13)])))
-dendro_halfpounder_w <- as.dendrogram(hclust(d = dist(halfpounder_w[,-c(1,2,13)])))
-dendro_halfpounder_s <- as.dendrogram(hclust(d = dist(halfpounder_s[,-c(1,2,13)])))
-dendro_halfpounder_u <- as.dendrogram(hclust(d = dist(halfpounder_u[,-c(1,2,13)])))
+dendro_fall_w <- as.dendrogram(hclust(d = dist(fall_w[,-c(1,2,11)])))
+dendro_fall_s <- as.dendrogram(hclust(d = dist(fall_s[,-c(1,2,11)])))
+dendro_fall_u <- as.dendrogram(hclust(d = dist(fall_u[,-c(1,2,11)])))
+dendro_halfpounder_w <- as.dendrogram(hclust(d = dist(halfpounder_w[,-c(1,2,11)])))
+dendro_halfpounder_s <- as.dendrogram(hclust(d = dist(halfpounder_s[,-c(1,2,11)])))
+dendro_halfpounder_u <- as.dendrogram(hclust(d = dist(halfpounder_u[,-c(1,2,11)])))
 
 #add row ids for ordering later
 winter_pac <- rowid_to_column(winter_pac, "row_id")
@@ -1681,42 +1824,42 @@ halfpounder_u <- rowid_to_column(halfpounder_u, "row_id")
 long_winter <- winter_pac %>%
   pivot_longer(cols = !(c("run", "sample", "row_id")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(winter_pac$row_id[order.dendrogram(dendro_winter)]), ordered = TRUE)) %>%
-  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
+  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD15709-53", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
 long_summer <- summer_pac %>%
   pivot_longer(cols = !(c("run", "sample", "row_id")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(summer_pac$row_id[order.dendrogram(dendro_summer)]), ordered = TRUE)) %>%
-  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
+  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD15709-53", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
 long_fall_w <- fall_w %>%
   pivot_longer(cols = !(c("run", "sample", "row_id", "assignment")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(fall_w$row_id[order.dendrogram(dendro_fall_w)]), ordered = TRUE)) %>%
-  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
+  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD15709-53", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
 long_fall_s <- fall_s %>%
   pivot_longer(cols = !(c("run", "sample", "row_id", "assignment")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(fall_s$row_id[order.dendrogram(dendro_fall_s)]), ordered = TRUE)) %>%
-  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
+  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD15709-53",  "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
 long_fall_u <- fall_u %>%
   pivot_longer(cols = !(c("run", "sample", "row_id", "assignment")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(fall_u$row_id[order.dendrogram(dendro_fall_u)]), ordered = TRUE)) %>%
-  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
+  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578",  "Omy_RAD15709-53", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
 long_half_u <- halfpounder_u %>%
   pivot_longer(cols = !(c("run", "sample", "row_id", "assignment")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(halfpounder_u$row_id[order.dendrogram(dendro_halfpounder_u)]), ordered = TRUE)) %>%
-  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
+  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD15709-53", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
 long_half_w <- halfpounder_w %>%
   pivot_longer(cols = !(c("run", "sample", "row_id", "assignment")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(halfpounder_w$row_id[order.dendrogram(dendro_halfpounder_w)]), ordered = TRUE)) %>%
-  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
+  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD15709-53", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
 long_half_s <- halfpounder_s %>%
   pivot_longer(cols = !(c("run", "sample", "row_id", "assignment")) ,names_to = "snp", values_to = "allele_count") %>%
   mutate(row_id = factor(row_id, levels=unique(halfpounder_s$row_id[order.dendrogram(dendro_halfpounder_s)]), ordered = TRUE)) %>%
-  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD47080-54", "Omy_RAD15709-53", "Chr28_11671116", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
+  mutate(snp = factor(snp, levels = c("Omy_GREB1_05", "Chr28_11625241", "Chr28_11658853", "Chr28_11667578", "Omy_RAD15709-53", "Chr28_11676622", "Chr28_11683204", "Chr28_11702210"), ordered = TRUE))
 
 ############
 #build heatmaps
@@ -1764,9 +1907,13 @@ This involves removing the uninformative markers from the .phylip file and runni
 Let's also collect the same stats again
 
 ```{r, message = FALSE, warning=FALSE}
-ph_geno <- read_tsv("phasing/phased_genos3_r.txt")
+#here to remove the two unwanted markers deleted the rows in a texteditor from phased_genos3_r.txt then saved as phased_genos4_r.txt
 
-ph_geno <- genos_2.2 %>%
+#ph_geno <- read_tsv("phasing/phased_genos3_r.txt")
+ph_geno <- read_tsv("phasing/phased_genos4_r.txt")
+
+
+ph_geno <- genos_2.3 %>%
   select(Sample, run) %>%
   left_join(ph_geno, by = c("Sample" = "ind"))
 
@@ -1778,8 +1925,10 @@ ph_geno %>%
 
 
 ```{r}
-#ran popart on phased_genos3.phylip and traits2.txt
-knitr::include_graphics('phasing/phased_genos3.phylip.svg')
+#did the same as above (removed the bad columns) from phased_genos3.phylip and ran again
+
+#ran popart on phased_genos4.phylip and traits2.txt
+knitr::include_graphics('phasing/phased_genos4.phylip.svg')
 ```
 
 
@@ -1920,6 +2069,9 @@ summary(lm(LD1~as.numeric(jdate), data=cor_data[cor_data$run=="halfpounder",]))
 ggplot(cor_data[cor_data$run=="halfpounder",])+geom_point(aes(jdate,LD1))+theme_classic()+geom_smooth(aes(jdate,LD1), method = "lm")
 
 
+cor_data %>% group_by(run) %>%
+  summarise(r = range(jdate))
+
 ```
 
 There is a significant, but minor trend (r2 = 0.03, p = 0.04) towards more genetically winter-like fish over time among fall run fish. 
@@ -1935,7 +2087,7 @@ let's check to make sure there are no interesting patterns / structure among hal
 
 ```{r, message=FALSE, warning=FALSE}
 # create the dataset
-half_genind <- seppop(genind_2.0)$halfpounder
+half_genind <- seppop(genind_2.1)$halfpounder
 years <- str_sub(row.names(half_genind@tab), 6,7)
 half_genind$pop <- as.factor(years)
 
@@ -1988,7 +2140,7 @@ md <- md %>%
 to_exp <- polarized_allele_counts %>%
   rownames_to_column(var = "sample") %>%
   left_join(assn) %>%
-  left_join(select(genos_2.2, Sample, Date, run , year), by = c("sample" = "Sample")) %>%
+  left_join(select(genos_2.3, Sample, Date, run , year), by = c("sample" = "Sample")) %>%
   left_join(select(md, SFGL_ID, Origin), by = c("sample" = "SFGL_ID"))
 
 write_tsv(to_exp, "genotype_data/chr28_polarized_allele_counts_2.txt")
