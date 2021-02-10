@@ -1147,7 +1147,7 @@ ggplot(genos_2.0)+geom_density(aes(x=`On-Target Reads`))+geom_vline(aes(xinterce
 The median number of on target reads was 98104. There were 350,847,984 reads contributing to the samples included in the final dataset and 407,683,506 reads contributing to all individuals. 
 
 ```{r, fig.cap="Proportion on Target"}
-ggplot(genos_2.0)+geom_density(aes(x=`%On-Target`))+geom_vline(aes(xintercept=median(`%On-Target`)), color = "red") +theme_classic()
+ggplot(genos_2.3)+geom_density(aes(x=`%On-Target`))+geom_vline(aes(xintercept=median(`%On-Target`)), color = "red") +theme_classic()
 ```
 
 The median proportion of on target reads was 30%.
@@ -1155,14 +1155,20 @@ The median proportion of on target reads was 30%.
 ```{r, warning=FALSE, message=FALSE}
 #code to estimate depth at filtered loci
 marker_info %>%
-  filter(marker %in% colnames(genos_2.0)) %>%
+  filter(marker %in% colnames(genos_2.3)) %>%
   mutate(sumdepth=a1_count+a2_count) %>%
-  summarise(mean=mean(sumdepth, na.rm = TRUE), median=median(sumdepth, na.rm = TRUE), sd=sd(sumdepth, na.rm = TRUE))
+  summarise(mean=mean(sumdepth, na.rm = TRUE), median=median(sumdepth, na.rm = TRUE), sd=sd(sumdepth, na.rm = TRUE), sum=sum(sumdepth, na.rm = TRUE))
 
 marker_info %>%
-  filter(marker %in% colnames(genos_2.0)) %>%
+  filter(marker %in% colnames(genos_2.3)) %>%
   mutate(sumdepth=a1_count+a2_count) %>%
   ggplot + aes(x=sumdepth)+geom_histogram()+theme_classic()
+
+marker_info %>%
+  filter(marker %in% colnames(genos_2.3)) %>%
+  mutate(sumdepth=a1_count+a2_count) %>%
+  select(sumdepth) %>%
+  colSums( na.rm = TRUE)
 ```
 
 The median sequencing depth was 166, and the mean was 278 +- 375 (sd)

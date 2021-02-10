@@ -938,9 +938,16 @@ kable(marker_mapping2 %>%
 
 #for ms tables with loading value
 #marker_loadings2a <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.00000001, lab.jitter=1, main = "laoding plot for DA 2")
-#write.table(as.data.frame(marker_loadings2a$var.values), "load.txt", quote = FALSE, sep = "\t" )
+#write.table(as.data.frame(marker_loadings2a$var.values[seq(1, length(marker_loadings2a$var.values), 2)]), "load.txt", quote = FALSE, sep = "\t" )
 #write.table(select(marker_mapping2, marker, `Presumed Type`, chr), "map.txt", quote=FALSE, sep = "\t")  
 
+loads <- marker_loadings2a$var.values
+loads <- as.data.frame(loads)
+loads <- loads %>%
+ rownames_to_column(var = "marker") %>% 
+ mutate(marker = str_sub(marker, 1, nchar(marker)-2)) %>%
+  left_join(marker_mapping2) %>%
+  select(marker, loads, `Presumed Type`)
 ```
 
 
