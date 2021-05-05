@@ -1,0 +1,3032 @@
+
+
+----------------------------------------------------
+STRUCTURE by Pritchard, Stephens and Donnelly (2000)
+     and Falush, Stephens and Pritchard (2003)
+       Code by Pritchard, Falush and Hubisz
+             Version 2.3.4 (Jul 2012)
+----------------------------------------------------
+
+
+
+Command line arguments:   bin/structure -m "/Users/ddayan/FRA/premature_migration/Rogue_Half-Pounder/half-pounder/structure/halfpounder_2021/10k_20k_adm_corr/mainparams" -e "/Users/ddayan/FRA/premature_migration/Rogue_Half-Pounder/half-pounder/structure/halfpounder_2021/10k_20k_adm_corr/extraparams" 
+Input File:    /Users/ddayan/FRA/premature_migration/Rogue_Half-Pounder/half-pounder/structure/halfpounder_2021/project_data
+
+Run parameters:
+   1000 individuals
+   328 loci
+   2 populations assumed
+   10000 Burn-in period
+   20000 Reps
+
+
+--------------------------------------------
+Proportion of membership of each pre-defined
+ population in each of the 2 clusters
+
+Given    Inferred Clusters       Number of
+ Pop       1      2             Individuals
+
+  1:     0.496  0.504             275
+  2:     0.507  0.493             643
+  3:     0.633  0.367              42
+  4:     0.581  0.419              40
+--------------------------------------------
+
+Allele-freq. divergence among pops (Net nucleotide distance),
+computed using point estimates of P.
+
+      1       2      
+ 1      -    0.0216  
+ 2   0.0216     -    
+
+Average distances (expected heterozygosity) between individuals in same cluster:
+cluster  1  : 0.2983 
+cluster  2  : 0.2573 
+
+--------------------------------------------
+Estimated Ln Prob of Data   = -285540.5
+Mean value of ln likelihood = -285036.5
+Variance of ln likelihood   = 1008.0
+Mean value of alpha         = 3.7872
+
+Mean value of Fst_1         = 0.0236
+Mean value of Fst_2         = 0.1551
+
+
+Inferred ancestry of individuals:
+        Label (%Miss) Pop:  Inferred clusters
+  1 OmyAC19ROGR    (0)    1 :  0.740 0.260 
+  2 OmyAC19ROGR    (0)    1 :  0.513 0.487 
+  3 OmyAC19ROGR    (0)    1 :  0.545 0.455 
+  4 OmyAC19ROGR    (0)    1 :  0.666 0.334 
+  5 OmyAC19ROGR    (1)    1 :  0.119 0.881 
+  6 OmyAC19ROGR    (0)    1 :  0.443 0.557 
+  7 OmyAC19ROGR    (0)    1 :  0.446 0.554 
+  8 OmyAC19ROGR    (0)    1 :  0.720 0.280 
+  9 OmyAC19ROGR    (0)    1 :  0.430 0.570 
+ 10 OmyAC19ROGR    (0)    1 :  0.373 0.627 
+ 11 OmyAC19ROGR    (0)    1 :  0.564 0.436 
+ 12 OmyAC19ROGR    (0)    1 :  0.499 0.501 
+ 13 OmyAC19ROGR    (0)    1 :  0.644 0.356 
+ 14 OmyAC19ROGR    (0)    1 :  0.340 0.660 
+ 15 OmyAC19ROGR    (0)    1 :  0.363 0.637 
+ 16 OmyAC19ROGR    (0)    1 :  0.511 0.489 
+ 17 OmyAC19ROGR    (0)    1 :  0.528 0.472 
+ 18 OmyAC19ROGR    (2)    1 :  0.660 0.340 
+ 19 OmyAC19ROGR    (1)    1 :  0.577 0.423 
+ 20 OmyAC19ROGR    (0)    1 :  0.442 0.558 
+ 21 OmyAC19ROGR    (1)    1 :  0.439 0.561 
+ 22 OmyAC19ROGR    (0)    1 :  0.548 0.452 
+ 23 OmyAC19ROGR    (0)    1 :  0.392 0.608 
+ 24 OmyAC19ROGR    (0)    1 :  0.736 0.264 
+ 25 OmyAC19ROGR    (0)    1 :  0.443 0.557 
+ 26 OmyAC19ROGR    (0)    1 :  0.503 0.497 
+ 27 OmyAC19ROGR    (1)    1 :  0.542 0.458 
+ 28 OmyAC19ROGR    (0)    1 :  0.615 0.385 
+ 29 OmyAC19ROGR    (0)    1 :  0.549 0.451 
+ 30 OmyAC19ROGR    (0)    1 :  0.270 0.730 
+ 31 OmyAC19ROGR    (0)    1 :  0.589 0.411 
+ 32 OmyAC19ROGR    (0)    1 :  0.486 0.514 
+ 33 OmyAC19ROGR    (1)    1 :  0.530 0.470 
+ 34 OmyAC19ROGR    (0)    1 :  0.348 0.652 
+ 35 OmyAC19ROGR    (0)    1 :  0.571 0.429 
+ 36 OmyAC19ROGR    (0)    1 :  0.460 0.540 
+ 37 OmyAC19ROGR    (0)    1 :  0.487 0.513 
+ 38 OmyAC19ROGR    (0)    1 :  0.368 0.632 
+ 39 OmyAC19ROGR    (0)    1 :  0.499 0.501 
+ 40 OmyAC19ROGR    (0)    1 :  0.384 0.616 
+ 41 OmyAC19ROGR    (1)    1 :  0.583 0.417 
+ 42 OmyAC19ROGR    (0)    1 :  0.197 0.803 
+ 43 OmyAC19ROGR    (0)    1 :  0.601 0.399 
+ 44 OmyAC19ROGR    (6)    1 :  0.599 0.401 
+ 45 OmyAC19ROGR    (1)    1 :  0.413 0.587 
+ 46 OmyAC19ROGR    (0)    1 :  0.543 0.457 
+ 47 OmyAC19ROGR    (0)    1 :  0.566 0.434 
+ 48 OmyAC19ROGR    (0)    1 :  0.613 0.387 
+ 49 OmyAC19ROGR    (0)    1 :  0.651 0.349 
+ 50 OmyAC19ROGR    (0)    1 :  0.652 0.348 
+ 51 OmyAC19ROGR    (2)    1 :  0.247 0.753 
+ 52 OmyAC19ROGR    (0)    1 :  0.184 0.816 
+ 53 OmyAC19ROGR    (1)    1 :  0.643 0.357 
+ 54 OmyAC19ROGR    (0)    1 :  0.545 0.455 
+ 55 OmyAC19ROGR    (3)    1 :  0.523 0.477 
+ 56 OmyAC19ROGR    (0)    1 :  0.513 0.487 
+ 57 OmyAC19ROGR    (0)    1 :  0.700 0.300 
+ 58 OmyAC19ROGR    (0)    1 :  0.270 0.730 
+ 59 OmyAC19ROGR    (0)    1 :  0.715 0.285 
+ 60 OmyAC19ROGR    (1)    1 :  0.479 0.521 
+ 61 OmyAC19ROGR    (0)    1 :  0.596 0.404 
+ 62 OmyAC19ROGR    (0)    1 :  0.621 0.379 
+ 63 OmyAC19ROGR    (0)    1 :  0.471 0.529 
+ 64 OmyAC19ROGR    (2)    1 :  0.538 0.462 
+ 65 OmyAC19ROGR    (0)    1 :  0.610 0.390 
+ 66 OmyAC19ROGR    (3)    1 :  0.374 0.626 
+ 67 OmyAC19ROGR    (0)    1 :  0.674 0.326 
+ 68 OmyAC19ROGR    (1)    1 :  0.561 0.439 
+ 69 OmyAC19ROGR    (2)    1 :  0.420 0.580 
+ 70 OmyAC19ROGR    (0)    1 :  0.625 0.375 
+ 71 OmyAC19ROGR    (0)    1 :  0.619 0.381 
+ 72 OmyAC19ROGR    (4)    1 :  0.647 0.353 
+ 73 OmyAC19ROGR    (0)    1 :  0.460 0.540 
+ 74 OmyAC19ROGR    (0)    1 :  0.611 0.389 
+ 75 OmyAC19ROGR    (0)    1 :  0.516 0.484 
+ 76 OmyAC19ROGR    (0)    1 :  0.592 0.408 
+ 77 OmyAC19ROGR    (1)    1 :  0.143 0.857 
+ 78 OmyAC19ROGR    (0)    1 :  0.595 0.405 
+ 79 OmyAC19ROGR    (2)    1 :  0.580 0.420 
+ 80 OmyAC19ROGR    (1)    1 :  0.279 0.721 
+ 81 OmyAC19ROGR    (2)    1 :  0.349 0.651 
+ 82 OmyAC19ROGR    (1)    1 :  0.725 0.275 
+ 83 OmyAC19ROGR    (0)    1 :  0.575 0.425 
+ 84 OmyAC19ROGR    (0)    1 :  0.438 0.562 
+ 85 OmyAC19ROGR    (5)    1 :  0.637 0.363 
+ 86 OmyAC19ROGR    (0)    1 :  0.459 0.541 
+ 87 OmyAC19ROGR    (1)    1 :  0.585 0.415 
+ 88 OmyJC19ROGR    (0)    2 :  0.209 0.791 
+ 89 OmyJC19ROGR    (0)    2 :  0.525 0.475 
+ 90 OmyJC19ROGR    (0)    2 :  0.163 0.837 
+ 91 OmyJC19ROGR    (1)    2 :  0.748 0.252 
+ 92 OmyJC19ROGR    (0)    2 :  0.613 0.387 
+ 93 OmyJC19ROGR    (0)    2 :  0.743 0.257 
+ 94 OmyJC19ROGR    (0)    2 :  0.441 0.559 
+ 95 OmyJC19ROGR    (0)    2 :  0.473 0.527 
+ 96 OmyJC19ROGR    (0)    2 :  0.535 0.465 
+ 97 OmyJC19ROGR    (0)    2 :  0.492 0.508 
+ 98 OmyJC19ROGR    (0)    2 :  0.654 0.346 
+ 99 OmyJC19ROGR    (0)    2 :  0.553 0.447 
+100 OmyJC19ROGR    (1)    2 :  0.568 0.432 
+101 OmyJC19ROGR    (0)    2 :  0.357 0.643 
+102 OmyJC19ROGR    (0)    2 :  0.500 0.500 
+103 OmyJC19ROGR    (0)    2 :  0.473 0.527 
+104 OmyJC19ROGR    (0)    2 :  0.644 0.356 
+105 OmyJC19ROGR    (0)    2 :  0.480 0.520 
+106 OmyJC19ROGR    (0)    2 :  0.156 0.844 
+107 OmyJC19ROGR    (1)    2 :  0.522 0.478 
+108 OmyJC19ROGR    (0)    2 :  0.578 0.422 
+109 OmyJC19ROGR    (0)    2 :  0.412 0.588 
+110 OmyJC19ROGR    (0)    2 :  0.427 0.573 
+111 OmyJC19ROGR    (1)    2 :  0.533 0.467 
+112 OmyJC19ROGR    (2)    2 :  0.497 0.503 
+113 OmyJC19ROGR    (0)    2 :  0.288 0.712 
+114 OmyJC19ROGR    (3)    2 :  0.588 0.412 
+115 OmyJC19ROGR    (1)    2 :  0.580 0.420 
+116 OmyJC19ROGR    (0)    2 :  0.493 0.507 
+117 OmyJC19ROGR    (0)    2 :  0.466 0.534 
+118 OmyJC19ROGR    (0)    2 :  0.694 0.306 
+119 OmyJC19ROGR    (2)    2 :  0.567 0.433 
+120 OmyJC19ROGR    (0)    2 :  0.727 0.273 
+121 OmyJC19ROGR    (0)    2 :  0.567 0.433 
+122 OmyJC19ROGR    (0)    2 :  0.573 0.427 
+123 OmyJC19ROGR    (0)    2 :  0.681 0.319 
+124 OmyJC19ROGR    (0)    2 :  0.482 0.518 
+125 OmyJC19ROGR    (0)    2 :  0.514 0.486 
+126 OmyJC19ROGR    (1)    2 :  0.274 0.726 
+127 OmyJC19ROGR    (0)    2 :  0.591 0.409 
+128 OmyJC19ROGR    (1)    2 :  0.595 0.405 
+129 OmyJC19ROGR    (0)    2 :  0.440 0.560 
+130 OmyJC19ROGR    (2)    2 :  0.557 0.443 
+131 OmyJC19ROGR    (0)    2 :  0.545 0.455 
+132 OmyJC19ROGR    (1)    2 :  0.593 0.407 
+133 OmyJC19ROGR    (0)    2 :  0.648 0.352 
+134 OmyJC19ROGR    (0)    2 :  0.548 0.452 
+135 OmyJC19ROGR    (1)    2 :  0.652 0.348 
+136 OmyJC19ROGR    (3)    2 :  0.612 0.388 
+137 OmyJC19ROGR    (0)    2 :  0.441 0.559 
+138 OmyJC19ROGR    (0)    2 :  0.252 0.748 
+139 OmyJC19ROGR    (2)    2 :  0.667 0.333 
+140 OmyJC19ROGR    (2)    2 :  0.541 0.459 
+141 OmyJC19ROGR    (0)    2 :  0.407 0.593 
+142 OmyJC19ROGR    (0)    2 :  0.416 0.584 
+143 OmyJC19ROGR    (0)    2 :  0.581 0.419 
+144 OmyJC19ROGR    (0)    2 :  0.699 0.301 
+145 OmyJC19ROGR    (0)    2 :  0.612 0.388 
+146 OmyJC19ROGR    (1)    2 :  0.563 0.437 
+147 OmyJC19ROGR    (0)    2 :  0.530 0.470 
+148 OmyJC19ROGR    (0)    2 :  0.676 0.324 
+149 OmyJC19ROGR    (1)    2 :  0.557 0.443 
+150 OmyJC19ROGR    (1)    2 :  0.579 0.421 
+151 OmyJC19ROGR    (0)    2 :  0.499 0.501 
+152 OmyJC19ROGR    (0)    2 :  0.577 0.423 
+153 OmyJC19ROGR    (0)    2 :  0.594 0.406 
+154 OmyJC19ROGR    (1)    2 :  0.547 0.453 
+155 OmyJC19ROGR    (0)    2 :  0.549 0.451 
+156 OmyJC19ROGR    (1)    2 :  0.520 0.480 
+157 OmyJC19ROGR    (0)    2 :  0.546 0.454 
+158 OmyJC19ROGR    (0)    2 :  0.708 0.292 
+159 OmyJC19ROGR    (0)    2 :  0.564 0.436 
+160 OmyJC19ROGR    (0)    2 :  0.564 0.436 
+161 OmyJC19ROGR    (0)    2 :  0.676 0.324 
+162 OmyJC19ROGR    (0)    2 :  0.550 0.450 
+163 OmyJC19ROGR    (0)    2 :  0.604 0.396 
+164 OmyJC19ROGR    (0)    2 :  0.640 0.360 
+165 OmyJC19ROGR    (0)    2 :  0.696 0.304 
+166 OmyJC19ROGR    (0)    2 :  0.567 0.433 
+167 OmyJC19ROGR    (1)    2 :  0.528 0.472 
+168 OmyJC19ROGR    (0)    2 :  0.581 0.419 
+169 OmyJC19ROGR    (0)    2 :  0.143 0.857 
+170 OmyJC19ROGR    (0)    2 :  0.594 0.406 
+171 OmyJC19ROGR    (0)    2 :  0.632 0.368 
+172 OmyJC19ROGR    (0)    2 :  0.391 0.609 
+173 OmyJC19ROGR    (0)    2 :  0.187 0.813 
+174 OmyJC19ROGR    (0)    2 :  0.611 0.389 
+175 OmyJC19ROGR    (0)    2 :  0.621 0.379 
+176 OmyJC19ROGR    (0)    2 :  0.530 0.470 
+177 OmyJC19ROGR    (0)    2 :  0.757 0.243 
+178 OmyJC19ROGR    (0)    2 :  0.549 0.451 
+179 OmyJC19ROGR    (0)    2 :  0.699 0.301 
+180 OmyJC19ROGR    (0)    2 :  0.205 0.795 
+181 OmyJC19ROGR    (0)    2 :  0.548 0.452 
+182 OmyJC19ROGR    (0)    2 :  0.481 0.519 
+183 OmyJC19ROGR    (0)    2 :  0.629 0.371 
+184 OmyJC19ROGR    (0)    2 :  0.322 0.678 
+185 OmyJC19ROGR    (1)    2 :  0.746 0.254 
+186 OmyJC19ROGR    (0)    2 :  0.571 0.429 
+187 OmyJC19ROGR    (0)    2 :  0.635 0.365 
+188 OmyJC19ROGR    (0)    2 :  0.645 0.355 
+189 OmyJC19ROGR    (0)    2 :  0.476 0.524 
+190 OmyJC19ROGR    (0)    2 :  0.623 0.377 
+191 OmyJC19ROGR    (0)    2 :  0.642 0.358 
+192 OmyJC19ROGR    (0)    2 :  0.591 0.409 
+193 OmyJC19ROGR    (1)    2 :  0.465 0.535 
+194 OmyJC19ROGR    (0)    2 :  0.696 0.304 
+195 OmyJC19ROGR    (0)    2 :  0.235 0.765 
+196 OmyJC19ROGR    (0)    2 :  0.573 0.427 
+197 OmyJC19ROGR    (0)    2 :  0.575 0.425 
+198 OmyJC19ROGR    (0)    2 :  0.246 0.754 
+199 OmyJC19ROGR    (0)    2 :  0.649 0.351 
+200 OmyJC19ROGR    (0)    2 :  0.555 0.445 
+201 OmyJC19ROGR    (0)    2 :  0.662 0.338 
+202 OmyJC19ROGR    (0)    2 :  0.770 0.230 
+203 OmyJC19ROGR    (0)    2 :  0.604 0.396 
+204 OmyJC19ROGR    (0)    2 :  0.600 0.400 
+205 OmyJC19ROGR    (0)    2 :  0.500 0.500 
+206 OmyJC19ROGR    (0)    2 :  0.192 0.808 
+207 OmyJC19ROGR    (0)    2 :  0.427 0.573 
+208 OmyJC19ROGR    (0)    2 :  0.602 0.398 
+209 OmyJC19ROGR    (0)    2 :  0.343 0.657 
+210 OmyJC19ROGR    (0)    2 :  0.173 0.827 
+211 OmyJC19ROGR    (0)    2 :  0.477 0.523 
+212 OmyJC19ROGR    (1)    2 :  0.501 0.499 
+213 OmyJC19ROGR    (1)    2 :  0.609 0.391 
+214 OmyJC19ROGR    (0)    2 :  0.569 0.431 
+215 OmyJC19ROGR    (0)    2 :  0.650 0.350 
+216 OmyJC19ROGR    (0)    2 :  0.223 0.777 
+217 OmyJC19ROGR    (0)    2 :  0.381 0.619 
+218 OmyJC19ROGR    (0)    2 :  0.627 0.373 
+219 OmyJC19ROGR    (0)    2 :  0.485 0.515 
+220 OmyJC19ROGR    (0)    2 :  0.763 0.237 
+221 OmyJC19ROGR    (0)    2 :  0.412 0.588 
+222 OmyJC19ROGR    (0)    2 :  0.630 0.370 
+223 OmyJC19ROGR    (0)    2 :  0.576 0.424 
+224 OmyJC19ROGR    (0)    2 :  0.652 0.348 
+225 OmyJC19ROGR    (0)    2 :  0.141 0.859 
+226 OmyJC19ROGR    (0)    2 :  0.439 0.561 
+227 OmyJC19ROGR    (1)    2 :  0.186 0.814 
+228 OmyJC19ROGR    (0)    2 :  0.604 0.396 
+229 OmyJC19ROGR    (1)    2 :  0.640 0.360 
+230 OmyJC19ROGR    (0)    2 :  0.454 0.546 
+231 OmyJC19ROGR    (0)    2 :  0.495 0.505 
+232 OmyJC19ROGR    (1)    2 :  0.581 0.419 
+233 OmyJC19ROGR    (0)    2 :  0.466 0.534 
+234 OmyJC19ROGR    (0)    2 :  0.176 0.824 
+235 OmyJC19ROGR    (0)    2 :  0.296 0.704 
+236 OmyJC19ROGR    (1)    2 :  0.621 0.379 
+237 OmyJC19ROGR    (0)    2 :  0.591 0.409 
+238 OmyJC19ROGR    (0)    2 :  0.505 0.495 
+239 OmyJC19ROGR    (0)    2 :  0.549 0.451 
+240 OmyJC19ROGR    (0)    2 :  0.583 0.417 
+241 OmyJC19ROGR    (0)    2 :  0.508 0.492 
+242 OmyJC19ROGR    (0)    2 :  0.692 0.308 
+243 OmyJC19ROGR    (0)    2 :  0.599 0.401 
+244 OmyJC19ROGR    (0)    2 :  0.574 0.426 
+245 OmyJC19ROGR    (0)    2 :  0.144 0.856 
+246 OmyJC19ROGR    (0)    2 :  0.455 0.545 
+247 OmyJC19ROGR    (0)    2 :  0.337 0.663 
+248 OmyJC19ROGR    (0)    2 :  0.332 0.668 
+249 OmyJC19ROGR    (0)    2 :  0.530 0.470 
+250 OmyJC19ROGR    (0)    2 :  0.527 0.473 
+251 OmyJC19ROGR    (0)    2 :  0.572 0.428 
+252 OmyJC19ROGR    (0)    2 :  0.605 0.395 
+253 OmyJC19ROGR    (0)    2 :  0.515 0.485 
+254 OmyJC19ROGR    (0)    2 :  0.564 0.436 
+255 OmyJC19ROGR    (0)    2 :  0.630 0.370 
+256 OmyJC19ROGR    (0)    2 :  0.409 0.591 
+257 OmyJC19ROGR    (0)    2 :  0.511 0.489 
+258 OmyAC19ROGR    (0)    1 :  0.480 0.520 
+259 OmyAC19ROGR    (1)    1 :  0.347 0.653 
+260 OmyAC19ROGR    (0)    1 :  0.663 0.337 
+261 OmyAC19ROGR    (0)    1 :  0.548 0.452 
+262 OmyAC19ROGR    (0)    1 :  0.513 0.487 
+263 OmyAC19ROGR    (0)    1 :  0.588 0.412 
+264 OmyAC19ROGR    (0)    1 :  0.546 0.454 
+265 OmyAC19ROGR    (0)    1 :  0.594 0.406 
+266 OmyAC19ROGR    (0)    1 :  0.655 0.345 
+267 OmyAC19ROGR    (0)    1 :  0.484 0.516 
+268 OmyAC19ROGR    (1)    1 :  0.480 0.520 
+269 OmyAC19ROGR    (1)    1 :  0.482 0.518 
+270 OmyAC19ROGR    (0)    1 :  0.623 0.377 
+271 OmyAC19ROGR    (0)    1 :  0.395 0.605 
+272 OmyAC19ROGR    (0)    1 :  0.422 0.578 
+273 OmyAC19ROGR    (0)    1 :  0.633 0.367 
+274 OmyAC19ROGR    (0)    1 :  0.212 0.788 
+275 OmyAC19ROGR    (0)    1 :  0.508 0.492 
+276 OmyAC19ROGR    (0)    1 :  0.526 0.474 
+277 OmyAC19ROGR    (0)    1 :  0.502 0.498 
+278 OmyAC19ROGR    (0)    1 :  0.396 0.604 
+279 OmyAC19ROGR    (0)    1 :  0.436 0.564 
+280 OmyAC19ROGR    (0)    1 :  0.503 0.497 
+281 OmyAC19ROGR    (0)    1 :  0.569 0.431 
+282 OmyAC19ROGR    (0)    1 :  0.482 0.518 
+283 OmyAC19ROGR    (0)    1 :  0.561 0.439 
+284 OmyAC19ROGR    (0)    1 :  0.660 0.340 
+285 OmyAC19ROGR    (0)    1 :  0.609 0.391 
+286 OmyAC19ROGR    (0)    1 :  0.673 0.327 
+287 OmyAC19ROGR    (0)    1 :  0.107 0.893 
+288 OmyAC19ROGR    (0)    1 :  0.230 0.770 
+289 OmyAC19ROGR    (0)    1 :  0.478 0.522 
+290 OmyAC19ROGR    (1)    1 :  0.132 0.868 
+291 OmyAC19ROGR    (0)    1 :  0.379 0.621 
+292 OmyAC19ROGR    (1)    1 :  0.452 0.548 
+293 OmyAC19ROGR    (0)    1 :  0.659 0.341 
+294 OmyAC19ROGR    (0)    1 :  0.373 0.627 
+295 OmyAC19ROGR    (0)    1 :  0.651 0.349 
+296 OmyAC19ROGR    (0)    1 :  0.629 0.371 
+297 OmyAC19ROGR    (0)    1 :  0.230 0.770 
+298 OmyAC19ROGR    (0)    1 :  0.630 0.370 
+299 OmyAC19ROGR    (0)    1 :  0.450 0.550 
+300 OmyAC19ROGR    (0)    1 :  0.609 0.391 
+301 OmyAC19ROGR    (0)    1 :  0.166 0.834 
+302 OmyAC19ROGR    (0)    1 :  0.339 0.661 
+303 OmyAC19ROGR    (0)    1 :  0.491 0.509 
+304 OmyAC19ROGR    (0)    1 :  0.460 0.540 
+305 OmyAC19ROGR    (0)    1 :  0.604 0.396 
+306 OmyAC19ROGR    (0)    1 :  0.237 0.763 
+307 OmyAC19ROGR    (1)    1 :  0.667 0.333 
+308 OmyAC19ROGR    (0)    1 :  0.491 0.509 
+309 OmyAC19ROGR    (1)    1 :  0.186 0.814 
+310 OmyAC19ROGR    (0)    1 :  0.386 0.614 
+311 OmyAC19ROGR    (0)    1 :  0.343 0.657 
+312 OmyAC19ROGR    (0)    1 :  0.611 0.389 
+313 OmyAC19ROGR    (0)    1 :  0.677 0.323 
+314 OmyAC19ROGR    (0)    1 :  0.617 0.383 
+315 OmyAC19ROGR    (0)    1 :  0.530 0.470 
+316 OmyAC19ROGR    (0)    1 :  0.606 0.394 
+317 OmyAC19ROGR    (0)    1 :  0.615 0.385 
+318 OmyAC19ROGR    (0)    1 :  0.679 0.321 
+319 OmyAC19ROGR    (1)    1 :  0.727 0.273 
+320 OmyAC19ROGR    (0)    1 :  0.758 0.242 
+321 OmyAC19ROGR    (0)    1 :  0.619 0.381 
+322 OmyAC19ROGR    (0)    1 :  0.356 0.644 
+323 OmyAC19ROGR    (0)    1 :  0.620 0.380 
+324 OmyAC19ROGR    (0)    1 :  0.632 0.368 
+325 OmyAC19ROGR    (0)    1 :  0.377 0.623 
+326 OmyAC19ROGR    (0)    1 :  0.567 0.433 
+327 OmyAC19ROGR    (0)    1 :  0.607 0.393 
+328 OmyAC20ROGR    (1)    1 :  0.643 0.357 
+329 OmyAC20ROGR    (0)    1 :  0.542 0.458 
+330 OmyAC20ROGR    (0)    1 :  0.542 0.458 
+331 OmyAC20ROGR    (0)    1 :  0.407 0.593 
+332 OmyAC20ROGR    (0)    1 :  0.459 0.541 
+333 OmyAC20ROGR    (0)    1 :  0.428 0.572 
+334 OmyAC20ROGR    (0)    1 :  0.682 0.318 
+335 OmyAC20ROGR    (0)    1 :  0.607 0.393 
+336 OmyAC20ROGR    (0)    1 :  0.462 0.538 
+337 OmyAC20ROGR    (0)    1 :  0.351 0.649 
+338 OmyAC20ROGR    (0)    1 :  0.511 0.489 
+339 OmyAC20ROGR    (0)    1 :  0.515 0.485 
+340 OmyAC20ROGR    (0)    1 :  0.554 0.446 
+341 OmyAC20ROGR    (0)    1 :  0.574 0.426 
+342 OmyAC20ROGR    (0)    1 :  0.472 0.528 
+343 OmyAC20ROGR    (0)    1 :  0.562 0.438 
+344 OmyAC20ROGR    (0)    1 :  0.464 0.536 
+345 OmyAC20ROGR    (1)    1 :  0.453 0.547 
+346 OmyAC20ROGR    (0)    1 :  0.434 0.566 
+347 OmyAC20ROGR    (0)    1 :  0.471 0.529 
+348 OmyAC20ROGR    (0)    1 :  0.461 0.539 
+349 OmyAC20ROGR    (0)    1 :  0.567 0.433 
+350 OmyAC20ROGR    (0)    1 :  0.514 0.486 
+351 OmyAC20ROGR    (0)    1 :  0.492 0.508 
+352 OmyAC20ROGR    (0)    1 :  0.585 0.415 
+353 OmyAC20ROGR    (0)    1 :  0.609 0.391 
+354 OmyAC20ROGR    (0)    1 :  0.428 0.572 
+355 OmyAC20ROGR    (0)    1 :  0.578 0.422 
+356 OmyAC20ROGR    (0)    1 :  0.613 0.387 
+357 OmyAC20ROGR    (0)    1 :  0.470 0.530 
+358 OmyAC20ROGR    (0)    1 :  0.592 0.408 
+359 OmyAC20ROGR    (0)    1 :  0.407 0.593 
+360 OmyAC20ROGR    (0)    1 :  0.429 0.571 
+361 OmyAC20ROGR    (0)    1 :  0.596 0.404 
+362 OmyAC20ROGR    (0)    1 :  0.580 0.420 
+363 OmyAC20ROGR    (0)    1 :  0.474 0.526 
+364 OmyAC20ROGR    (1)    1 :  0.618 0.382 
+365 OmyAC20ROGR    (0)    1 :  0.672 0.328 
+366 OmyAC20ROGR    (0)    1 :  0.634 0.366 
+367 OmyAC20ROGR    (0)    1 :  0.502 0.498 
+368 OmyAC20ROGR    (1)    1 :  0.501 0.499 
+369 OmyAC20ROGR    (0)    1 :  0.419 0.581 
+370 OmyAC20ROGR    (0)    1 :  0.280 0.720 
+371 OmyAC20ROGR    (0)    1 :  0.202 0.798 
+372 OmyAC20ROGR    (2)    1 :  0.170 0.830 
+373 OmyAC20ROGR    (0)    1 :  0.358 0.642 
+374 OmyAC20ROGR    (0)    1 :  0.655 0.345 
+375 OmyAC20ROGR    (0)    1 :  0.526 0.474 
+376 OmyAC20ROGR    (0)    1 :  0.351 0.649 
+377 OmyAC20ROGR    (0)    1 :  0.708 0.292 
+378 OmyAC20ROGR    (0)    1 :  0.686 0.314 
+379 OmyAC20ROGR    (0)    1 :  0.362 0.638 
+380 OmyAC20ROGR    (1)    1 :  0.672 0.328 
+381 OmyAC20ROGR    (0)    1 :  0.487 0.513 
+382 OmyAC20ROGR    (0)    1 :  0.178 0.822 
+383 OmyAC20ROGR    (0)    1 :  0.431 0.569 
+384 OmyAC20ROGR    (0)    1 :  0.409 0.591 
+385 OmyAC20ROGR    (0)    1 :  0.386 0.614 
+386 OmyAC20ROGR    (0)    1 :  0.480 0.520 
+387 OmyAC20ROGR    (0)    1 :  0.390 0.610 
+388 OmyAC20ROGR    (0)    1 :  0.409 0.591 
+389 OmyAC20ROGR    (0)    1 :  0.627 0.373 
+390 OmyAC20ROGR    (0)    1 :  0.679 0.321 
+391 OmyAC20ROGR    (0)    1 :  0.395 0.605 
+392 OmyAC20ROGR    (0)    1 :  0.425 0.575 
+393 OmyAC20ROGR    (0)    1 :  0.540 0.460 
+394 OmyAC20ROGR    (1)    1 :  0.532 0.468 
+395 OmyAC20ROGR    (0)    1 :  0.560 0.440 
+396 OmyAC20ROGR    (0)    1 :  0.570 0.430 
+397 OmyAC20ROGR    (0)    1 :  0.410 0.590 
+398 OmyAC20ROGR    (0)    1 :  0.281 0.719 
+399 OmyAC20ROGR    (0)    1 :  0.461 0.539 
+400 OmyAC20ROGR    (0)    1 :  0.490 0.510 
+401 OmyAC20ROGR    (1)    1 :  0.200 0.800 
+402 OmyAC20ROGR    (0)    1 :  0.659 0.341 
+403 OmyAC20ROGR    (0)    1 :  0.501 0.499 
+404 OmyAC20ROGR    (0)    1 :  0.665 0.335 
+405 OmyAC20ROGR    (0)    1 :  0.416 0.584 
+406 OmyAC20ROGR    (0)    1 :  0.530 0.470 
+407 OmyAC20ROGR    (0)    1 :  0.557 0.443 
+408 OmyAC20ROGR    (0)    1 :  0.534 0.466 
+409 OmyAC20ROGR    (0)    1 :  0.521 0.479 
+410 OmyAC20ROGR    (0)    1 :  0.155 0.845 
+411 OmyAC20ROGR    (0)    1 :  0.310 0.690 
+412 OmyAC20ROGR    (0)    1 :  0.522 0.478 
+413 OmyAC20ROGR    (0)    1 :  0.580 0.420 
+414 OmyAC20ROGR    (0)    1 :  0.398 0.602 
+415 OmyAC20ROGR    (0)    1 :  0.654 0.346 
+416 OmyAC20ROGR    (0)    1 :  0.535 0.465 
+417 OmyAC20ROGR    (0)    1 :  0.657 0.343 
+418 OmyAC20ROGR    (0)    1 :  0.470 0.530 
+419 OmyAC20ROGR    (0)    1 :  0.367 0.633 
+420 OmyAC20ROGR    (0)    1 :  0.655 0.345 
+421 OmyAC20ROGR    (0)    1 :  0.535 0.465 
+422 OmyAC20ROGR    (0)    1 :  0.171 0.829 
+423 OmyAC20ROGR    (0)    1 :  0.594 0.406 
+424 OmyAC20ROGR    (0)    1 :  0.643 0.357 
+425 OmyAC20ROGR    (0)    1 :  0.208 0.792 
+426 OmyAC20ROGR    (0)    1 :  0.530 0.470 
+427 OmyAC20ROGR    (0)    1 :  0.426 0.574 
+428 OmyAC20ROGR    (0)    1 :  0.151 0.849 
+429 OmyAC20ROGR    (0)    1 :  0.646 0.354 
+430 OmyAC20ROGR    (0)    1 :  0.491 0.509 
+431 OmyAC20ROGR    (0)    1 :  0.337 0.663 
+432 OmyAC20ROGR    (0)    1 :  0.212 0.788 
+433 OmyAC20ROGR    (0)    1 :  0.190 0.810 
+434 OmyAC20ROGR    (0)    1 :  0.400 0.600 
+435 OmyAC20ROGR    (0)    1 :  0.661 0.339 
+436 OmyAC20ROGR    (0)    1 :  0.570 0.430 
+437 OmyAC20ROGR    (0)    1 :  0.279 0.721 
+438 OmyAC20ROGR    (0)    1 :  0.336 0.664 
+439 OmyAC20ROGR    (0)    1 :  0.529 0.471 
+440 OmyAC20ROGR    (0)    1 :  0.249 0.751 
+441 OmyAC20ROGR    (0)    1 :  0.692 0.308 
+442 OmyAC20ROGR    (0)    1 :  0.545 0.455 
+443 OmyAC20ROGR    (0)    1 :  0.730 0.270 
+444 OmyAC20ROGR    (0)    1 :  0.479 0.521 
+445 OmyAC20ROGR    (0)    1 :  0.495 0.505 
+446 OmyJC18ROGR    (0)    2 :  0.582 0.418 
+447 OmyJC18ROGR    (0)    2 :  0.553 0.447 
+448 OmyJC18ROGR    (0)    2 :  0.526 0.474 
+449 OmyJC18ROGR    (0)    2 :  0.286 0.714 
+450 OmyJC18ROGR    (0)    2 :  0.282 0.718 
+451 OmyJC18ROGR    (0)    2 :  0.195 0.805 
+452 OmyJC18ROGR    (0)    2 :  0.445 0.555 
+453 OmyJC18ROGR    (0)    2 :  0.646 0.354 
+454 OmyJC18ROGR    (0)    2 :  0.207 0.793 
+455 OmyJC18ROGR    (0)    2 :  0.617 0.383 
+456 OmyJC18ROGR    (0)    2 :  0.181 0.819 
+457 OmyJC18ROGR    (0)    2 :  0.543 0.457 
+458 OmyJC18ROGR    (0)    2 :  0.486 0.514 
+459 OmyJC18ROGR    (0)    2 :  0.702 0.298 
+460 OmyJC18ROGR    (2)    2 :  0.374 0.626 
+461 OmyJC18ROGR    (1)    2 :  0.433 0.567 
+462 OmyJC18ROGR    (3)    2 :  0.382 0.618 
+463 OmyJC18ROGR    (1)    2 :  0.257 0.743 
+464 OmyJC18ROGR    (3)    2 :  0.643 0.357 
+465 OmyJC18ROGR    (3)    2 :  0.557 0.443 
+466 OmyJC18ROGR    (0)    2 :  0.444 0.556 
+467 OmyJC18ROGR    (1)    2 :  0.588 0.412 
+468 OmyJC18ROGR    (0)    2 :  0.534 0.466 
+469 OmyJC18ROGR    (0)    2 :  0.269 0.731 
+470 OmyJC18ROGR    (3)    2 :  0.302 0.698 
+471 OmyJC18ROGR    (1)    2 :  0.421 0.579 
+472 OmyJC18ROGR    (1)    2 :  0.509 0.491 
+473 OmyJC18ROGR    (2)    2 :  0.633 0.367 
+474 OmyJC18ROGR    (0)    2 :  0.641 0.359 
+475 OmyJC18ROGR    (1)    2 :  0.278 0.722 
+476 OmyJC18ROGR    (2)    2 :  0.690 0.310 
+477 OmyJC18ROGR    (3)    2 :  0.506 0.494 
+478 OmyJC18ROGR    (0)    2 :  0.596 0.404 
+479 OmyJC18ROGR    (0)    2 :  0.648 0.352 
+480 OmyJC18ROGR    (0)    2 :  0.490 0.510 
+481 OmyJC18ROGR    (2)    2 :  0.467 0.533 
+482 OmyJC18ROGR    (3)    2 :  0.702 0.298 
+483 OmyJC18ROGR    (3)    2 :  0.563 0.437 
+484 OmyJC18ROGR    (3)    2 :  0.592 0.408 
+485 OmyJC18ROGR    (2)    2 :  0.273 0.727 
+486 OmyJC18ROGR    (2)    2 :  0.350 0.650 
+487 OmyJC18ROGR    (1)    2 :  0.491 0.509 
+488 OmyJC18ROGR    (3)    2 :  0.560 0.440 
+489 OmyJC18ROGR    (0)    2 :  0.619 0.381 
+490 OmyJC18ROGR    (2)    2 :  0.522 0.478 
+491 OmyJC18ROGR    (4)    2 :  0.510 0.490 
+492 OmyJC18ROGR    (4)    2 :  0.690 0.310 
+493 OmyJC18ROGR    (3)    2 :  0.482 0.518 
+494 OmyJC18ROGR    (3)    2 :  0.169 0.831 
+495 OmyJC18ROGR    (3)    2 :  0.471 0.529 
+496 OmyJC18ROGR    (0)    2 :  0.547 0.453 
+497 OmyJC18ROGR    (5)    2 :  0.511 0.489 
+498 OmyJC18ROGR    (3)    2 :  0.465 0.535 
+499 OmyJC18ROGR    (1)    2 :  0.584 0.416 
+500 OmyJC18ROGR    (1)    2 :  0.655 0.345 
+501 OmyJC18ROGR    (3)    2 :  0.339 0.661 
+502 OmyJC18ROGR    (1)    2 :  0.433 0.567 
+503 OmyJC18ROGR    (4)    2 :  0.529 0.471 
+504 OmyJC18ROGR    (1)    2 :  0.386 0.614 
+505 OmyJC18ROGR    (0)    2 :  0.437 0.563 
+506 OmyJC18ROGR    (6)    2 :  0.584 0.416 
+507 OmyJC18ROGR    (0)    2 :  0.485 0.515 
+508 OmyJC18ROGR    (0)    2 :  0.517 0.483 
+509 OmyJC18ROGR    (2)    2 :  0.195 0.805 
+510 OmyJC18ROGR    (1)    2 :  0.647 0.353 
+511 OmyJC18ROGR    (3)    2 :  0.485 0.515 
+512 OmyJC18ROGR    (2)    2 :  0.235 0.765 
+513 OmyJC18ROGR    (7)    2 :  0.467 0.533 
+514 OmyJC18ROGR    (3)    2 :  0.340 0.660 
+515 OmyJC18ROGR    (0)    2 :  0.542 0.458 
+516 OmyJC18ROGR    (2)    2 :  0.463 0.537 
+517 OmyJC18ROGR    (2)    2 :  0.450 0.550 
+518 OmyJC18ROGR    (0)    2 :  0.575 0.425 
+519 OmyJC18ROGR    (7)    2 :  0.555 0.445 
+520 OmyJC18ROGR    (4)    2 :  0.448 0.552 
+521 OmyJC18ROGR    (1)    2 :  0.489 0.511 
+522 OmyJC18ROGR    (1)    2 :  0.468 0.532 
+523 OmyJC18ROGR    (3)    2 :  0.588 0.412 
+524 OmyJC18ROGR    (1)    2 :  0.590 0.410 
+525 OmyJC18ROGR    (2)    2 :  0.488 0.512 
+526 OmyJC18ROGR    (1)    2 :  0.532 0.468 
+527 OmyJC18ROGR    (0)    2 :  0.629 0.371 
+528 OmyJC18ROGR    (0)    2 :  0.602 0.398 
+529 OmyJC18ROGR    (1)    2 :  0.633 0.367 
+530 OmyJC18ROGR    (0)    2 :  0.627 0.373 
+531 OmyJC18ROGR    (0)    2 :  0.551 0.449 
+532 OmyJC18ROGR    (1)    2 :  0.657 0.343 
+533 OmyJC18ROGR    (2)    2 :  0.693 0.307 
+534 OmyJC18ROGR    (2)    2 :  0.547 0.453 
+535 OmyJC18ROGR    (0)    2 :  0.583 0.417 
+536 OmyJC18ROGR    (0)    2 :  0.644 0.356 
+537 OmyJC18ROGR    (0)    2 :  0.661 0.339 
+538 OmyJC18ROGR    (0)    2 :  0.579 0.421 
+539 OmyJC18ROGR    (1)    2 :  0.554 0.446 
+540 OmyJC18ROGR    (6)    2 :  0.572 0.428 
+541 OmyJC18ROGR    (1)    2 :  0.597 0.403 
+542 OmyJC18ROGR    (1)    2 :  0.457 0.543 
+543 OmyJC18ROGR    (0)    2 :  0.439 0.561 
+544 OmyJC18ROGR    (2)    2 :  0.587 0.413 
+545 OmyJC18ROGR    (1)    2 :  0.292 0.708 
+546 OmyJC18ROGR    (6)    2 :  0.701 0.299 
+547 OmyJC18ROGR    (0)    2 :  0.450 0.550 
+548 OmyJC18ROGR    (1)    2 :  0.490 0.510 
+549 OmyJC18ROGR    (0)    2 :  0.564 0.436 
+550 OmyJC18ROGR    (1)    2 :  0.254 0.746 
+551 OmyJC18ROGR    (1)    2 :  0.590 0.410 
+552 OmyJC18ROGR    (2)    2 :  0.476 0.524 
+553 OmyJC18ROGR    (7)    2 :  0.543 0.457 
+554 OmyJC18ROGR    (2)    2 :  0.625 0.375 
+555 OmyJC18ROGR    (3)    2 :  0.613 0.387 
+556 OmyJC18ROGR    (0)    2 :  0.544 0.456 
+557 OmyJC18ROGR    (1)    2 :  0.341 0.659 
+558 OmyJC18ROGR    (0)    2 :  0.485 0.515 
+559 OmyJC18ROGR    (0)    2 :  0.642 0.358 
+560 OmyJC18ROGR    (5)    2 :  0.529 0.471 
+561 OmyJC18ROGR    (0)    2 :  0.631 0.369 
+562 OmyJC18ROGR    (6)    2 :  0.622 0.378 
+563 OmyJC18ROGR    (2)    2 :  0.575 0.425 
+564 OmyJC18ROGR    (3)    2 :  0.427 0.573 
+565 OmyJC18ROGR    (3)    2 :  0.529 0.471 
+566 OmyJC18ROGR    (1)    2 :  0.539 0.461 
+567 OmyJC18ROGR    (0)    2 :  0.637 0.363 
+568 OmyJC18ROGR    (3)    2 :  0.505 0.495 
+569 OmyJC18ROGR    (2)    2 :  0.583 0.417 
+570 OmyJC18ROGR    (0)    2 :  0.516 0.484 
+571 OmyJC18ROGR    (1)    2 :  0.661 0.339 
+572 OmyJC18ROGR    (4)    2 :  0.594 0.406 
+573 OmyJC18ROGR    (3)    2 :  0.360 0.640 
+574 OmyJC18ROGR    (5)    2 :  0.444 0.556 
+575 OmyJC18ROGR    (3)    2 :  0.661 0.339 
+576 OmyJC18ROGR    (0)    2 :  0.547 0.453 
+577 OmyJC18ROGR    (0)    2 :  0.200 0.800 
+578 OmyJC18ROGR    (1)    2 :  0.585 0.415 
+579 OmyJC18ROGR    (0)    2 :  0.249 0.751 
+580 OmyJC18ROGR    (0)    2 :  0.729 0.271 
+581 OmyJC18ROGR    (3)    2 :  0.550 0.450 
+582 OmyJC18ROGR    (6)    2 :  0.650 0.350 
+583 OmyJC18ROGR    (3)    2 :  0.653 0.347 
+584 OmyJC18ROGR    (3)    2 :  0.581 0.419 
+585 OmyJC18ROGR    (1)    2 :  0.528 0.472 
+586 OmyJC18ROGR    (1)    2 :  0.711 0.289 
+587 OmyJC18ROGR    (0)    2 :  0.151 0.849 
+588 OmyJC18ROGR    (0)    2 :  0.463 0.537 
+589 OmyJC18ROGR    (1)    2 :  0.542 0.458 
+590 OmyJC18ROGR    (2)    2 :  0.800 0.200 
+591 OmyJC18ROGR    (0)    2 :  0.569 0.431 
+592 OmyJC18ROGR    (3)    2 :  0.530 0.470 
+593 OmyJC18ROGR    (0)    2 :  0.505 0.495 
+594 OmyJC18ROGR    (1)    2 :  0.604 0.396 
+595 OmyJC18ROGR    (0)    2 :  0.547 0.453 
+596 OmyJC18ROGR    (1)    2 :  0.512 0.488 
+597 OmyJC18ROGR    (0)    2 :  0.562 0.438 
+598 OmyJC18ROGR    (1)    2 :  0.544 0.456 
+599 OmyJC18ROGR    (0)    2 :  0.551 0.449 
+600 OmyJC18ROGR    (0)    2 :  0.624 0.376 
+601 OmyJC18ROGR    (0)    2 :  0.655 0.345 
+602 OmyJC18ROGR    (0)    2 :  0.505 0.495 
+603 OmyJC18ROGR    (0)    2 :  0.655 0.345 
+604 OmyJC18ROGR    (0)    2 :  0.590 0.410 
+605 OmyJC18ROGR    (0)    2 :  0.664 0.336 
+606 OmyJC18ROGR    (0)    2 :  0.565 0.435 
+607 OmyJC18ROGR    (0)    2 :  0.563 0.437 
+608 OmyJC18ROGR    (0)    2 :  0.650 0.350 
+609 OmyJC18ROGR    (0)    2 :  0.590 0.410 
+610 OmyJC18ROGR    (4)    2 :  0.216 0.784 
+611 OmyJC18ROGR    (0)    2 :  0.434 0.566 
+612 OmyJC18ROGR    (2)    2 :  0.592 0.408 
+613 OmyJC18ROGR    (0)    2 :  0.549 0.451 
+614 OmyJC18ROGR    (0)    2 :  0.439 0.561 
+615 OmyJC18ROGR    (0)    2 :  0.746 0.254 
+616 OmyJC18ROGR    (0)    2 :  0.504 0.496 
+617 OmyJC18ROGR    (0)    2 :  0.615 0.385 
+618 OmyJC18ROGR    (0)    2 :  0.461 0.539 
+619 OmyJC18ROGR    (0)    2 :  0.675 0.325 
+620 OmyJC18ROGR    (0)    2 :  0.495 0.505 
+621 OmyJC18ROGR    (1)    2 :  0.533 0.467 
+622 OmyJC18ROGR    (2)    2 :  0.576 0.424 
+623 OmyJC18ROGR    (1)    2 :  0.533 0.467 
+624 OmyJC18ROGR    (2)    2 :  0.543 0.457 
+625 OmyJC18ROGR    (0)    2 :  0.481 0.519 
+626 OmyJC18ROGR    (6)    2 :  0.605 0.395 
+627 OmyJC18ROGR    (0)    2 :  0.510 0.490 
+628 OmyJC18ROGR    (0)    2 :  0.129 0.871 
+629 OmyJC18ROGR    (1)    2 :  0.494 0.506 
+630 OmyJC18ROGR    (1)    2 :  0.674 0.326 
+631 OmyJC18ROGR    (3)    2 :  0.614 0.386 
+632 OmyJC18ROGR    (0)    2 :  0.656 0.344 
+633 OmyJC18ROGR    (4)    2 :  0.604 0.396 
+634 OmyJC18ROGR    (2)    2 :  0.403 0.597 
+635 OmyJC18ROGR    (0)    2 :  0.707 0.293 
+636 OmyJC18ROGR    (0)    2 :  0.348 0.652 
+637 OmyJC18ROGR    (0)    2 :  0.519 0.481 
+638 OmyJC18ROGR    (0)    2 :  0.600 0.400 
+639 OmyJC18ROGR    (1)    2 :  0.508 0.492 
+640 OmyJC18ROGR    (1)    2 :  0.377 0.623 
+641 OmyJC18ROGR    (0)    2 :  0.432 0.568 
+642 OmyJC18ROGR    (3)    2 :  0.488 0.512 
+643 OmyJC18ROGR    (1)    2 :  0.620 0.380 
+644 OmyJC18ROGR    (7)    2 :  0.705 0.295 
+645 OmyJC18ROGR    (4)    2 :  0.515 0.485 
+646 OmyJC18ROGR    (0)    2 :  0.672 0.328 
+647 OmyJC18ROGR    (1)    2 :  0.601 0.399 
+648 OmyJC18ROGR    (1)    2 :  0.543 0.457 
+649 OmyJC18ROGR    (0)    2 :  0.598 0.402 
+650 OmyJC18ROGR    (1)    2 :  0.705 0.295 
+651 OmyJC18ROGR    (5)    2 :  0.220 0.780 
+652 OmyJC18ROGR    (1)    2 :  0.511 0.489 
+653 OmyJC18ROGR    (3)    2 :  0.553 0.447 
+654 OmyJC18ROGR    (1)    2 :  0.501 0.499 
+655 OmyJC18ROGR    (2)    2 :  0.412 0.588 
+656 OmyJC18ROGR    (0)    2 :  0.637 0.363 
+657 OmyJC18ROGR    (0)    2 :  0.609 0.391 
+658 OmyJC18ROGR    (0)    2 :  0.589 0.411 
+659 OmyJC18ROGR    (5)    2 :  0.779 0.221 
+660 OmyJC18ROGR    (3)    2 :  0.511 0.489 
+661 OmyJC18ROGR    (2)    2 :  0.708 0.292 
+662 OmyJC18ROGR    (1)    2 :  0.542 0.458 
+663 OmyJC18ROGR    (2)    2 :  0.421 0.579 
+664 OmyJC18ROGR    (0)    2 :  0.597 0.403 
+665 OmyJC18ROGR    (0)    2 :  0.537 0.463 
+666 OmyJC18ROGR    (0)    2 :  0.231 0.769 
+667 OmyJC18ROGR    (0)    2 :  0.402 0.598 
+668 OmyJC18ROGR    (2)    2 :  0.429 0.571 
+669 OmyJC18ROGR    (4)    2 :  0.510 0.490 
+670 OmyJC18ROGR    (6)    2 :  0.569 0.431 
+671 OmyJC18ROGR    (3)    2 :  0.634 0.366 
+672 OmyJC18ROGR    (0)    2 :  0.705 0.295 
+673 OmyJC18ROGR    (4)    2 :  0.670 0.330 
+674 OmyJC18ROGR    (0)    2 :  0.529 0.471 
+675 OmyJC18ROGR    (0)    2 :  0.635 0.365 
+676 OmyJC18ROGR    (1)    2 :  0.618 0.382 
+677 OmyJC18ROGR    (3)    2 :  0.422 0.578 
+678 OmyJC18ROGR    (6)    2 :  0.650 0.350 
+679 OmyJC18ROGR    (1)    2 :  0.441 0.559 
+680 OmyJC18ROGR    (1)    2 :  0.607 0.393 
+681 OmyJC18ROGR    (1)    2 :  0.440 0.560 
+682 OmyJC18ROGR    (1)    2 :  0.358 0.642 
+683 OmyJC18ROGR    (0)    2 :  0.527 0.473 
+684 OmyJC18ROGR    (0)    2 :  0.637 0.363 
+685 OmyJC18ROGR    (0)    2 :  0.594 0.406 
+686 OmyJC18ROGR    (0)    2 :  0.651 0.349 
+687 OmyJC18ROGR    (3)    2 :  0.612 0.388 
+688 OmyJC18ROGR    (1)    2 :  0.412 0.588 
+689 OmyJC18ROGR    (1)    2 :  0.334 0.666 
+690 OmyJC18ROGR    (5)    2 :  0.518 0.482 
+691 OmyJC18ROGR    (5)    2 :  0.442 0.558 
+692 OmyJC18ROGR    (0)    2 :  0.416 0.584 
+693 OmyJC18ROGR    (2)    2 :  0.655 0.345 
+694 OmyJC18ROGR    (0)    2 :  0.697 0.303 
+695 OmyJC18ROGR    (0)    2 :  0.409 0.591 
+696 OmyJC18ROGR    (0)    2 :  0.656 0.344 
+697 OmyJC18ROGR    (2)    2 :  0.544 0.456 
+698 OmyJC18ROGR    (0)    2 :  0.742 0.258 
+699 OmyJC18ROGR    (1)    2 :  0.543 0.457 
+700 OmyJC18ROGR    (0)    2 :  0.521 0.479 
+701 OmyJC18ROGR    (0)    2 :  0.571 0.429 
+702 OmyJC18ROGR    (1)    2 :  0.410 0.590 
+703 OmyJC18ROGR    (1)    2 :  0.408 0.592 
+704 OmyJC18ROGR    (0)    2 :  0.327 0.673 
+705 OmyJC18ROGR    (0)    2 :  0.628 0.372 
+706 OmyJC18ROGR    (0)    2 :  0.385 0.615 
+707 OmyJC18ROGR    (1)    2 :  0.599 0.401 
+708 OmyJC18ROGR    (1)    2 :  0.488 0.512 
+709 OmyJC18ROGR    (0)    2 :  0.388 0.612 
+710 OmyJC18ROGR    (0)    2 :  0.561 0.439 
+711 OmyJC18ROGR    (0)    2 :  0.457 0.543 
+712 OmyJC18ROGR    (1)    2 :  0.568 0.432 
+713 OmyJC18ROGR    (0)    2 :  0.549 0.451 
+714 OmyJC18ROGR    (0)    2 :  0.518 0.482 
+715 OmyJC18ROGR    (0)    2 :  0.506 0.494 
+716 OmyJC18ROGR    (0)    2 :  0.335 0.665 
+717 OmyJC18ROGR    (1)    2 :  0.570 0.430 
+718 OmyJC18ROGR    (1)    2 :  0.614 0.386 
+719 OmyJC18ROGR    (7)    2 :  0.742 0.258 
+720 OmyJC18ROGR    (2)    2 :  0.534 0.466 
+721 OmyJC18ROGR    (1)    2 :  0.590 0.410 
+722 OmyJC18ROGR    (0)    2 :  0.598 0.402 
+723 OmyJC18ROGR    (1)    2 :  0.615 0.385 
+724 OmyJC18ROGR    (0)    2 :  0.346 0.654 
+725 OmyJC18ROGR    (0)    2 :  0.611 0.389 
+726 OmyJC18ROGR    (0)    2 :  0.615 0.385 
+727 OmyJC18ROGR    (1)    2 :  0.566 0.434 
+728 OmyJC18ROGR    (0)    2 :  0.468 0.532 
+729 OmyJC18ROGR    (1)    2 :  0.576 0.424 
+730 OmyJC18ROGR    (0)    2 :  0.518 0.482 
+731 OmyJC18ROGR    (2)    2 :  0.273 0.727 
+732 OmyJC18ROGR    (1)    2 :  0.441 0.559 
+733 OmyJC18ROGR    (0)    2 :  0.624 0.376 
+734 OmyJC18ROGR    (0)    2 :  0.602 0.398 
+735 OmyJC18ROGR    (0)    2 :  0.647 0.353 
+736 OmyJC18ROGR    (0)    2 :  0.472 0.528 
+737 OmyJC18ROGR    (0)    2 :  0.505 0.495 
+738 OmyJC18ROGR    (0)    2 :  0.442 0.558 
+739 OmyJC18ROGR    (0)    2 :  0.507 0.493 
+740 OmyJC18ROGR    (0)    2 :  0.758 0.242 
+741 OmyJC18ROGR    (0)    2 :  0.452 0.548 
+742 OmyJC18ROGR    (0)    2 :  0.552 0.448 
+743 OmyJC18ROGR    (0)    2 :  0.569 0.431 
+744 OmyJC18ROGR    (0)    2 :  0.667 0.333 
+745 OmyJC18ROGR    (0)    2 :  0.632 0.368 
+746 OmyJC18ROGR    (0)    2 :  0.368 0.632 
+747 OmyJC18ROGR    (0)    2 :  0.177 0.823 
+748 OmyJC18ROGR    (2)    2 :  0.476 0.524 
+749 OmyJC18ROGR    (5)    2 :  0.450 0.550 
+750 OmyJC18ROGR    (1)    2 :  0.541 0.459 
+751 OmyJC18ROGR    (0)    2 :  0.417 0.583 
+752 OmyJC18ROGR    (3)    2 :  0.713 0.287 
+753 OmyJC18ROGR    (0)    2 :  0.699 0.301 
+754 OmyJC18ROGR    (0)    2 :  0.600 0.400 
+755 OmyJC18ROGR    (0)    2 :  0.653 0.347 
+756 OmyJC18ROGR    (0)    2 :  0.448 0.552 
+757 OmyJC18ROGR    (0)    2 :  0.571 0.429 
+758 OmyJC18ROGR    (1)    2 :  0.487 0.513 
+759 OmyJC18ROGR    (0)    2 :  0.532 0.468 
+760 OmyJC18ROGR    (0)    2 :  0.389 0.611 
+761 OmyJC18ROGR    (0)    2 :  0.734 0.266 
+762 OmyJC18ROGR    (0)    2 :  0.646 0.354 
+763 OmyJC18ROGR    (0)    2 :  0.462 0.538 
+764 OmyAC19ROGR    (0)    4 :  0.580 0.420 
+765 OmyJC18ROGR    (0)    2 :  0.530 0.470 
+766 OmyAC19ROGR    (0)    4 :  0.680 0.320 
+767 OmyAC19APPR    (0)    4 :  0.712 0.288 
+768 OmyAC19APPR    (0)    4 :  0.561 0.439 
+769 OmyJC18ROGR    (0)    2 :  0.596 0.404 
+770 OmyAC19APPR    (0)    4 :  0.601 0.399 
+771 OmyAC19CORH    (1)    3 :  0.638 0.362 
+772 OmyJC18ROGR    (0)    2 :  0.593 0.407 
+773 OmyAC19CORH    (0)    3 :  0.481 0.519 
+774 OmyAC19CORH    (0)    3 :  0.627 0.373 
+775 OmyAC19CORH    (0)    3 :  0.684 0.316 
+776 OmyAC19CORH    (0)    3 :  0.538 0.462 
+777 OmyAC19CORH    (0)    3 :  0.659 0.341 
+778 OmyAC19ROGR    (3)    4 :  0.434 0.566 
+779 OmyJC18ROGR    (1)    2 :  0.519 0.481 
+780 OmyAC19ROGR    (0)    4 :  0.574 0.426 
+781 OmyAC19ROGR    (0)    4 :  0.632 0.368 
+782 OmyAC19APPR    (0)    4 :  0.541 0.459 
+783 OmyAC19APPR    (0)    4 :  0.444 0.556 
+784 OmyJC18ROGR    (0)    2 :  0.308 0.692 
+785 OmyAC19APPR    (0)    4 :  0.588 0.412 
+786 OmyAC19CORH    (0)    3 :  0.411 0.589 
+787 OmyAC19CORH    (0)    3 :  0.626 0.374 
+788 OmyAC19CORH    (0)    3 :  0.717 0.283 
+789 OmyAC19CORH    (0)    3 :  0.564 0.436 
+790 OmyAC19CORH    (1)    3 :  0.594 0.406 
+791 OmyAC19CORH    (0)    3 :  0.632 0.368 
+792 OmyAC19ROGR    (2)    4 :  0.660 0.340 
+793 OmyAC19ROGR    (4)    4 :  0.557 0.443 
+794 OmyAC19ROGR    (0)    4 :  0.750 0.250 
+795 OmyAC19APPR    (2)    4 :  0.488 0.512 
+796 OmyAC19APPR    (0)    4 :  0.556 0.444 
+797 OmyJC18ROGR    (1)    2 :  0.418 0.582 
+798 OmyAC19APPR    (0)    4 :  0.483 0.517 
+799 OmyAC19CORH    (1)    3 :  0.531 0.469 
+800 OmyJC18ROGR    (0)    2 :  0.561 0.439 
+801 OmyAC19CORH    (1)    3 :  0.673 0.327 
+802 OmyAC19CORH    (1)    3 :  0.464 0.536 
+803 OmyAC19CORH    (0)    3 :  0.665 0.335 
+804 OmyAC19CORH    (0)    3 :  0.695 0.305 
+805 OmyAC19ROGR    (0)    4 :  0.534 0.466 
+806 OmyAC19ROGR    (1)    4 :  0.682 0.318 
+807 OmyAC19APPR    (0)    4 :  0.538 0.462 
+808 OmyAC19APPR    (0)    4 :  0.548 0.452 
+809 OmyJC18ROGR    (0)    2 :  0.553 0.447 
+810 OmyAC19APPR    (0)    4 :  0.589 0.411 
+811 OmyJC18ROGR    (0)    2 :  0.551 0.449 
+812 OmyAC19CORH    (1)    3 :  0.628 0.372 
+813 OmyAC19CORH    (0)    3 :  0.806 0.194 
+814 OmyAC19CORH    (0)    3 :  0.500 0.500 
+815 OmyAC19CORH    (0)    3 :  0.583 0.417 
+816 OmyAC19CORH    (0)    3 :  0.604 0.396 
+817 OmyAC19ROGR    (6)    4 :  0.558 0.442 
+818 OmyJC18ROGR    (0)    2 :  0.351 0.649 
+819 OmyAC19ROGR    (2)    4 :  0.621 0.379 
+820 OmyAC19ROGR    (1)    4 :  0.619 0.381 
+821 OmyAC19APPR    (2)    4 :  0.510 0.490 
+822 OmyAC19APPR    (0)    4 :  0.580 0.420 
+823 OmyJC18ROGR    (0)    2 :  0.516 0.484 
+824 OmyAC19APPR    (0)    4 :  0.590 0.410 
+825 OmyJC18ROGR    (0)    2 :  0.216 0.784 
+826 OmyAC19CORH    (1)    3 :  0.744 0.256 
+827 OmyJC18ROGR    (0)    2 :  0.227 0.773 
+828 OmyAC19CORH    (0)    3 :  0.610 0.390 
+829 OmyAC19CORH    (0)    3 :  0.583 0.417 
+830 OmyAC19CORH    (0)    3 :  0.549 0.451 
+831 OmyAC19CORH    (0)    3 :  0.694 0.306 
+832 OmyAC19ROGR    (0)    4 :  0.546 0.454 
+833 OmyJC18ROGR    (0)    2 :  0.678 0.322 
+834 OmyAC19ROGR    (2)    4 :  0.615 0.385 
+835 OmyAC19ROGR    (0)    4 :  0.544 0.456 
+836 OmyAC19APPR    (4)    4 :  0.641 0.359 
+837 OmyAC19APPR    (0)    4 :  0.534 0.466 
+838 OmyJC18ROGR    (0)    2 :  0.467 0.533 
+839 OmyJC18ROGR    (0)    2 :  0.503 0.497 
+840 OmyAC19CORH    (1)    3 :  0.521 0.479 
+841 OmyAC19CORH    (0)    3 :  0.567 0.433 
+842 OmyAC19CORH    (0)    3 :  0.831 0.169 
+843 OmyAC19CORH    (1)    3 :  0.709 0.291 
+844 OmyAC19CORH    (0)    3 :  0.724 0.276 
+845 OmyJC18ROGR    (1)    2 :  0.654 0.346 
+846 OmyAC19ROGR    (2)    4 :  0.599 0.401 
+847 OmyAC19ROGR    (0)    4 :  0.540 0.460 
+848 OmyAC19APPR    (1)    4 :  0.561 0.439 
+849 OmyAC19APPR    (0)    4 :  0.544 0.456 
+850 OmyAC19CORH    (0)    3 :  0.496 0.504 
+851 OmyAC19CORH    (0)    3 :  0.643 0.357 
+852 OmyAC19CORH    (0)    3 :  0.716 0.284 
+853 OmyAC19CORH    (1)    3 :  0.632 0.368 
+854 OmyAC19CORH    (1)    3 :  0.793 0.207 
+855 OmyJC18ROGR    (0)    2 :  0.353 0.647 
+856 OmyAC19APPR    (0)    4 :  0.668 0.332 
+857 OmyAC19APPR    (0)    4 :  0.633 0.367 
+858 OmyAC19APPR    (0)    4 :  0.588 0.412 
+859 OmyJC18ROGR    (0)    2 :  0.467 0.533 
+860 OmyJC18ROGR    (0)    2 :  0.607 0.393 
+861 OmyAC19CORH    (0)    3 :  0.651 0.349 
+862 OmyAC19CORH    (0)    3 :  0.579 0.421 
+863 OmyAC19CORH    (0)    3 :  0.815 0.185 
+864 OmyAC19CORH    (0)    3 :  0.733 0.267 
+865 OmyAC19CORH    (0)    3 :  0.690 0.310 
+866 OmyJC19ROGR    (0)    2 :  0.306 0.694 
+867 OmyJC19ROGR    (0)    2 :  0.387 0.613 
+868 OmyJC19ROGR    (0)    2 :  0.560 0.440 
+869 OmyJC19ROGR    (0)    2 :  0.188 0.812 
+870 OmyJC19ROGR    (0)    2 :  0.650 0.350 
+871 OmyJC19ROGR    (0)    2 :  0.485 0.515 
+872 OmyJC19ROGR    (0)    2 :  0.587 0.413 
+873 OmyJC19ROGR    (0)    2 :  0.468 0.532 
+874 OmyJC19ROGR    (0)    2 :  0.189 0.811 
+875 OmyJC19ROGR    (0)    2 :  0.279 0.721 
+876 OmyJC19ROGR    (1)    2 :  0.213 0.787 
+877 OmyJC19ROGR    (0)    2 :  0.585 0.415 
+878 OmyJC19ROGR    (0)    2 :  0.587 0.413 
+879 OmyJC19ROGR    (0)    2 :  0.633 0.367 
+880 OmyJC19ROGR    (0)    2 :  0.539 0.461 
+881 OmyJC19ROGR    (0)    2 :  0.383 0.617 
+882 OmyJC19ROGR    (1)    2 :  0.363 0.637 
+883 OmyJC19ROGR    (0)    2 :  0.480 0.520 
+884 OmyJC19ROGR    (3)    2 :  0.357 0.643 
+885 OmyJC19ROGR    (0)    2 :  0.654 0.346 
+886 OmyJC19ROGR    (0)    2 :  0.181 0.819 
+887 OmyJC19ROGR    (0)    2 :  0.626 0.374 
+888 OmyJC19ROGR    (0)    2 :  0.594 0.406 
+889 OmyJC19ROGR    (0)    2 :  0.428 0.572 
+890 OmyJC19ROGR    (0)    2 :  0.568 0.432 
+891 OmyJC19ROGR    (0)    2 :  0.560 0.440 
+892 OmyJC19ROGR    (0)    2 :  0.502 0.498 
+893 OmyJC19ROGR    (0)    2 :  0.483 0.517 
+894 OmyJC19ROGR    (0)    2 :  0.697 0.303 
+895 OmyJC19ROGR    (0)    2 :  0.689 0.311 
+896 OmyJC19ROGR    (0)    2 :  0.622 0.378 
+897 OmyJC19ROGR    (6)    2 :  0.192 0.808 
+898 OmyJC19ROGR    (1)    2 :  0.590 0.410 
+899 OmyJC19ROGR    (0)    2 :  0.539 0.461 
+900 OmyJC19ROGR    (0)    2 :  0.699 0.301 
+901 OmyJC19ROGR    (0)    2 :  0.467 0.533 
+902 OmyJC19ROGR    (1)    2 :  0.372 0.628 
+903 OmyJC19ROGR    (0)    2 :  0.357 0.643 
+904 OmyJC19ROGR    (1)    2 :  0.634 0.366 
+905 OmyJC19ROGR    (0)    2 :  0.461 0.539 
+906 OmyJC19ROGR    (0)    2 :  0.656 0.344 
+907 OmyJC19ROGR    (0)    2 :  0.640 0.360 
+908 OmyJC19ROGR    (0)    2 :  0.358 0.642 
+909 OmyJC19ROGR    (1)    2 :  0.142 0.858 
+910 OmyJC19ROGR    (2)    2 :  0.688 0.312 
+911 OmyJC19ROGR    (1)    2 :  0.643 0.357 
+912 OmyJC19ROGR    (0)    2 :  0.601 0.399 
+913 OmyJC19ROGR    (0)    2 :  0.208 0.792 
+914 OmyJC19ROGR    (0)    2 :  0.543 0.457 
+915 OmyJC19ROGR    (0)    2 :  0.495 0.505 
+916 OmyJC19ROGR    (0)    2 :  0.520 0.480 
+917 OmyJC19ROGR    (0)    2 :  0.308 0.692 
+918 OmyJC19ROGR    (0)    2 :  0.326 0.674 
+919 OmyJC19ROGR    (0)    2 :  0.204 0.796 
+920 OmyJC19ROGR    (0)    2 :  0.570 0.430 
+921 OmyJC19ROGR    (1)    2 :  0.661 0.339 
+922 OmyJC19ROGR    (0)    2 :  0.651 0.349 
+923 OmyJC19ROGR    (0)    2 :  0.532 0.468 
+924 OmyJC19ROGR    (0)    2 :  0.569 0.431 
+925 OmyJC19ROGR    (0)    2 :  0.397 0.603 
+926 OmyJC19ROGR    (0)    2 :  0.200 0.800 
+927 OmyJC19ROGR    (1)    2 :  0.406 0.594 
+928 OmyJC19ROGR    (0)    2 :  0.218 0.782 
+929 OmyJC19ROGR    (0)    2 :  0.173 0.827 
+930 OmyJC19ROGR    (0)    2 :  0.538 0.462 
+931 OmyJC19ROGR    (0)    2 :  0.245 0.755 
+932 OmyJC19ROGR    (0)    2 :  0.194 0.806 
+933 OmyJC19ROGR    (0)    2 :  0.593 0.407 
+934 OmyJC19ROGR    (0)    2 :  0.513 0.487 
+935 OmyJC19ROGR    (0)    2 :  0.525 0.475 
+936 OmyJC19ROGR    (1)    2 :  0.225 0.775 
+937 OmyJC19ROGR    (1)    2 :  0.472 0.528 
+938 OmyJC19ROGR    (0)    2 :  0.463 0.537 
+939 OmyJC19ROGR    (0)    2 :  0.197 0.803 
+940 OmyJC19ROGR    (1)    2 :  0.441 0.559 
+941 OmyJC19ROGR    (0)    2 :  0.336 0.664 
+942 OmyJC19ROGR    (0)    2 :  0.238 0.762 
+943 OmyJC19ROGR    (0)    2 :  0.766 0.234 
+944 OmyJC19ROGR    (0)    2 :  0.193 0.807 
+945 OmyJC19ROGR    (0)    2 :  0.484 0.516 
+946 OmyJC19ROGR    (0)    2 :  0.643 0.357 
+947 OmyJC19ROGR    (0)    2 :  0.353 0.647 
+948 OmyJC19ROGR    (0)    2 :  0.643 0.357 
+949 OmyJC19ROGR    (0)    2 :  0.222 0.778 
+950 OmyJC19ROGR    (0)    2 :  0.600 0.400 
+951 OmyJC19ROGR    (0)    2 :  0.662 0.338 
+952 OmyJC19ROGR    (0)    2 :  0.601 0.399 
+953 OmyJC19ROGR    (0)    2 :  0.467 0.533 
+954 OmyJC19ROGR    (0)    2 :  0.316 0.684 
+955 OmyJC19ROGR    (0)    2 :  0.412 0.588 
+956 OmyJC19ROGR    (0)    2 :  0.584 0.416 
+957 OmyJC19ROGR    (1)    2 :  0.663 0.337 
+958 OmyJC19ROGR    (0)    2 :  0.534 0.466 
+959 OmyJC19ROGR    (4)    2 :  0.345 0.655 
+960 OmyJC19ROGR    (0)    2 :  0.192 0.808 
+961 OmyJC19ROGR    (1)    2 :  0.138 0.862 
+962 OmyJC19ROGR    (0)    2 :  0.378 0.622 
+963 OmyJC19ROGR    (0)    2 :  0.493 0.507 
+964 OmyJC19ROGR    (0)    2 :  0.537 0.463 
+965 OmyJC19ROGR    (0)    2 :  0.576 0.424 
+966 OmyJC19ROGR    (0)    2 :  0.181 0.819 
+967 OmyJC19ROGR    (0)    2 :  0.616 0.384 
+968 OmyJC19ROGR    (0)    2 :  0.604 0.396 
+969 OmyJC19ROGR    (0)    2 :  0.557 0.443 
+970 OmyJC19ROGR    (0)    2 :  0.380 0.620 
+971 OmyJC19ROGR    (0)    2 :  0.338 0.662 
+972 OmyJC19ROGR    (0)    2 :  0.368 0.632 
+973 OmyJC19ROGR    (0)    2 :  0.598 0.402 
+974 OmyJC19ROGR    (5)    2 :  0.516 0.484 
+975 OmyJC19ROGR    (0)    2 :  0.619 0.381 
+976 OmyJC19ROGR    (0)    2 :  0.609 0.391 
+977 OmyJC19ROGR    (0)    2 :  0.249 0.751 
+978 OmyJC19ROGR    (0)    2 :  0.129 0.871 
+979 OmyJC19ROGR    (0)    2 :  0.186 0.814 
+980 OmyJC19ROGR    (0)    2 :  0.468 0.532 
+981 OmyJC19ROGR    (0)    2 :  0.198 0.802 
+982 OmyJC19ROGR    (3)    2 :  0.264 0.736 
+983 OmyJC19ROGR    (0)    2 :  0.558 0.442 
+984 OmyJC19ROGR    (0)    2 :  0.395 0.605 
+985 OmyJC19ROGR    (0)    2 :  0.640 0.360 
+986 OmyJC19ROGR    (0)    2 :  0.606 0.394 
+987 OmyJC19ROGR    (1)    2 :  0.615 0.385 
+988 OmyJC19ROGR    (0)    2 :  0.216 0.784 
+989 OmyJC19ROGR    (0)    2 :  0.511 0.489 
+990 OmyJC19ROGR    (0)    2 :  0.550 0.450 
+991 OmyJC19ROGR    (0)    2 :  0.181 0.819 
+992 OmyJC19ROGR    (0)    2 :  0.577 0.423 
+993 OmyJC19ROGR    (0)    2 :  0.501 0.499 
+994 OmyJC19ROGR    (1)    2 :  0.515 0.485 
+995 OmyJC19ROGR    (1)    2 :  0.367 0.633 
+996 OmyJC19ROGR    (0)    2 :  0.447 0.553 
+997 OmyJC19ROGR    (1)    2 :  0.135 0.865 
+998 OmyJC19ROGR    (0)    2 :  0.440 0.560 
+999 OmyJC19ROGR    (1)    2 :  0.257 0.743 
+1000 OmyJC19ROGR    (0)    2 :  0.560 0.440 
+
+
+Estimated Allele Frequencies in each cluster
+First column gives estimated ancestral frequencies
+
+
+Locus 1 : 
+2 alleles
+0.0% missing data
+   4   (0.706) 0.699 0.845 
+   1   (0.294) 0.301 0.155 
+
+Locus 2 : 
+2 alleles
+2.4% missing data
+   1   (0.408) 0.436 0.188 
+   4   (0.592) 0.564 0.812 
+
+Locus 3 : 
+2 alleles
+0.0% missing data
+   4   (0.901) 0.927 0.930 
+   1   (0.099) 0.073 0.070 
+
+Locus 4 : 
+2 alleles
+0.0% missing data
+   1   (0.935) 0.964 0.932 
+   2   (0.065) 0.036 0.068 
+
+Locus 5 : 
+2 alleles
+0.1% missing data
+   2   (0.308) 0.330 0.112 
+   3   (0.692) 0.670 0.888 
+
+Locus 6 : 
+2 alleles
+0.0% missing data
+   2   (0.492) 0.461 0.694 
+   4   (0.508) 0.539 0.306 
+
+Locus 7 : 
+2 alleles
+2.3% missing data
+   4   (0.333) 0.344 0.190 
+   1   (0.667) 0.656 0.810 
+
+Locus 8 : 
+2 alleles
+0.4% missing data
+   1   (0.277) 0.257 0.297 
+   2   (0.723) 0.743 0.703 
+
+Locus 9 : 
+2 alleles
+3.7% missing data
+   1   (0.335) 0.329 0.299 
+   3   (0.665) 0.671 0.701 
+
+Locus 10 : 
+2 alleles
+1.6% missing data
+   2   (0.570) 0.580 0.534 
+   4   (0.430) 0.420 0.466 
+
+Locus 11 : 
+2 alleles
+0.1% missing data
+   2   (0.482) 0.482 0.454 
+   3   (0.518) 0.518 0.546 
+
+Locus 12 : 
+2 alleles
+7.3% missing data
+   1   (0.202) 0.182 0.180 
+   2   (0.798) 0.818 0.820 
+
+Locus 13 : 
+2 alleles
+0.0% missing data
+   1   (0.379) 0.320 0.755 
+   4   (0.621) 0.680 0.245 
+
+Locus 14 : 
+2 alleles
+0.0% missing data
+   3   (0.884) 0.879 0.984 
+   2   (0.116) 0.121 0.016 
+
+Locus 15 : 
+2 alleles
+0.1% missing data
+   2   (0.652) 0.670 0.600 
+   1   (0.348) 0.330 0.400 
+
+Locus 16 : 
+2 alleles
+14.2% missing data
+   4   (0.464) 0.499 0.211 
+   1   (0.536) 0.501 0.789 
+
+Locus 17 : 
+2 alleles
+0.0% missing data
+   2   (0.125) 0.107 0.068 
+   4   (0.875) 0.893 0.932 
+
+Locus 18 : 
+2 alleles
+0.0% missing data
+   4   (0.886) 0.902 0.960 
+   2   (0.114) 0.098 0.040 
+
+Locus 19 : 
+2 alleles
+0.3% missing data
+   1   (0.230) 0.222 0.141 
+   4   (0.770) 0.778 0.859 
+
+Locus 20 : 
+2 alleles
+0.0% missing data
+   4   (0.833) 0.802 0.985 
+   3   (0.167) 0.198 0.015 
+
+Locus 21 : 
+2 alleles
+0.2% missing data
+   3   (0.638) 0.631 0.759 
+   2   (0.362) 0.369 0.241 
+
+Locus 22 : 
+2 alleles
+0.6% missing data
+   4   (0.868) 0.908 0.674 
+   2   (0.132) 0.092 0.326 
+
+Locus 23 : 
+2 alleles
+0.0% missing data
+   2   (0.960) 0.986 0.922 
+   3   (0.040) 0.014 0.078 
+
+Locus 24 : 
+2 alleles
+12.0% missing data
+   3   (0.728) 0.751 0.681 
+   2   (0.272) 0.249 0.319 
+
+Locus 25 : 
+2 alleles
+0.0% missing data
+   4   (0.454) 0.452 0.445 
+   2   (0.546) 0.548 0.555 
+
+Locus 26 : 
+2 alleles
+0.0% missing data
+   4   (0.628) 0.638 0.619 
+   1   (0.372) 0.362 0.381 
+
+Locus 27 : 
+2 alleles
+0.0% missing data
+   2   (0.291) 0.248 0.557 
+   3   (0.709) 0.752 0.443 
+
+Locus 28 : 
+2 alleles
+0.0% missing data
+   3   (0.378) 0.350 0.530 
+   2   (0.622) 0.650 0.470 
+
+Locus 29 : 
+2 alleles
+1.0% missing data
+   2   (0.254) 0.237 0.239 
+   4   (0.746) 0.763 0.761 
+
+Locus 30 : 
+2 alleles
+0.5% missing data
+   4   (0.838) 0.865 0.823 
+   1   (0.162) 0.135 0.177 
+
+Locus 31 : 
+2 alleles
+0.0% missing data
+   3   (0.893) 0.934 0.655 
+   2   (0.107) 0.066 0.345 
+
+Locus 32 : 
+2 alleles
+0.1% missing data
+   4   (0.414) 0.426 0.282 
+   1   (0.586) 0.574 0.718 
+
+Locus 33 : 
+2 alleles
+0.3% missing data
+   4   (0.686) 0.695 0.728 
+   1   (0.314) 0.305 0.272 
+
+Locus 34 : 
+2 alleles
+17.8% missing data
+   4   (0.790) 0.812 0.786 
+   2   (0.210) 0.188 0.214 
+
+Locus 35 : 
+2 alleles
+3.0% missing data
+   3   (0.305) 0.267 0.509 
+   4   (0.695) 0.733 0.491 
+
+Locus 36 : 
+2 alleles
+0.0% missing data
+   3   (0.287) 0.265 0.346 
+   2   (0.713) 0.735 0.654 
+
+Locus 37 : 
+2 alleles
+0.0% missing data
+   2   (0.541) 0.544 0.552 
+   3   (0.459) 0.456 0.448 
+
+Locus 38 : 
+2 alleles
+0.2% missing data
+   4   (0.929) 0.957 0.933 
+   1   (0.071) 0.043 0.067 
+
+Locus 39 : 
+2 alleles
+0.5% missing data
+   4   (0.636) 0.654 0.586 
+   1   (0.364) 0.346 0.414 
+
+Locus 40 : 
+2 alleles
+0.0% missing data
+   3   (0.876) 0.902 0.900 
+   2   (0.124) 0.098 0.100 
+
+Locus 41 : 
+2 alleles
+0.3% missing data
+   1   (0.492) 0.459 0.725 
+   3   (0.508) 0.541 0.275 
+
+Locus 42 : 
+2 alleles
+4.9% missing data
+   1   (0.982) 0.996 0.998 
+   2   (0.018) 0.004 0.002 
+
+Locus 43 : 
+2 alleles
+0.0% missing data
+   2   (0.161) 0.171 0.030 
+   4   (0.839) 0.829 0.970 
+
+Locus 44 : 
+2 alleles
+0.2% missing data
+   1   (0.684) 0.692 0.722 
+   4   (0.316) 0.308 0.278 
+
+Locus 45 : 
+2 alleles
+0.5% missing data
+   1   (0.272) 0.241 0.408 
+   2   (0.728) 0.759 0.592 
+
+Locus 46 : 
+2 alleles
+0.0% missing data
+   4   (0.865) 0.862 0.974 
+   2   (0.135) 0.138 0.026 
+
+Locus 47 : 
+2 alleles
+0.1% missing data
+   2   (0.423) 0.406 0.532 
+   4   (0.577) 0.594 0.468 
+
+Locus 48 : 
+2 alleles
+0.8% missing data
+   3   (0.801) 0.834 0.709 
+   2   (0.199) 0.166 0.291 
+
+Locus 49 : 
+2 alleles
+0.0% missing data
+   1   (0.807) 0.812 0.906 
+   2   (0.193) 0.188 0.094 
+
+Locus 50 : 
+2 alleles
+0.0% missing data
+   4   (0.988) 0.999 1.000 
+   2   (0.012) 0.001 0.000 
+
+Locus 51 : 
+2 alleles
+0.2% missing data
+   2   (0.759) 0.784 0.709 
+   1   (0.241) 0.216 0.291 
+
+Locus 52 : 
+2 alleles
+0.1% missing data
+   2   (0.702) 0.741 0.501 
+   4   (0.298) 0.259 0.499 
+
+Locus 53 : 
+2 alleles
+0.0% missing data
+   1   (0.915) 0.922 0.987 
+   2   (0.085) 0.078 0.013 
+
+Locus 54 : 
+2 alleles
+0.0% missing data
+   1   (0.485) 0.457 0.693 
+   4   (0.515) 0.543 0.307 
+
+Locus 55 : 
+2 alleles
+0.1% missing data
+   2   (0.339) 0.308 0.491 
+   3   (0.661) 0.692 0.509 
+
+Locus 56 : 
+2 alleles
+0.4% missing data
+   4   (0.919) 0.931 0.983 
+   2   (0.081) 0.069 0.017 
+
+Locus 57 : 
+2 alleles
+0.0% missing data
+   4   (0.915) 0.941 0.945 
+   2   (0.085) 0.059 0.055 
+
+Locus 58 : 
+2 alleles
+2.9% missing data
+   3   (0.615) 0.615 0.668 
+   4   (0.385) 0.385 0.332 
+
+Locus 59 : 
+2 alleles
+0.1% missing data
+   1   (0.744) 0.764 0.733 
+   2   (0.256) 0.236 0.267 
+
+Locus 60 : 
+2 alleles
+1.6% missing data
+   1   (0.926) 0.945 0.975 
+   4   (0.074) 0.055 0.025 
+
+Locus 61 : 
+2 alleles
+0.0% missing data
+   1   (0.468) 0.485 0.329 
+   4   (0.532) 0.515 0.671 
+
+Locus 62 : 
+2 alleles
+0.0% missing data
+   4   (0.894) 0.880 0.993 
+   2   (0.106) 0.120 0.007 
+
+Locus 63 : 
+2 alleles
+0.0% missing data
+   3   (0.960) 0.969 0.999 
+   2   (0.040) 0.031 0.001 
+
+Locus 64 : 
+2 alleles
+0.0% missing data
+   2   (0.360) 0.344 0.394 
+   4   (0.640) 0.656 0.606 
+
+Locus 65 : 
+2 alleles
+0.3% missing data
+   4   (0.928) 0.927 0.996 
+   1   (0.072) 0.073 0.004 
+
+Locus 66 : 
+2 alleles
+0.0% missing data
+   4   (0.934) 0.960 0.958 
+   2   (0.066) 0.040 0.042 
+
+Locus 67 : 
+2 alleles
+0.0% missing data
+   1   (0.694) 0.692 0.798 
+   2   (0.306) 0.308 0.202 
+
+Locus 68 : 
+2 alleles
+0.1% missing data
+   1   (0.723) 0.734 0.773 
+   2   (0.277) 0.266 0.227 
+
+Locus 69 : 
+2 alleles
+7.8% missing data
+   4   (0.913) 0.924 0.982 
+   2   (0.087) 0.076 0.018 
+
+Locus 70 : 
+2 alleles
+11.8% missing data
+   1   (0.965) 0.982 0.992 
+   4   (0.035) 0.018 0.008 
+
+Locus 71 : 
+2 alleles
+0.0% missing data
+   3   (0.982) 0.995 0.999 
+   1   (0.018) 0.005 0.001 
+
+Locus 72 : 
+2 alleles
+0.1% missing data
+   2   (0.332) 0.317 0.347 
+   3   (0.668) 0.683 0.653 
+
+Locus 73 : 
+2 alleles
+0.0% missing data
+   4   (0.858) 0.887 0.835 
+   2   (0.142) 0.113 0.165 
+
+Locus 74 : 
+2 alleles
+0.5% missing data
+   3   (0.833) 0.867 0.728 
+   1   (0.167) 0.133 0.272 
+
+Locus 75 : 
+2 alleles
+4.2% missing data
+   2   (0.547) 0.549 0.571 
+   4   (0.453) 0.451 0.429 
+
+Locus 76 : 
+2 alleles
+0.1% missing data
+   1   (0.842) 0.861 0.886 
+   3   (0.158) 0.139 0.114 
+
+Locus 77 : 
+2 alleles
+0.0% missing data
+   4   (0.983) 0.996 1.000 
+   2   (0.017) 0.004 0.000 
+
+Locus 78 : 
+2 alleles
+0.5% missing data
+   1   (0.637) 0.662 0.513 
+   4   (0.363) 0.338 0.487 
+
+Locus 79 : 
+2 alleles
+0.6% missing data
+   2   (0.745) 0.777 0.626 
+   1   (0.255) 0.223 0.374 
+
+Locus 80 : 
+2 alleles
+3.3% missing data
+   2   (0.794) 0.792 0.920 
+   3   (0.206) 0.208 0.080 
+
+Locus 81 : 
+2 alleles
+0.1% missing data
+   3   (0.705) 0.663 0.942 
+   1   (0.295) 0.337 0.058 
+
+Locus 82 : 
+2 alleles
+0.2% missing data
+   2   (0.401) 0.477 0.055 
+   1   (0.599) 0.523 0.945 
+
+Locus 83 : 
+2 alleles
+0.0% missing data
+   1   (0.794) 0.804 0.869 
+   4   (0.206) 0.196 0.131 
+
+Locus 84 : 
+2 alleles
+0.0% missing data
+   2   (0.442) 0.506 0.095 
+   3   (0.558) 0.494 0.905 
+
+Locus 85 : 
+2 alleles
+0.0% missing data
+   2   (0.611) 0.568 0.886 
+   3   (0.389) 0.432 0.114 
+
+Locus 86 : 
+2 alleles
+0.3% missing data
+   2   (0.298) 0.269 0.415 
+   4   (0.702) 0.731 0.585 
+
+Locus 87 : 
+2 alleles
+0.0% missing data
+   3   (0.474) 0.490 0.334 
+   2   (0.526) 0.510 0.666 
+
+Locus 88 : 
+2 alleles
+0.0% missing data
+   2   (0.805) 0.840 0.685 
+   3   (0.195) 0.160 0.315 
+
+Locus 89 : 
+2 alleles
+0.1% missing data
+   3   (0.702) 0.712 0.746 
+   2   (0.298) 0.288 0.254 
+
+Locus 90 : 
+2 alleles
+0.0% missing data
+   2   (0.884) 0.907 0.923 
+   3   (0.116) 0.093 0.077 
+
+Locus 91 : 
+2 alleles
+0.0% missing data
+   3   (0.868) 0.889 0.912 
+   4   (0.132) 0.111 0.088 
+
+Locus 92 : 
+2 alleles
+0.0% missing data
+   3   (0.823) 0.816 0.954 
+   4   (0.177) 0.184 0.046 
+
+Locus 93 : 
+2 alleles
+3.9% missing data
+   3   (0.692) 0.688 0.817 
+   2   (0.308) 0.312 0.183 
+
+Locus 94 : 
+2 alleles
+0.0% missing data
+   4   (0.868) 0.886 0.919 
+   1   (0.132) 0.114 0.081 
+
+Locus 95 : 
+2 alleles
+0.7% missing data
+   1   (0.332) 0.307 0.438 
+   3   (0.668) 0.693 0.562 
+
+Locus 96 : 
+2 alleles
+0.0% missing data
+   1   (0.515) 0.504 0.601 
+   4   (0.485) 0.496 0.399 
+
+Locus 97 : 
+2 alleles
+5.8% missing data
+   3   (0.726) 0.750 0.667 
+   2   (0.274) 0.250 0.333 
+
+Locus 98 : 
+2 alleles
+0.1% missing data
+   2   (0.806) 0.823 0.833 
+   4   (0.194) 0.177 0.167 
+
+Locus 99 : 
+2 alleles
+0.1% missing data
+   4   (0.456) 0.454 0.433 
+   2   (0.544) 0.546 0.567 
+
+Locus 100 : 
+2 alleles
+0.0% missing data
+   4   (0.816) 0.794 0.972 
+   1   (0.184) 0.206 0.028 
+
+Locus 101 : 
+2 alleles
+0.1% missing data
+   1   (0.762) 0.806 0.510 
+   3   (0.238) 0.194 0.490 
+
+Locus 102 : 
+2 alleles
+0.1% missing data
+   3   (0.928) 0.953 0.967 
+   1   (0.072) 0.047 0.033 
+
+Locus 103 : 
+2 alleles
+0.0% missing data
+   3   (0.620) 0.637 0.561 
+   2   (0.380) 0.363 0.439 
+
+Locus 104 : 
+2 alleles
+0.0% missing data
+   2   (0.771) 0.794 0.748 
+   1   (0.229) 0.206 0.252 
+
+Locus 105 : 
+2 alleles
+0.0% missing data
+   2   (0.787) 0.835 0.492 
+   4   (0.213) 0.165 0.508 
+
+Locus 106 : 
+2 alleles
+1.6% missing data
+   4   (0.515) 0.539 0.336 
+   1   (0.485) 0.461 0.664 
+
+Locus 107 : 
+2 alleles
+0.0% missing data
+   3   (0.510) 0.531 0.370 
+   2   (0.490) 0.469 0.630 
+
+Locus 108 : 
+2 alleles
+1.0% missing data
+   2   (0.790) 0.809 0.813 
+   4   (0.210) 0.191 0.187 
+
+Locus 109 : 
+2 alleles
+7.1% missing data
+   2   (0.795) 0.760 0.975 
+   4   (0.205) 0.240 0.025 
+
+Locus 110 : 
+2 alleles
+0.1% missing data
+   2   (0.743) 0.725 0.924 
+   4   (0.257) 0.275 0.076 
+
+Locus 111 : 
+2 alleles
+0.0% missing data
+   2   (0.706) 0.695 0.858 
+   3   (0.294) 0.305 0.142 
+
+Locus 112 : 
+2 alleles
+0.0% missing data
+   1   (0.957) 0.968 0.997 
+   4   (0.043) 0.032 0.003 
+
+Locus 113 : 
+2 alleles
+0.0% missing data
+   2   (0.969) 0.991 0.977 
+   1   (0.031) 0.009 0.023 
+
+Locus 114 : 
+2 alleles
+0.0% missing data
+   4   (0.277) 0.251 0.360 
+   1   (0.723) 0.749 0.640 
+
+Locus 115 : 
+2 alleles
+0.5% missing data
+   4   (0.388) 0.384 0.361 
+   2   (0.612) 0.616 0.639 
+
+Locus 116 : 
+2 alleles
+0.4% missing data
+   3   (0.595) 0.600 0.611 
+   2   (0.405) 0.400 0.389 
+
+Locus 117 : 
+2 alleles
+0.0% missing data
+   2   (0.878) 0.910 0.825 
+   1   (0.122) 0.090 0.175 
+
+Locus 118 : 
+2 alleles
+0.2% missing data
+   1   (0.099) 0.073 0.071 
+   4   (0.901) 0.927 0.929 
+
+Locus 119 : 
+2 alleles
+0.0% missing data
+   1   (0.938) 0.970 0.875 
+   2   (0.062) 0.030 0.125 
+
+Locus 120 : 
+2 alleles
+0.4% missing data
+   3   (0.890) 0.909 0.947 
+   2   (0.110) 0.091 0.053 
+
+Locus 121 : 
+2 alleles
+1.0% missing data
+   2   (0.869) 0.893 0.890 
+   3   (0.131) 0.107 0.110 
+
+Locus 122 : 
+2 alleles
+1.3% missing data
+   2   (0.547) 0.565 0.440 
+   4   (0.453) 0.435 0.560 
+
+Locus 123 : 
+2 alleles
+0.0% missing data
+   3   (0.222) 0.187 0.363 
+   2   (0.778) 0.813 0.637 
+
+Locus 124 : 
+2 alleles
+0.0% missing data
+   3   (0.454) 0.467 0.327 
+   4   (0.546) 0.533 0.673 
+
+Locus 125 : 
+2 alleles
+0.3% missing data
+   2   (0.923) 0.936 0.985 
+   3   (0.077) 0.064 0.015 
+
+Locus 126 : 
+2 alleles
+0.0% missing data
+   2   (0.860) 0.856 0.973 
+   1   (0.140) 0.144 0.027 
+
+Locus 127 : 
+2 alleles
+0.0% missing data
+   3   (0.555) 0.556 0.569 
+   2   (0.445) 0.444 0.431 
+
+Locus 128 : 
+2 alleles
+0.0% missing data
+   1   (0.799) 0.805 0.897 
+   2   (0.201) 0.195 0.103 
+
+Locus 129 : 
+2 alleles
+0.0% missing data
+   3   (0.875) 0.869 0.983 
+   4   (0.125) 0.131 0.017 
+
+Locus 130 : 
+2 alleles
+2.0% missing data
+   3   (0.252) 0.257 0.118 
+   2   (0.748) 0.743 0.882 
+
+Locus 131 : 
+2 alleles
+6.5% missing data
+   1   (0.787) 0.794 0.876 
+   3   (0.213) 0.206 0.124 
+
+Locus 132 : 
+2 alleles
+0.1% missing data
+   1   (0.918) 0.926 0.986 
+   2   (0.082) 0.074 0.014 
+
+Locus 133 : 
+2 alleles
+0.0% missing data
+   2   (0.889) 0.908 0.942 
+   4   (0.111) 0.092 0.058 
+
+Locus 134 : 
+2 alleles
+0.1% missing data
+   2   (0.433) 0.388 0.743 
+   3   (0.567) 0.612 0.257 
+
+Locus 135 : 
+2 alleles
+1.2% missing data
+   4   (0.950) 0.980 0.842 
+   2   (0.050) 0.020 0.158 
+
+Locus 136 : 
+2 alleles
+4.0% missing data
+   3   (0.260) 0.208 0.615 
+   1   (0.740) 0.792 0.385 
+
+Locus 137 : 
+2 alleles
+0.1% missing data
+   3   (0.973) 0.994 0.966 
+   2   (0.027) 0.006 0.034 
+
+Locus 138 : 
+2 alleles
+0.1% missing data
+   3   (0.409) 0.372 0.634 
+   2   (0.591) 0.628 0.366 
+
+Locus 139 : 
+2 alleles
+0.1% missing data
+   4   (0.988) 0.999 1.000 
+   2   (0.012) 0.001 0.000 
+
+Locus 140 : 
+2 alleles
+0.1% missing data
+   4   (0.724) 0.734 0.769 
+   1   (0.276) 0.266 0.231 
+
+Locus 141 : 
+2 alleles
+0.0% missing data
+   2   (0.881) 0.896 0.952 
+   4   (0.119) 0.104 0.048 
+
+Locus 142 : 
+2 alleles
+0.0% missing data
+   3   (0.697) 0.705 0.754 
+   2   (0.303) 0.295 0.246 
+
+Locus 143 : 
+2 alleles
+0.0% missing data
+   2   (0.314) 0.289 0.431 
+   3   (0.686) 0.711 0.569 
+
+Locus 144 : 
+2 alleles
+2.7% missing data
+   3   (0.903) 0.882 0.997 
+   2   (0.097) 0.118 0.003 
+
+Locus 145 : 
+2 alleles
+0.1% missing data
+   3   (0.587) 0.595 0.578 
+   2   (0.413) 0.405 0.422 
+
+Locus 146 : 
+2 alleles
+0.0% missing data
+   2   (0.941) 0.973 0.824 
+   3   (0.059) 0.027 0.176 
+
+Locus 147 : 
+2 alleles
+4.7% missing data
+   1   (0.918) 0.941 0.964 
+   3   (0.082) 0.059 0.036 
+
+Locus 148 : 
+2 alleles
+14.5% missing data
+   2   (0.830) 0.869 0.659 
+   3   (0.170) 0.131 0.341 
+
+Locus 149 : 
+2 alleles
+0.8% missing data
+   4   (0.875) 0.861 0.989 
+   3   (0.125) 0.139 0.011 
+
+Locus 150 : 
+2 alleles
+0.0% missing data
+   3   (0.765) 0.777 0.825 
+   2   (0.235) 0.223 0.175 
+
+Locus 151 : 
+2 alleles
+6.4% missing data
+   3   (0.970) 0.983 0.999 
+   2   (0.030) 0.017 0.001 
+
+Locus 152 : 
+2 alleles
+0.2% missing data
+   4   (0.528) 0.478 0.841 
+   1   (0.472) 0.522 0.159 
+
+Locus 153 : 
+2 alleles
+0.0% missing data
+   2   (0.495) 0.492 0.502 
+   1   (0.505) 0.508 0.498 
+
+Locus 154 : 
+2 alleles
+0.0% missing data
+   4   (0.905) 0.929 0.940 
+   1   (0.095) 0.071 0.060 
+
+Locus 155 : 
+2 alleles
+0.0% missing data
+   4   (0.908) 0.896 0.996 
+   1   (0.092) 0.104 0.004 
+
+Locus 156 : 
+2 alleles
+0.1% missing data
+   3   (0.810) 0.820 0.893 
+   2   (0.190) 0.180 0.107 
+
+Locus 157 : 
+2 alleles
+0.4% missing data
+   1   (0.306) 0.306 0.202 
+   3   (0.694) 0.694 0.798 
+
+Locus 158 : 
+2 alleles
+6.5% missing data
+   1   (0.780) 0.791 0.847 
+   4   (0.220) 0.209 0.153 
+
+Locus 159 : 
+2 alleles
+0.0% missing data
+   3   (0.961) 0.971 0.999 
+   2   (0.039) 0.029 0.001 
+
+Locus 160 : 
+2 alleles
+0.1% missing data
+   4   (0.875) 0.907 0.819 
+   1   (0.125) 0.093 0.181 
+
+Locus 161 : 
+2 alleles
+0.4% missing data
+   3   (0.959) 0.973 0.995 
+   2   (0.041) 0.027 0.005 
+
+Locus 162 : 
+1 alleles
+3.7% missing data
+   1   (1.000) 1.000 1.000 
+
+Locus 163 : 
+2 alleles
+0.0% missing data
+   1   (0.871) 0.910 0.698 
+   4   (0.129) 0.090 0.302 
+
+Locus 164 : 
+2 alleles
+0.1% missing data
+   3   (0.874) 0.871 0.977 
+   2   (0.126) 0.129 0.023 
+
+Locus 165 : 
+2 alleles
+0.2% missing data
+   4   (0.882) 0.889 0.969 
+   3   (0.118) 0.111 0.031 
+
+Locus 166 : 
+1 alleles
+0.7% missing data
+   4   (1.000) 1.000 1.000 
+
+Locus 167 : 
+2 alleles
+0.0% missing data
+   4   (0.969) 0.983 0.998 
+   1   (0.031) 0.017 0.002 
+
+Locus 168 : 
+2 alleles
+1.4% missing data
+   4   (0.605) 0.629 0.474 
+   1   (0.395) 0.371 0.526 
+
+Locus 169 : 
+2 alleles
+6.2% missing data
+   3   (0.926) 0.920 0.997 
+   2   (0.074) 0.080 0.003 
+
+Locus 170 : 
+2 alleles
+0.0% missing data
+   2   (0.785) 0.792 0.878 
+   3   (0.215) 0.208 0.122 
+
+Locus 171 : 
+2 alleles
+0.0% missing data
+   2   (0.898) 0.911 0.969 
+   3   (0.102) 0.089 0.031 
+
+Locus 172 : 
+2 alleles
+0.0% missing data
+   4   (0.648) 0.631 0.811 
+   1   (0.352) 0.369 0.189 
+
+Locus 173 : 
+2 alleles
+0.5% missing data
+   4   (0.828) 0.838 0.914 
+   1   (0.172) 0.162 0.086 
+
+Locus 174 : 
+2 alleles
+0.5% missing data
+   4   (0.693) 0.709 0.691 
+   2   (0.307) 0.291 0.309 
+
+Locus 175 : 
+2 alleles
+0.0% missing data
+   1   (0.209) 0.220 0.059 
+   2   (0.791) 0.780 0.941 
+
+Locus 176 : 
+2 alleles
+2.0% missing data
+   2   (0.108) 0.094 0.033 
+   3   (0.892) 0.906 0.967 
+
+Locus 177 : 
+2 alleles
+0.1% missing data
+   1   (0.766) 0.805 0.576 
+   4   (0.234) 0.195 0.424 
+
+Locus 178 : 
+2 alleles
+0.0% missing data
+   1   (0.831) 0.836 0.938 
+   4   (0.169) 0.164 0.062 
+
+Locus 179 : 
+2 alleles
+1.9% missing data
+   1   (0.929) 0.931 0.994 
+   2   (0.071) 0.069 0.006 
+
+Locus 180 : 
+2 alleles
+0.0% missing data
+   2   (0.946) 0.959 0.993 
+   3   (0.054) 0.041 0.007 
+
+Locus 181 : 
+2 alleles
+0.0% missing data
+   3   (0.729) 0.750 0.698 
+   1   (0.271) 0.250 0.302 
+
+Locus 182 : 
+2 alleles
+0.9% missing data
+   4   (0.983) 0.996 0.999 
+   1   (0.017) 0.004 0.001 
+
+Locus 183 : 
+2 alleles
+17.5% missing data
+   2   (0.943) 0.951 0.995 
+   3   (0.057) 0.049 0.005 
+
+Locus 184 : 
+2 alleles
+0.0% missing data
+   1   (0.616) 0.604 0.754 
+   2   (0.384) 0.396 0.246 
+
+Locus 185 : 
+2 alleles
+0.0% missing data
+   4   (0.979) 0.994 0.999 
+   2   (0.021) 0.006 0.001 
+
+Locus 186 : 
+2 alleles
+0.1% missing data
+   2   (0.442) 0.425 0.549 
+   3   (0.558) 0.575 0.451 
+
+Locus 187 : 
+2 alleles
+0.0% missing data
+   1   (0.200) 0.214 0.046 
+   4   (0.800) 0.786 0.954 
+
+Locus 188 : 
+2 alleles
+0.0% missing data
+   1   (0.988) 0.999 1.000 
+   4   (0.012) 0.001 0.000 
+
+Locus 189 : 
+2 alleles
+6.6% missing data
+   3   (0.753) 0.746 0.905 
+   4   (0.247) 0.254 0.095 
+
+Locus 190 : 
+2 alleles
+13.6% missing data
+   3   (0.819) 0.840 0.827 
+   2   (0.181) 0.160 0.173 
+
+Locus 191 : 
+2 alleles
+0.3% missing data
+   1   (0.540) 0.553 0.456 
+   4   (0.460) 0.447 0.544 
+
+Locus 192 : 
+2 alleles
+0.1% missing data
+   4   (0.876) 0.890 0.948 
+   1   (0.124) 0.110 0.052 
+
+Locus 193 : 
+2 alleles
+0.0% missing data
+   4   (0.774) 0.793 0.790 
+   2   (0.226) 0.207 0.210 
+
+Locus 194 : 
+2 alleles
+0.0% missing data
+   1   (0.753) 0.750 0.885 
+   3   (0.247) 0.250 0.115 
+
+Locus 195 : 
+2 alleles
+0.1% missing data
+   4   (0.680) 0.690 0.698 
+   1   (0.320) 0.310 0.302 
+
+Locus 196 : 
+2 alleles
+0.1% missing data
+   3   (0.960) 0.969 0.999 
+   1   (0.040) 0.031 0.001 
+
+Locus 197 : 
+2 alleles
+0.5% missing data
+   2   (0.670) 0.681 0.673 
+   1   (0.330) 0.319 0.327 
+
+Locus 198 : 
+2 alleles
+6.8% missing data
+   1   (0.785) 0.805 0.791 
+   2   (0.215) 0.195 0.209 
+
+Locus 199 : 
+2 alleles
+0.0% missing data
+   3   (0.967) 0.979 0.999 
+   2   (0.033) 0.021 0.001 
+
+Locus 200 : 
+2 alleles
+0.0% missing data
+   2   (0.180) 0.194 0.034 
+   3   (0.820) 0.806 0.966 
+
+Locus 201 : 
+2 alleles
+0.1% missing data
+   1   (0.807) 0.819 0.886 
+   3   (0.193) 0.181 0.114 
+
+Locus 202 : 
+2 alleles
+0.0% missing data
+   3   (0.482) 0.462 0.627 
+   2   (0.518) 0.538 0.373 
+
+Locus 203 : 
+2 alleles
+0.7% missing data
+   1   (0.182) 0.209 0.022 
+   4   (0.818) 0.791 0.978 
+
+Locus 204 : 
+2 alleles
+0.0% missing data
+   4   (0.639) 0.562 0.962 
+   2   (0.361) 0.438 0.038 
+
+Locus 205 : 
+2 alleles
+0.0% missing data
+   2   (0.896) 0.908 0.969 
+   3   (0.104) 0.092 0.031 
+
+Locus 206 : 
+2 alleles
+0.0% missing data
+   1   (0.537) 0.556 0.421 
+   4   (0.463) 0.444 0.579 
+
+Locus 207 : 
+2 alleles
+0.2% missing data
+   2   (0.794) 0.842 0.496 
+   3   (0.206) 0.158 0.504 
+
+Locus 208 : 
+2 alleles
+0.3% missing data
+   3   (0.396) 0.380 0.457 
+   1   (0.604) 0.620 0.543 
+
+Locus 209 : 
+2 alleles
+0.4% missing data
+   4   (0.544) 0.557 0.474 
+   1   (0.456) 0.443 0.526 
+
+Locus 210 : 
+2 alleles
+0.0% missing data
+   1   (0.962) 0.987 0.963 
+   4   (0.038) 0.013 0.037 
+
+Locus 211 : 
+2 alleles
+0.0% missing data
+   1   (0.668) 0.676 0.707 
+   4   (0.332) 0.324 0.293 
+
+Locus 212 : 
+2 alleles
+0.0% missing data
+   4   (0.882) 0.908 0.904 
+   1   (0.118) 0.092 0.096 
+
+Locus 213 : 
+2 alleles
+7.1% missing data
+   3   (0.409) 0.455 0.122 
+   4   (0.591) 0.545 0.878 
+
+Locus 214 : 
+2 alleles
+3.9% missing data
+   3   (0.777) 0.733 0.973 
+   2   (0.223) 0.267 0.027 
+
+Locus 215 : 
+2 alleles
+0.1% missing data
+   4   (0.918) 0.917 0.994 
+   2   (0.082) 0.083 0.006 
+
+Locus 216 : 
+2 alleles
+0.0% missing data
+   4   (0.815) 0.790 0.975 
+   2   (0.185) 0.210 0.025 
+
+Locus 217 : 
+2 alleles
+0.0% missing data
+   1   (0.705) 0.712 0.767 
+   4   (0.295) 0.288 0.233 
+
+Locus 218 : 
+2 alleles
+0.0% missing data
+   2   (0.880) 0.863 0.992 
+   3   (0.120) 0.137 0.008 
+
+Locus 219 : 
+1 alleles
+0.4% missing data
+   1   (1.000) 1.000 1.000 
+
+Locus 220 : 
+2 alleles
+0.0% missing data
+   3   (0.729) 0.768 0.511 
+   2   (0.271) 0.232 0.489 
+
+Locus 221 : 
+2 alleles
+0.0% missing data
+   4   (0.525) 0.540 0.420 
+   3   (0.475) 0.460 0.580 
+
+Locus 222 : 
+2 alleles
+0.0% missing data
+   1   (0.822) 0.862 0.638 
+   3   (0.178) 0.138 0.362 
+
+Locus 223 : 
+2 alleles
+0.0% missing data
+   2   (0.957) 0.963 0.999 
+   3   (0.043) 0.037 0.001 
+
+Locus 224 : 
+2 alleles
+0.0% missing data
+   1   (0.943) 0.947 0.997 
+   3   (0.057) 0.053 0.003 
+
+Locus 225 : 
+2 alleles
+0.5% missing data
+   1   (0.394) 0.367 0.553 
+   3   (0.606) 0.633 0.447 
+
+Locus 226 : 
+2 alleles
+1.3% missing data
+   1   (0.466) 0.458 0.516 
+   2   (0.534) 0.542 0.484 
+
+Locus 227 : 
+2 alleles
+0.0% missing data
+   2   (0.688) 0.673 0.856 
+   4   (0.312) 0.327 0.144 
+
+Locus 228 : 
+2 alleles
+1.4% missing data
+   2   (0.928) 0.928 0.996 
+   3   (0.072) 0.072 0.004 
+
+Locus 229 : 
+2 alleles
+0.1% missing data
+   4   (0.986) 0.998 1.000 
+   1   (0.014) 0.002 0.000 
+
+Locus 230 : 
+2 alleles
+0.0% missing data
+   3   (0.431) 0.437 0.350 
+   4   (0.569) 0.563 0.650 
+
+Locus 231 : 
+2 alleles
+0.0% missing data
+   3   (0.965) 0.979 0.997 
+   2   (0.035) 0.021 0.003 
+
+Locus 232 : 
+2 alleles
+0.0% missing data
+   1   (0.698) 0.723 0.613 
+   2   (0.302) 0.277 0.387 
+
+Locus 233 : 
+2 alleles
+0.0% missing data
+   2   (0.295) 0.272 0.361 
+   4   (0.705) 0.728 0.639 
+
+Locus 234 : 
+2 alleles
+2.2% missing data
+   4   (0.201) 0.165 0.360 
+   1   (0.799) 0.835 0.640 
+
+Locus 235 : 
+2 alleles
+0.0% missing data
+   2   (0.715) 0.715 0.820 
+   3   (0.285) 0.285 0.180 
+
+Locus 236 : 
+2 alleles
+2.6% missing data
+   2   (0.541) 0.521 0.704 
+   3   (0.459) 0.479 0.296 
+
+Locus 237 : 
+2 alleles
+0.0% missing data
+   3   (0.902) 0.918 0.967 
+   2   (0.098) 0.082 0.033 
+
+Locus 238 : 
+2 alleles
+4.8% missing data
+   2   (0.554) 0.533 0.712 
+   3   (0.446) 0.467 0.288 
+
+Locus 239 : 
+2 alleles
+0.9% missing data
+   3   (0.794) 0.761 0.975 
+   1   (0.206) 0.239 0.025 
+
+Locus 240 : 
+2 alleles
+0.9% missing data
+   3   (0.886) 0.928 0.657 
+   1   (0.114) 0.072 0.343 
+
+Locus 241 : 
+2 alleles
+1.1% missing data
+   2   (0.620) 0.652 0.450 
+   1   (0.380) 0.348 0.550 
+
+Locus 242 : 
+2 alleles
+0.0% missing data
+   4   (0.712) 0.714 0.808 
+   3   (0.288) 0.286 0.192 
+
+Locus 243 : 
+2 alleles
+0.3% missing data
+   3   (0.522) 0.539 0.395 
+   4   (0.478) 0.461 0.605 
+
+Locus 244 : 
+2 alleles
+0.0% missing data
+   1   (0.935) 0.937 0.996 
+   2   (0.065) 0.063 0.004 
+
+Locus 245 : 
+1 alleles
+0.2% missing data
+   3   (1.000) 1.000 1.000 
+
+Locus 246 : 
+2 alleles
+0.0% missing data
+   2   (0.467) 0.516 0.150 
+   4   (0.533) 0.484 0.850 
+
+Locus 247 : 
+2 alleles
+0.6% missing data
+   2   (0.532) 0.548 0.420 
+   3   (0.468) 0.452 0.580 
+
+Locus 248 : 
+2 alleles
+0.3% missing data
+   2   (0.887) 0.868 0.994 
+   3   (0.113) 0.132 0.006 
+
+Locus 249 : 
+2 alleles
+0.7% missing data
+   4   (0.753) 0.755 0.863 
+   2   (0.247) 0.245 0.137 
+
+Locus 250 : 
+2 alleles
+0.0% missing data
+   3   (0.930) 0.960 0.918 
+   2   (0.070) 0.040 0.082 
+
+Locus 251 : 
+2 alleles
+0.0% missing data
+   2   (0.986) 0.998 1.000 
+   3   (0.014) 0.002 0.000 
+
+Locus 252 : 
+2 alleles
+3.0% missing data
+   4   (0.592) 0.601 0.579 
+   1   (0.408) 0.399 0.421 
+
+Locus 253 : 
+2 alleles
+0.1% missing data
+   4   (0.858) 0.879 0.899 
+   1   (0.142) 0.121 0.101 
+
+Locus 254 : 
+2 alleles
+6.5% missing data
+   1   (0.707) 0.703 0.832 
+   4   (0.293) 0.297 0.168 
+
+Locus 255 : 
+2 alleles
+9.0% missing data
+   2   (0.905) 0.948 0.570 
+   1   (0.095) 0.052 0.430 
+
+Locus 256 : 
+2 alleles
+2.5% missing data
+   4   (0.815) 0.858 0.587 
+   2   (0.185) 0.142 0.413 
+
+Locus 257 : 
+2 alleles
+0.8% missing data
+   3   (0.323) 0.332 0.184 
+   2   (0.677) 0.668 0.816 
+
+Locus 258 : 
+2 alleles
+0.2% missing data
+   1   (0.653) 0.676 0.565 
+   2   (0.347) 0.324 0.435 
+
+Locus 259 : 
+2 alleles
+1.7% missing data
+   2   (0.866) 0.884 0.930 
+   3   (0.134) 0.116 0.070 
+
+Locus 260 : 
+2 alleles
+0.2% missing data
+   3   (0.394) 0.377 0.445 
+   2   (0.606) 0.623 0.555 
+
+Locus 261 : 
+2 alleles
+0.0% missing data
+   3   (0.570) 0.595 0.421 
+   4   (0.430) 0.405 0.579 
+
+Locus 262 : 
+2 alleles
+0.0% missing data
+   3   (0.250) 0.253 0.119 
+   1   (0.750) 0.747 0.881 
+
+Locus 263 : 
+2 alleles
+0.5% missing data
+   2   (0.695) 0.728 0.522 
+   3   (0.305) 0.272 0.478 
+
+Locus 264 : 
+2 alleles
+0.5% missing data
+   4   (0.469) 0.455 0.563 
+   1   (0.531) 0.545 0.437 
+
+Locus 265 : 
+2 alleles
+0.2% missing data
+   2   (0.744) 0.732 0.903 
+   3   (0.256) 0.268 0.097 
+
+Locus 266 : 
+2 alleles
+0.3% missing data
+   4   (0.726) 0.727 0.827 
+   2   (0.274) 0.273 0.173 
+
+Locus 267 : 
+2 alleles
+0.4% missing data
+   2   (0.872) 0.910 0.725 
+   5   (0.128) 0.090 0.275 
+
+Locus 268 : 
+2 alleles
+0.3% missing data
+   2   (0.918) 0.947 0.926 
+   4   (0.082) 0.053 0.074 
+
+Locus 269 : 
+2 alleles
+3.2% missing data
+   4   (0.970) 0.983 0.999 
+   1   (0.030) 0.017 0.001 
+
+Locus 270 : 
+2 alleles
+0.1% missing data
+   2   (0.188) 0.215 0.024 
+   3   (0.812) 0.785 0.976 
+
+Locus 271 : 
+2 alleles
+0.0% missing data
+   3   (0.506) 0.439 0.890 
+   2   (0.494) 0.561 0.110 
+
+Locus 272 : 
+2 alleles
+0.3% missing data
+   3   (0.846) 0.874 0.805 
+   2   (0.154) 0.126 0.195 
+
+Locus 273 : 
+2 alleles
+2.1% missing data
+   3   (0.915) 0.952 0.708 
+   2   (0.085) 0.048 0.292 
+
+Locus 274 : 
+2 alleles
+0.0% missing data
+   2   (0.251) 0.222 0.328 
+   1   (0.749) 0.778 0.672 
+
+Locus 275 : 
+2 alleles
+0.1% missing data
+   2   (0.654) 0.641 0.803 
+   4   (0.346) 0.359 0.197 
+
+Locus 276 : 
+2 alleles
+0.9% missing data
+   4   (0.843) 0.864 0.867 
+   2   (0.157) 0.136 0.133 
+
+Locus 277 : 
+2 alleles
+0.5% missing data
+   2   (0.968) 0.992 0.900 
+   3   (0.032) 0.008 0.100 
+
+Locus 278 : 
+2 alleles
+0.0% missing data
+   4   (0.733) 0.754 0.694 
+   2   (0.267) 0.246 0.306 
+
+Locus 279 : 
+2 alleles
+0.0% missing data
+   1   (0.986) 0.998 1.000 
+   2   (0.014) 0.002 0.000 
+
+Locus 280 : 
+2 alleles
+0.4% missing data
+   2   (0.778) 0.808 0.714 
+   3   (0.222) 0.192 0.286 
+
+Locus 281 : 
+2 alleles
+0.3% missing data
+   2   (0.722) 0.694 0.932 
+   3   (0.278) 0.306 0.068 
+
+Locus 282 : 
+2 alleles
+0.0% missing data
+   2   (0.974) 0.991 0.997 
+   3   (0.026) 0.009 0.003 
+
+Locus 283 : 
+2 alleles
+0.0% missing data
+   3   (0.890) 0.911 0.942 
+   2   (0.110) 0.089 0.058 
+
+Locus 284 : 
+2 alleles
+0.0% missing data
+   3   (0.887) 0.922 0.795 
+   2   (0.113) 0.078 0.205 
+
+Locus 285 : 
+2 alleles
+4.1% missing data
+   2   (0.632) 0.582 0.914 
+   3   (0.368) 0.418 0.086 
+
+Locus 286 : 
+2 alleles
+0.1% missing data
+   3   (0.910) 0.909 0.992 
+   1   (0.090) 0.091 0.008 
+
+Locus 287 : 
+2 alleles
+0.0% missing data
+   1   (0.915) 0.912 0.993 
+   5   (0.085) 0.088 0.007 
+
+Locus 288 : 
+2 alleles
+0.0% missing data
+   1   (0.950) 0.953 0.999 
+   5   (0.050) 0.047 0.001 
+
+Locus 289 : 
+2 alleles
+0.0% missing data
+   2   (0.733) 0.742 0.803 
+   1   (0.267) 0.258 0.197 
+
+Locus 290 : 
+2 alleles
+6.8% missing data
+   1   (0.930) 0.934 0.994 
+   4   (0.070) 0.066 0.006 
+
+Locus 291 : 
+2 alleles
+0.0% missing data
+   3   (0.690) 0.709 0.656 
+   2   (0.310) 0.291 0.344 
+
+Locus 292 : 
+2 alleles
+1.4% missing data
+   1   (0.680) 0.669 0.832 
+   4   (0.320) 0.331 0.168 
+
+Locus 293 : 
+2 alleles
+0.2% missing data
+   3   (0.984) 0.997 1.000 
+   1   (0.016) 0.003 0.000 
+
+Locus 294 : 
+2 alleles
+0.1% missing data
+   4   (0.356) 0.348 0.331 
+   3   (0.644) 0.652 0.669 
+
+Locus 295 : 
+2 alleles
+0.6% missing data
+   1   (0.683) 0.670 0.842 
+   2   (0.317) 0.330 0.158 
+
+Locus 296 : 
+2 alleles
+0.1% missing data
+   3   (0.597) 0.595 0.661 
+   2   (0.403) 0.405 0.339 
+
+Locus 297 : 
+2 alleles
+0.1% missing data
+   4   (0.762) 0.800 0.566 
+   2   (0.238) 0.200 0.434 
+
+Locus 298 : 
+2 alleles
+0.3% missing data
+   2   (0.486) 0.548 0.129 
+   1   (0.514) 0.452 0.871 
+
+Locus 299 : 
+2 alleles
+0.1% missing data
+   1   (0.826) 0.820 0.953 
+   3   (0.174) 0.180 0.047 
+
+Locus 300 : 
+2 alleles
+0.0% missing data
+   2   (0.949) 0.968 0.986 
+   1   (0.051) 0.032 0.014 
+
+Locus 301 : 
+2 alleles
+2.4% missing data
+   2   (0.944) 0.973 0.935 
+   5   (0.056) 0.027 0.065 
+
+Locus 302 : 
+2 alleles
+0.0% missing data
+   3   (0.950) 0.976 0.967 
+   1   (0.050) 0.024 0.033 
+
+Locus 303 : 
+2 alleles
+0.0% missing data
+   1   (0.487) 0.477 0.537 
+   4   (0.513) 0.523 0.463 
+
+Locus 304 : 
+2 alleles
+4.5% missing data
+   3   (0.871) 0.857 0.985 
+   2   (0.129) 0.143 0.015 
+
+Locus 305 : 
+2 alleles
+0.0% missing data
+   1   (0.866) 0.913 0.565 
+   2   (0.134) 0.087 0.435 
+
+Locus 306 : 
+2 alleles
+0.4% missing data
+   2   (0.914) 0.946 0.863 
+   1   (0.086) 0.054 0.137 
+
+Locus 307 : 
+2 alleles
+0.0% missing data
+   3   (0.988) 0.999 1.000 
+   2   (0.012) 0.001 0.000 
+
+Locus 308 : 
+2 alleles
+0.0% missing data
+   3   (0.769) 0.781 0.825 
+   2   (0.231) 0.219 0.175 
+
+Locus 309 : 
+2 alleles
+0.3% missing data
+   4   (0.660) 0.652 0.802 
+   2   (0.340) 0.348 0.198 
+
+Locus 310 : 
+3 alleles
+0.3% missing data
+   0   (0.012) 0.001 0.000 
+   5   (0.768) 0.778 0.895 
+   2   (0.220) 0.220 0.105 
+
+Locus 311 : 
+2 alleles
+0.0% missing data
+   3   (0.905) 0.900 0.991 
+   2   (0.095) 0.100 0.009 
+
+Locus 312 : 
+2 alleles
+0.0% missing data
+   2   (0.775) 0.794 0.790 
+   4   (0.225) 0.206 0.210 
+
+Locus 313 : 
+2 alleles
+0.1% missing data
+   4   (0.372) 0.340 0.553 
+   1   (0.628) 0.660 0.447 
+
+Locus 314 : 
+2 alleles
+0.3% missing data
+   3   (0.820) 0.837 0.871 
+   2   (0.180) 0.163 0.129 
+
+Locus 315 : 
+2 alleles
+0.0% missing data
+   1   (0.767) 0.733 0.964 
+   4   (0.233) 0.267 0.036 
+
+Locus 316 : 
+2 alleles
+0.0% missing data
+   4   (0.296) 0.289 0.227 
+   5   (0.704) 0.711 0.773 
+
+Locus 317 : 
+2 alleles
+0.1% missing data
+   3   (0.757) 0.793 0.590 
+   1   (0.243) 0.207 0.410 
+
+Locus 318 : 
+2 alleles
+0.0% missing data
+   3   (0.760) 0.764 0.857 
+   2   (0.240) 0.236 0.143 
+
+Locus 319 : 
+2 alleles
+0.1% missing data
+   1   (0.782) 0.802 0.786 
+   2   (0.218) 0.198 0.214 
+
+Locus 320 : 
+2 alleles
+0.1% missing data
+   2   (0.505) 0.472 0.740 
+   3   (0.495) 0.528 0.260 
+
+Locus 321 : 
+2 alleles
+0.0% missing data
+   4   (0.635) 0.615 0.829 
+   2   (0.365) 0.385 0.171 
+
+Locus 322 : 
+2 alleles
+7.2% missing data
+   2   (0.770) 0.753 0.938 
+   4   (0.230) 0.247 0.062 
+
+Locus 323 : 
+2 alleles
+0.0% missing data
+   3   (0.744) 0.745 0.856 
+   2   (0.256) 0.255 0.144 
+
+Locus 324 : 
+2 alleles
+0.0% missing data
+   3   (0.846) 0.865 0.903 
+   2   (0.154) 0.135 0.097 
+
+Locus 325 : 
+2 alleles
+0.1% missing data
+   2   (0.410) 0.382 0.571 
+   3   (0.590) 0.618 0.429 
+
+Locus 326 : 
+2 alleles
+2.4% missing data
+   1   (0.519) 0.512 0.587 
+   5   (0.481) 0.488 0.413 
+
+Locus 327 : 
+2 alleles
+0.0% missing data
+   3   (0.379) 0.423 0.103 
+   2   (0.621) 0.577 0.897 
+
+Locus 328 : 
+2 alleles
+0.0% missing data
+   3   (0.962) 0.973 0.998 
+   1   (0.038) 0.027 0.002 
+
+Values of parameters used in structure:
+DATAFILE=/Users/ddayan/FRA/premature_migration/Rogue_Half-Pounder/half-pounder/structure/halfpounder_2021/project_data,	OUTFILE=/Users/ddayan/FRA/premature_migration/Rogue_Half-Pounder/half-pounder/structure/halfpounder_2021/10k_20k_adm_corr/Results/10k_20k_adm_corr_run_10,	NUMINDS=1000,	NUMLOCI=328,	MISSING=-9,	LABEL=1,	POPDATA=1,	POPFLAG=0,	PHENOTYPE=0,	EXTRACOLS=0,	MAXPOPS=2,	BURNIN=10000,	NUMREPS=20000,	USEPOPINFO=0,	INFERALPHA=1,	INFERLAMBDA=0,	POPSPECIFICLAMBDA=0,	POPALPHAS=0,	COMPUTEPROB=1,	NOADMIX=0,	ADMBURNIN=2500,	UPDATEFREQ=1,	PRINTLIKES=0,	INTERMEDSAVE=0,	PRINTKLD=0,	PRINTNET=0,	PRINTLAMBDA=0,	ANCESTDIST=0,	NUMBOXES=1000,	ANCESTPINT=0.90000,	GENSBACK=2,	MIGRPRIOR=0.05000,	PRINTQHAT=0,	PRINTQSUM=0,	ALPHA=1.0000,	FREQSCORR=1,	FPRIORMEAN=0.0100,	FPRIORSD=0.0500,	ONEFST=0,	LAMBDA=1.0000,	UNIFPRIORALPHA=1,	ALPHAMAX=10.0000,	ALPHAPRIORA=1.0000,	ALPHAPRIORB=2.0000,	ALPHAPROPSD=0.0250,	STARTATPOPINFO=0,	RANDOMIZE=1,	LINKAGE=0,	METROFREQ=10,	REPORTHITRATE=0,	MARKOVPHASE=-1,	PHASED=0,	PLOIDY=2,	PHASEINFO=0	LOCPRIOR=0, 	LOCPRIORINIT=1.000000, 	LOCDATA=0, 	LOCISPOP=0, 	LOCPRIORSTEP=0.100000, 	MAXLOCPRIOR=20.000000, 	SEED=1619828576,	
+[STRAT parameters]:    NUMSIMSTATS=1000,	PHENOTYPECOL=-9,	POOLFREQ=10,	LOCUSxONLY=0,	EMERROR=0.00100,	MISSINGPHENO=-9,	

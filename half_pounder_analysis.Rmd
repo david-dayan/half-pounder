@@ -55,22 +55,27 @@ Also ~5% of samples represented twice in GTseq library as QAQC samples
 __Adults__  
 For brevity and easy code comprehension, throughout the notebook early-summer run steelhead are referred to as summer run and late-summer run steelhead are referred to as fall run.
 
-45 winter and 45 early-run summer run fish. Adult summer steelhead were sampled at the Cole River Hatchery sorting pond on 6/26/2019 and (b) adult winter steelhead were sampled at Cole Rivers Hatchery (Rogue River) and the Applegate River from adult brood stock for 2019. Finally 166 additional late-summer run fish (fall run) were sampled at the Huntley Park seine on the lower Rogue.
+50 winter and 45 early-run summer run fish. Adult summer steelhead were sampled at the Cole River Hatchery sorting pond on 6/26/2019 and (b) adult winter steelhead were sampled at Cole Rivers Hatchery (Rogue River) and the Applegate River from adult brood stock for 2019. 166 late-summer run fish (fall run) were sampled at the Huntley Park seine on the lower Rogue in 2019 and an additional 119 late-summer fish were collected at Huntley in 2020.
 
 All but 4 early-summer run adults are marked and assumed to hatchery origin fish. The final filtered dataset contained 1 natural origin and 41 hatchery origin fish. Winter run fish include NOR and HOR fish. After filtering the final dataset contains 18 HOR and 22 NOR fish. Early summer run fish are all unmarked and assumed NOR. All late-summer fish were unmarked and assumed NOR.
 
 ## Genotype Data
 
-Information about sequencing data, genotype calling and filtering is available in the relevant R notebook (half_pounder_genotyping_notebook.Rmd) in this repository. 
+Information about sequencing data, genotype calling and filtering is available in the relevant R notebook (2021_genotyping_notebook.Rmd) in this repository. 
 
 ```{r}
-load("./genotype_data/genind_2.1.R")
-load("./genotype_data/genotypes_2.3.R")
+load("./genotype_data_2021/genind_2.0.R")
+load("./genotype_data_2021/genotypes_2.2.R")
+genos_2.3 <- genos_2.2
+genind_2.1 <- genind_2.0
 genos_2.3 <- ungroup(genos_2.3)
 kable(genos_2.3 %>%
   group_by(run, year) %>%
   tally(), caption = "Final Filtered Dataset")
 
+```
+
+```{r, eval = FALSE}
 #save a file with this info
 progeny <- readxl::read_xlsx("../meta_data/2019_summer/Omy Rogue2019 steelhead datasheets.xlsx", sheet = 4) 
 progeny <- progeny %>%
@@ -80,7 +85,7 @@ select(genos_2.3, Sample, run, year, Date) %>%
   mutate(Origin = replace(Origin, Origin == "AD", "HOR")) %>%
   mutate(Origin = replace(Origin, Origin == "1", "NOR")) %>%
   replace_na(list(Origin = "NOR")) %>%
-  write_tsv("sample_metadata.txt")#convert AD (HOR) and 1 (NOR)
+  write_tsv("supplemental_files_for_ms/sample_metadata_2021.txt")#convert AD (HOR) and 1 (NOR)
 
 
 
@@ -158,6 +163,7 @@ marker_mapping <- readxl::read_xlsx("./metadata/final_mapping_results.xlsx", she
 marker_divs <- marker_mapping %>%
   select(marker, `Presumed Type`) %>%
   mutate(marker = str_replace(marker, "Omy(\\d+)", "Chr\\1")) %>% #marker name convention is different
+  mutate(marker = str_replace(marker, "\\.", "_")) %>% 
   mutate(neutral = if_else(str_detect(`Presumed Type`, 'Adaptive|adaptive'), "adaptive", "neutral")) %>%
   right_join(marker_divs)
 
@@ -269,7 +275,7 @@ b <- t.test(summary(chr28_seppop$halfpounder)$Hexp, summary(neutral_seppop$halfp
 c <- t.test(summary(chr28_seppop$Summer)$Hexp, summary(neutral_seppop$Summer)$Hexp, alternative = "less")
 
 #winter
-d <- t.test(summary(chr28_seppop$Winter)$Hexp, summary(neutral_seppop$Winter)$Hexp, , alternative = "less")
+d <- t.test(summary(chr28_seppop$Winter)$Hexp, summary(neutral_seppop$Winter)$Hexp,  alternative = "less")
 
 #now make a nice table
 df <- as.data.frame(cbind(c("fall", "half", "summer", "winter"),c(a$p.value,b$p.value,c$p.value,d$p.value)))
@@ -449,18 +455,18 @@ Yes, there are some clear fst outlier loci in the dataset. These outliers are co
 Let's collect genetic distance info on pairs of pops as well (Weir and Cochran 1984). 
 
 First, the full dataset:
-```{r}
+```{r, cache = TRUE}
 genet.dist(fstat, method="WC84")
 ```
 
 Then just neutral loci:
-```{r}
+```{r, cache = TRUE}
 genet.dist(fstat_neutral, method="WC84")
 ```
 
 
-Let's split the halfpounders into year classes and run again
-```{r}
+Let's split the year classes and run again
+```{r, cache = TRUE}
 genind_year <- genind_2.1
 
 genind_year@pop <- as.factor(paste(genos_2.3$run, genos_2.3$year, sep = "_"))
@@ -1938,6 +1944,24 @@ ph_geno %>%
 knitr::include_graphics('phasing/phased_genos4.phylip.svg')
 ```
 
+__more recombination in half or fall__
+mean shortest distance to node on haplotype network containing known winter or early-summer haplotype
+
+```{r}
+#popart output is very limited, just a list of members of each node, with the node named after the first member. to figure out the statistic we're interested in we'll have to do some manual work here
+
+#for each named node, manually trace the shortest distance to a node with a early- or late-migrating haplotype
+
+#then assign this value to all the members in the nodes
+
+#then collect summary statistics on these per population (mean + sd + plot distribution)
+```
+
+
+
+early-summer: 0
+winter: 0
+late-summer
 
 ## summary
 
@@ -2079,6 +2103,9 @@ ggplot(cor_data[cor_data$run=="halfpounder",])+geom_point(aes(jdate,LD1))+theme_
 cor_data %>% group_by(run) %>%
   summarise(r = range(jdate))
 
+#figure demonstrating why similar analysis can not be done in half-pounders (year confounded with date)
+ggplot(data = filter(cor_data, pop == "halfpounder"))+geom_histogram(aes(x=as.numeric(jdate), color = year))
+
 ```
 
 There is a significant, but minor trend (r2 = 0.03, p = 0.04) towards more genetically winter-like fish over time among fall run fish. 
@@ -2090,7 +2117,7 @@ also look within halfpounders
 
 ### interannual variation  
 
-let's check to make sure there are no interesting patterns / structure among halfpounder years
+let's check to make sure there are no interesting patterns / structure among halfpounder and late summer years
 
 ```{r, message=FALSE, warning=FALSE}
 # create the dataset
@@ -2107,7 +2134,20 @@ scatter.dapc(half_dapc_year)
 
 Even with DAPC, very little structure year to year in halfpounders.
 
+```{r, message=FALSE, warning=FALSE}
+# create the dataset
+fall_genind <- seppop(genind_2.1)$fall
+years <- str_sub(row.names(fall_genind@tab), 6,7)
+fall_genind$pop <- as.factor(years)
 
+# optimized number of pcs with optim.a.score, smart = F
+#fall_dapc_year <- dapc(fall_genind, n.pca = 200, n.da =1)
+#optim.a.score(fall_dapc_year, smart = TRUE)
+fall_dapc_year <- dapc(fall_genind, n.pca = 1, n.da =1)
+scatter.dapc(fall_dapc_year)
+```
+
+Also very little difference between years in fall samples. 
 
 ### data export  
 
