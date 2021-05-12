@@ -1,4 +1,4 @@
-#define OUTFILE /Users/ddayan/FRA/premature_migration/Rogue_Half-Pounder/half-pounder/structure/halfpounder_2021/10k_20k_adm_corr/Results/10k_20k_adm_corr_run_30
+#define OUTFILE /Users/ddayan/FRA/premature_migration/Rogue_Half-Pounder/half-pounder/structure/halfpounder_2021/10k_20k_adm_corr/Results/10k_20k_adm_corr_run_60
 #define INFILE /Users/ddayan/FRA/premature_migration/Rogue_Half-Pounder/half-pounder/structure/halfpounder_2021/project_data
 #define NUMINDS 1000
 #define NUMLOCI 328
