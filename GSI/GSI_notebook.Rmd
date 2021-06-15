@@ -1,0 +1,490 @@
+---
+title: "Half Pounder GSI"
+output:
+  html_document:
+    code_folding: hide
+    df_print: paged
+    toc: yes
+    toc_collapsed: no
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r, message=FALSE, warning=FALSE}
+require(adegenet)
+require(tidyverse)
+require(magrittr)
+require(rubias)
+
+```
+
+# Rationale
+
+Here we attempt to assess rate at which rogue halfpounders stray from other rivers. We assign halfpounders using rubias GSI to Klamath Basin Region or Rogue region using empirical data from this project for the Rogue baseline and samples shared from Devon Pearse for the Klamath Region.
+
+# Baseline Samples
+
+__Klamath Baseline__  
+The full CA baseline contains 2744 fish genotyped at 90 loci. Coastal samples are distributed from Smith River near the OR-CA border to Big Sur River in the South. 
+
+We only include 212 samples from the region where halfpounders are known to occur, from the Eel River north.
+
+```{r, message=FALSE, warning=FALSE}
+# import baseline data
+full_CA_baseline <- read_csv("Omykiss_SNPbaseline_Donohoe_etal_2021.csv")
+
+# keep only Klamath region samples
+ncal_baseline <- full_CA_baseline %>%
+  slice_head( n = 212)
+
+# add population names
+ncal_baseline %<>%
+  mutate(pop = str_extract(indiv, "^[:alpha:]+"))
+
+ncal_baseline %>%
+  count(pop)
+```
+
+From North to South these rivers are:  
+
+Smith River - SmithRi
+Blue Creek, Klamath River - BlKlaRi
+Hunter Creek, Klamath River - HuKlaRi
+Lost Man Creek / Redwood Creek - LstMaCk
+Mad River - BlMadRi
+Hollow Tree Creek, Eel River - HoEelRi
+Lawrence Creek, Eel River - LaEelRi
+
+For GSI we will group all of these samples into a "reporting region" called "Klamath Region"
+
+__Rogue Baseline__  
+
+For the Rogue river baseline we we randomly sample an equal number of adults from the Rogue river.
+
+```{r, eval = FALSE}
+#run this only once and save output so that each knitr rendering doesn't creat a new sample
+load("../genotype_data_2021/genind_2.0.R")
+load("../genotype_data_2021/genotypes_2.2.R")
+genos_2.3 <- genos_2.2
+genind_2.1 <- genind_2.0
+genos_2.3 <- ungroup(genos_2.3)
+
+rogue_baseline_samples <- genos_2.3 %>%
+  filter(run != "halfpounder") %>%
+  sample_n(size = 212) %>%
+  pull(Sample)
+
+save(rogue_baseline_samples, file = "rogue_baseline_samples.R")
+```
+
+```{r}
+load("../genotype_data_2021/genind_2.0.R")
+load("../genotype_data_2021/genotypes_2.2.R")
+genos_2.3 <- genos_2.2
+genind_2.1 <- genind_2.0
+genos_2.3 <- ungroup(genos_2.3)
+
+load("rogue_baseline_samples.R")
+rogue_baseline_full_genos <- genos_2.3 %>%
+  filter(Sample %in% rogue_baseline_samples)
+
+rogue_baseline_full_genos %>%
+  count(run)
+```
+
+
+# GSI loci overlap
+
+How many loci are shared between the baseline data from California and our GTseq panel? When we compared the mansucript from which the baseline was based (Adabía-Cardoso 2011) with our GTseq panel, 58 markers overlapped. 
+
+```{r}
+
+#convert column names
+cols_cal <- str_replace(colnames(ncal_baseline), "^SH", "Omy_")
+
+sum(colnames(rogue_baseline_full_genos) %in% cols_cal)
+
+
+colnames(rogue_baseline_full_genos)[colnames(rogue_baseline_full_genos) %in% cols_cal]
+```
+
+Only 45 markers overlap in the actual filtered datasets.
+
+Let's make the mixture (test) and reference dataset, by filtering the Rogue and NCal data by shared markers.
+
+```{r, warning=FALSE, message=FALSE, eval = FALSE}
+shared_markers <- colnames(rogue_baseline_full_genos)[colnames(rogue_baseline_full_genos) %in% cols_cal]
+shared_markers <- c(shared_markers, paste(shared_markers, "1", sep = "_"))
+
+colnames(ncal_baseline) <- str_replace(colnames(ncal_baseline), "^SH", "Omy_")
+
+ncal_shared <- ncal_baseline %>%
+  select(indiv, pop, one_of(shared_markers))
+
+rogue_baseline <- rogue_baseline_full_genos %>%
+  select(Sample, run, one_of(shared_markers))
+
+# Next we need to make some changes to the Rogue dataset (nucleotide to integer, once column per allele etc)
+
+#write_tsv(rogue_baseline, "rogue_baseline.txt")
+#made changes using regex in a text editor
+# first split columns of genotype data
+# then duplicated headers: find: ([a-zA-Z0-9\-_]+), replace: \1\t\1_1
+
+rogue_baseline <- read_tsv("rogue_baseline.txt")
+#oops a column is all Ts so it got interepreted at a logical lets fix this
+rogue_baseline$`Omy_117286-374_1` <- rep("T", 212)
+
+#correct headers for rubias
+rogue_baseline %<>%
+  rename(indiv = Sample, collection = run)
+
+#convert to integer code
+#inferred code by comparing alleles across datasets:
+# 1-T
+# 2-G
+# 3-C
+# 4-A
+
+rogue_baseline %<>%
+  mutate(across(everything(), as.character)) %>%
+  mutate(across(-one_of(c("indiv", "collection")), ~ case_when(. == "T" ~ "1",
+                                                      . == "G" ~ "2",
+                                                      . == "C" ~ "3",
+                                                      . == "A" ~ "4")))
+
+ncal_shared %<>%
+  rename(collection = pop)
+
+ncal_shared %<>%
+  mutate(across(everything(), as.character))
+
+#now make the baseline
+baseline <- bind_rows(rogue_baseline, ncal_shared, .id = "repunit")
+
+baseline %<>%
+  mutate(repunit = case_when(repunit == "1" ~ "Rogue",
+                             repunit =="2" ~ "Klamath"))
+
+baseline$sample_type <- rep("reference", 424)
+
+baseline %<>% 
+  relocate(sample_type)
+
+# save as file
+#write_tsv(baseline, "final_baseline.txt")
+
+```
+
+```{r}
+baseline_data <- read_tsv("final_baseline.txt")
+
+baseline_data %<>%
+  mutate(across(everything(), as.character))
+
+
+```
+
+
+# Power/Accuracy Simulation
+
+Next we run some simulations using the reference dataset to asses the accuracy and power of the baseline to correctly assign the halfpounders.
+
+## Reference Self-Assignment
+
+First we attempt self-assignment of reference samples to their reporting group (ie Klamath region or Rogue)
+
+```{r}
+sa <- self_assign(reference = baseline_data, gen_start_col = 5)
+
+#summarise by reporting unit
+sa_to_repu <- sa %>%
+  group_by(indiv, collection, repunit, inferred_repunit) %>%
+  summarise(repu_scaled_like = sum(scaled_likelihood))
+
+# for each individual, assign to most likely reporting unit
+sa_assign <- sa_to_repu %>%
+  group_by(indiv) %>%
+  slice_max(repu_scaled_like)
+
+sa_assign$correct_assignment <- sa_assign$repunit == sa_assign$inferred_repunit
+
+sum(sa_assign$correct_assignment/nrow(sa_assign))
+```
+
+Self-assignment assigns (maximum scaled likelihood) reference individuals back to correct reporting unit 100% of time.
+
+## Simulated Mixture
+
+While we can successfully assign reference individuals back to the correct reporting unit, what about a simulated mixture? Also We have some priors about the Rogue samples, specifically we assume that the number of stray is relatively small relative to fish returning to natal reporting units (Klamath vs Rogue). Let's try both
+
+### 1:1 mixture proportion
+
+First let's assume halfpounders are equally represented across the reporting units.
+
+Here we conduct a 500 simulations of a mixture of 200 samples drawn at equal rates from the reporting units.
+
+```{r, message=FALSE, warning=FALSE}
+ref_sims_no_prior <- assess_reference_loo(reference = baseline_data, 
+                     gen_start_col = 5, 
+                     reps = 500, 
+                     mixsize = 200,
+                     )
+
+tmp <- ref_sims_no_prior %>%
+  group_by(iter, repunit) %>%
+  summarise(true_repprop = sum(true_pi), 
+            reprop_posterior_mean = sum(post_mean_pi),
+            repu_n = sum(n)) %>%
+  mutate(repu_n_prop = repu_n / sum(repu_n))
+
+ggplot(tmp, aes(x = true_repprop, y = reprop_posterior_mean, colour = repunit)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1) +
+  facet_wrap(~ repunit)
+```
+
+Using equal priors acorss the two reporting units the true vs inferred mixture proprotions (above) show very small residuals.
+
+Now let's check how reliable an individual assignment (posterior probability) is from these simulations.
+
+```{r, message=FALSE, warning=FALSE}
+ref_sims_no_prior_indivs <- assess_reference_loo(reference = baseline_data, 
+                     gen_start_col = 5, 
+                     reps = 500, 
+                     mixsize = 200,
+                     return_indiv_posteriors = TRUE)
+
+# summarise things
+repu_pofzs <- ref_sims_no_prior_indivs$indiv_posteriors %>%
+  filter(repunit == simulated_repunit) %>%
+  group_by(iter, indiv, simulated_collection, repunit) %>%  # first aggregate over reporting units
+  summarise(repu_PofZ = sum(PofZ)) %>%
+  ungroup() %>%
+  arrange(repunit, simulated_collection) %>%
+  mutate(simulated_collection = factor(simulated_collection, levels = unique(simulated_collection)))
+#> `summarise()` regrouping output by 'iter', 'indiv', 'simulated_collection' (override with `.groups` argument)
+
+# also get the number of simulated individuals from each collection
+num_simmed <- ref_sims_no_prior_indivs$indiv_posteriors %>%
+  group_by(iter, indiv) %>%
+  slice(1) %>%
+  ungroup() %>%
+  count(simulated_collection)
+  
+# note, the last few steps make simulated collection a factor so that collections within
+# the same repunit are grouped together in the plot.
+
+# now, plot it
+ggplot(repu_pofzs, aes(x = simulated_collection, y = repu_PofZ)) +
+  geom_boxplot(aes(colour = repunit)) +
+  geom_text(data = num_simmed, mapping = aes(y = 1.025, label = n), angle = 90, hjust = 0, vjust = 0.5, size = 3) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 9, vjust = 0.5)) +
+  ylim(c(0, 1.25))
+```
+
+Perfect assignment to reporting unit within each collection, but am I doing everything correctly here? It seems unlikely to get this level of accuracy. Let's check assignment back to collection. We know this shouldn't work, at least for fall rogue fish.
+
+```{r}
+coll_pofzs <- ref_sims_no_prior_indivs$indiv_posteriors %>%
+  filter(collection == simulated_collection) %>%
+  arrange(repunit, simulated_collection) %>%
+  mutate(simulated_collection = factor(simulated_collection, levels = unique(simulated_collection)))
+#> `summarise()` regrouping output by 'iter', 'indiv', 'simulated_collection' (override with `.groups` argument)
+
+# also get the number of simulated individuals from each collection
+num_simmed <- ref_sims_no_prior_indivs$indiv_posteriors %>%
+  group_by(iter, indiv) %>%
+  slice(1) %>%
+  ungroup() %>%
+  count(simulated_collection)
+  
+# note, the last few steps make simulated collection a factor so that collections within
+# the same repunit are grouped together in the plot.
+
+# now, plot it
+ggplot(coll_pofzs, aes(x = simulated_collection, y = PofZ)) +
+  geom_boxplot(aes(colour = repunit)) +
+  geom_text(data = num_simmed, mapping = aes(y = 1.025, label = n), angle = 90, hjust = 0, vjust = 0.5, size = 3) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 9, vjust = 0.5)) +
+  ylim(c(0, 1.25))
+```
+
+Okay, posterior means of group membership in each collection is not 1. This comes as a relief. The mean probability that the genotype of an individuals is from the correct collection is 52%.
+
+### 90% Rogue
+
+Now let's adjust the prior. Let's assume only a 10% straying rate (instead of 50%) and try again.
+
+```{r, message=FALSE, warning=FALSE}
+# 
+arep <- data.frame(c("Klamath", "Rogue"), c(0.1, 0.9))
+colnames(arep) <- c("repunit", "ppn")
+
+ref_sims <- assess_reference_loo(reference = baseline_data, 
+                     gen_start_col = 5, 
+                     reps = 500, 
+                     mixsize = 200,
+                     alpha_repunit = arep,
+                     return_indiv_posteriors = TRUE)
+
+# summarise things
+repu_pofzs <- ref_sims$indiv_posteriors %>%
+  filter(repunit == simulated_repunit) %>%
+  group_by(iter, indiv, simulated_collection, repunit) %>%  # first aggregate over reporting units
+  summarise(repu_PofZ = sum(PofZ)) %>%
+  ungroup() %>%
+  arrange(repunit, simulated_collection) %>%
+  mutate(simulated_collection = factor(simulated_collection, levels = unique(simulated_collection)))
+#> `summarise()` regrouping output by 'iter', 'indiv', 'simulated_collection' (override with `.groups` argument)
+
+# also get the number of simulated individuals from each collection
+num_simmed <- ref_sims$indiv_posteriors %>%
+  group_by(iter, indiv) %>%
+  slice(1) %>%
+  ungroup() %>%
+  count(simulated_collection)
+  
+# note, the last few steps make simulated collection a factor so that collections within
+# the same repunit are grouped together in the plot.
+
+# now, plot it
+ggplot(repu_pofzs, aes(x = simulated_collection, y = repu_PofZ)) +
+  geom_boxplot(aes(colour = repunit)) +
+  geom_text(data = num_simmed, mapping = aes(y = 1.025, label = n), angle = 90, hjust = 0, vjust = 0.5, size = 3) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 9, vjust = 0.5)) +
+  ylim(c(0, 1.25))
+
+```
+
+Still perfect assignment.
+
+Power and accuracy for assignment looks very good let's move on to GSI.
+
+# GSI
+
+Let's look for strays. Below we use rubias GSI to conduct three related analyses:  
+(1) Estimate the overall straying rate (mixture propotion) from Klamath Basin  
+(2) Check for samples that are not from ANY of the reference populations   
+(3) Identify individuals where GSI reports the genotype is most likely a stray.  
+
+## Klamath vs Rogue Mixture Proportions
+
+What proportion of the Rogue half-pounders are from Klamath the Klamath region
+
+```{r, eval = FALSE}
+#first get data
+half_pounders_GSI_data <- genos_2.3 %>%
+  filter(run == "halfpounder") %>%
+  select(Sample, run, year, one_of(shared_markers))
+
+write_tsv(half_pounders_GSI_data, "half_pounder_GSI.txt")
+
+#split columns
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+
+half_pounders_GSI_data <- read_tsv("half_pounder_GSI.txt")
+half_pounders_GSI_data$`Omy_117286-374_1` <- rep("T", 643)
+
+#get rid of year
+half_pounders_GSI_data %<>%
+  select(-year)
+
+#convert to integer code
+#inferred code by comparing alleles across datasets:
+# 1-T
+# 2-G
+# 3-C
+# 4-A
+
+half_pounders_GSI_data %<>%
+  mutate(across(everything(), as.character)) %>%
+  mutate(across(-one_of(c("indiv", "collection")), ~ case_when(. == "T" ~ "1",
+                                                      . == "G" ~ "2",
+                                                      . == "C" ~ "3",
+                                                      . == "A" ~ "4")))
+
+
+
+#now make the dataset
+GSI_data <- bind_rows(baseline_data, half_pounders_GSI_data, .id = "sample_type")
+
+GSI_data %<>%
+  mutate(sample_type = case_when(sample_type == "1" ~ "reference",
+                             sample_type =="2" ~ "mixture"))
+
+GSI_data_reference <- GSI_data %>%
+  filter(sample_type == "reference")
+
+GSI_data_mixture <- GSI_data %>%
+  filter(sample_type == "mixture")
+
+
+```
+
+```{r}
+mix_est <- infer_mixture(reference = GSI_data_reference, mixture = GSI_data_mixture, gen_start_col = 5 )
+
+#summarize by reporting unit
+mix_est$mixing_proportions %>%
+  group_by(repunit) %>%
+  summarise(half_pounder_mixing_prop = sum(pi))
+
+#plot the posterior densitites of the mixing proportions (discarding the first 200 sweeps as a burn in)
+trace_subset <- mix_est$mix_prop_traces %>%
+  filter(mixture_collection == "halfpounder", sweep > 200) %>%
+  group_by(sweep, repunit) %>%
+  summarise(repprop = sum(pi))
+
+ggplot(trace_subset, aes(x = repprop, colour = repunit)) +
+  geom_density()+theme_classic()
+
+#next get some number out of this plot, estimate 95% credible intervals for the mixing proportions
+cis <- trace_subset %>%
+  group_by(repunit) %>%
+  summarise(loCI = quantile(repprop, probs = 0.025),
+            hiCI = quantile(repprop, probs = 0.975))
+
+cis
+```
+
+99.9% Rogue (95% CI: 9.954654e-01 - 0.999994250), 0.001% Klamath (95% ci, 5.750498e-06 - 0.004534572). In the most generous assignment to KLamath this equates to ~3 individuals. The mean posterior density of the mixture proportion however equates to 1/2 of an individual.
+
+## Other system
+
+Here we check the z scores to see if any of the individual assignment are very weak, indicating that a halfpounder may be a stray, but that from a region other than Rogue or Klamath
+
+```{r}
+map_rows <- mix_est$indiv_posteriors %>%
+  group_by(indiv) %>%
+  top_n(1, PofZ) %>%
+  ungroup()
+
+normo <- tibble(z_score = rnorm(1e06))
+ggplot(map_rows, aes(x = z_score)) +
+  geom_density(colour = "blue") +
+  geom_density(data = normo, colour = "black")
+```
+
+Nice, the distribution of Z scores is normally distributed. There are no unusual z-scores in the mix that might stem from unaccounted for populations.
+
+## Individuals Assignments
+
+Next we take examine the individual posteriors. We will sum the posteriour probabilities within a reporting unit for each individual, then choose the most likely reporting unit as that with highest probability.
+
+```{r}
+#aggregate
+repu_pofzs_assn <- mix_est$indiv_posteriors %>%
+  group_by(indiv, repunit) %>%  # first aggregate over reporting units
+  summarise(repu_PofZ = sum(PofZ)) %>%
+  ungroup() %>%
+  group_by(indiv) %>%
+  slice_max(repu_PofZ)
+```
+Rogue always most likely assignment for all individuals.
+
+

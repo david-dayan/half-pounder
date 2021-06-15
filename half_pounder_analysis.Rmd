@@ -1312,6 +1312,14 @@ c = pheatmap(half_pac_diag[,-8], cluster_cols = FALSE, show_rownames = FALSE, ma
 
 #fall_pac_diag_mo_miss <- select(fall_pac_diag, -c("Omy_RAD47080-54", "Chr28_11671116"))
 
+#fall_pac_diag_2019 <- fall_pac_diag %>%
+#  rownames_to_column(var = "sample") %>%
+#  filter(str_detect(sample, "OmyAC19"))
+
+#fall_pac_diag_2020 <- fall_pac_diag %>%
+#  rownames_to_column(var = "sample") %>%
+#  filter(str_detect(sample, "OmyAC20"))
+
 #counting all winter fall run
 #sum(rowSums(fall_pac_diag_mo_miss[,-8], na.rm = TRUE) ==14)
 #counting all summer fall run
@@ -1435,6 +1443,54 @@ tmat <- t(as.matrix(pol_res_freq2[,1:4]))
 colnames(tmat) <- pol_res_freq$marker
 pheatmap(tmat)
 ```
+
+Is there a sex-bias here?
+```{r}
+# convert individual genotype to polarized residency allele count (more counts = more resident)
+
+#Marker Name	Resident Allele	Anadromous Allele
+#OmyR14589	T	A
+#OmyR19198	G	A
+#OmyR24370	G	A
+#OmyR33562	A	G
+#OmyR40252	T	A
+#OmyR40319	C	T
+
+#fix marker names
+res_genos <- genos_2.3 %>%
+  select(Sample, run, year, OmyY1_2SEXY,OmyR14589, OmyR19198, OmyR24370, OmyR33562, OmyR40252) %>%
+  rename( "OmyR14589" = "OmyR19198", "OmyR33562" = "OmyR14589", "OmyR24370" = "OmyR33562", "OmyR19198" = "OmyR24370")
+
+
+res_genos %<>%
+  mutate(OmyR14589 = case_when(OmyR14589 == "TT" ~ 2,
+                               OmyR14589 == "AA" ~ 0,
+                               OmyR14589 == "TA" ~ 1)) %>%
+  mutate(OmyR33562 = case_when(OmyR33562 == "AA" ~ 2,
+                               OmyR33562 == "GG" ~ 0,
+                               OmyR33562 == "AG" ~ 1)) %>%
+  mutate(OmyR19198 = case_when(OmyR19198 == "GG" ~ 2,
+                               OmyR19198 == "AA" ~ 0,
+                               OmyR19198 == "GA" ~ 1)) %>%
+  mutate(OmyR24370 = case_when(OmyR24370 == "GG" ~ 2,
+                               OmyR24370 == "AA" ~ 0,
+                               OmyR24370 == "GA" ~ 1)) %>%
+  mutate(OmyR40252 = case_when(OmyR40252 == "TT" ~ 2,
+                               OmyR40252 == "AA" ~ 0,
+                               OmyR40252 == "TA" ~ 1))
+  
+res_genos %<>%
+  mutate(res_sum =OmyR14589 + OmyR33562 + OmyR19198 + OmyR24370 + OmyR40252)
+
+res_genos_complete <- res_genos %>%
+  filter(OmyY1_2SEXY != "00") %>%
+  filter(is.na(res_sum) == FALSE)
+
+summary(glm(as.factor(OmyY1_2SEXY) ~ res_sum, data = res_genos_complete, family = "binomial"))
+
+ggplot(data = res_genos)+geom_boxplot(aes(x = OmyY1_2SEXY, y = res_sum))
+```
+
 
 
 So variation is high within all the runs (least so at fall run), with expected heterozygosity all the way near 0.5. Interestingly there is a dearth of heterozygotes in all but summer run, however, this is significant only for halfpounder where it is the strongest. This pattern suggests that there is some structuring with the halfpounders and to a lesser extent fall run (but not summer and winter run fish), with reduced interbreeding between individuals expressing alternative residency alleles. interpreting the differences across populations suggests there's varying degrees of introgression between anadromous and resident fish across the run types, with the highest proportion of resident alleles in the late-summer run samples. this may be explained by the temporal and spatial variation in spawning between run types. 
