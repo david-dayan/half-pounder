@@ -982,4 +982,51 @@ save(genos_2.2, file ="genotype_data_2021/genotypes_2.2.R")
 save(genind_2.0, file= "genotype_data_2021/genind_2.0.R")
 ```
 
+# Sex genotype bug
+
+There were some issues with the sex genotyper that produced a large number of undetermined sex genotypes. 
+
+In a separate analysis of this problem, amplicons from the sex marker took up a smaller proportion of the total on target reads than expected in the Omysex script. This led to a lot of likely males being called as NA. Using the empirical value for the proportion of reads in the data from the sex marker brought sex ratios back into line, and improved agreement between known phenotypic sex and called genotypic sex from 80% to 98%.
+
+Here we use the results from this analysis to regenotype the samples at the sex markers.
+
+```{r, eval = FALSE}
+#get the sex genotype data
+load("~/FRA/omysex_script/data/genos_tail_results.R")
+
+#grab the genos data again (in case it isnt loaded)
+load("genotype_data_2021/genotypes_2.2.R")
+
+sex_results <- genos_2.2 %>%
+  select(Sample, run, year) %>%
+  left_join(select(genos_tail, sample, corrected_sex), by = c("Sample" = "sample"))
+
+#merging here is going to be complicated because didn't keep track of replicates in the corrected sex data results...
+# let's check that all replicates agree
+
+
+sex_results %>%
+  group_by(Sample) %>%
+  filter(n()>1) %>%
+  mutate(letters = replace(corrected_sex, n_distinct(corrected_sex)==1, '') )
+
+
+#of the 111 samples that were duplicated only 4 disagreed on sex genotype called, and 3 of these were NA calls in one replicate. just edited the results manually to reflect the samples in the final dataset
+
+sex_results %<>%
+  distinct(Sample, .keep_all=TRUE)
+
+#now lets summarise the data for the manuscript
+sex_results %>%
+  ungroup() %>%
+  group_by(run, year) %>%
+  count(corrected_sex) 
+
+sex_results %>%
+  ungroup() %>%
+  group_by(run) %>%
+  summarise(sexratio = sum(corrected_sex == "XX", na.rm = TRUE)/sum(corrected_sex == "XY", na.rm = TRUE))
+
+```
+
 

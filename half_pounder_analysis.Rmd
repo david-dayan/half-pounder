@@ -187,12 +187,12 @@ ggplot(data=marker_divs[marker_divs$neutral=="adaptive",])+geom_boxplot(aes(x=ru
 ggplot(data=marker_divs[marker_divs$run_timing_marker=="run",])+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d()+theme_classic()+ggtitle("run-timing markers")
 
 #publication plot fig. 1
-#ggplot(data=drop_na(marker_divs[marker_divs$run_timing_marker=="run",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
+#ggplot(data=drop_na(marker_divs[marker_divs$run_timing_marker=="run",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
 
 # publication plot suppl fig. 1
-# a <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="neutral",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme(legend.position = "none")
+# a <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="neutral",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme(legend.position = "none")
 # 
-# b <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="adaptive",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+ylim(0,0.68)
+# b <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="adaptive",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+ylim(0,0.68)
 # 
 # plot_grid(a,b, rel_widths = c(0.83,1), labels = c("(a)", "(b)"))
 
@@ -1004,7 +1004,7 @@ ld1_2 <- as.data.frame(dapc_full_apriori$ind.coord) %>%
   left_join(pops_info)
     
 #plot
-ggplot(data=ld1)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d()+scale_fill_viridis_d()+theme_classic()+ggtitle("True Classifier")
+ggplot(data=ld1)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("True Classifier")+labs(color = "Run", fill = "Run")
 
 ggplot(data=ld1_2)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("A priori DAPC results")+labs(color = "Run", fill = "Run")
 
@@ -1054,6 +1054,33 @@ kable(ld1_2 %>%
   filter(pop == "fall") %>%
   summarise(winter_assigned = sum((LD1 < CIs$hiCI[4])), summer_assigned = sum((LD1 > CIs$loCI[3])), unassigned = sum((LD1 <= CIs$loCI[3] & LD1 >= CIs$hiCI[4])) ), caption = "A priori DAPC - Fall Run")
 
+#split by year
+ld1_2 %<>%
+  left_join(select(genos_2.3, Sample, year), by = c("sample" = "Sample"))
+
+kable(ld1_2 %>%
+  filter(pop == "fall") %>%
+    group_by(year) %>%
+  summarise(winter_assigned = sum((LD1 < CIs$hiCI[4])), summer_assigned = sum((LD1 > CIs$loCI[3])), unassigned = sum((LD1 <= CIs$loCI[3] & LD1 >= CIs$hiCI[4])) ), caption = "A priori DAPC - Fall Run")
+
+kable(ld1_2 %>%
+  filter(pop == "halfpounder") %>%
+    group_by(year) %>%
+  summarise(winter_assigned = sum((LD1 < CIs$hiCI[4])), summer_assigned = sum((LD1 > CIs$loCI[3])), unassigned = sum((LD1 <= CIs$loCI[3] & LD1 >= CIs$hiCI[4])) ), caption = "A priori DAPC - Halfpounder")
+
+
+ld1 %<>%
+  left_join(select(genos_2.3, Sample, year), by = c("sample" = "Sample"))
+
+kable(ld1 %>%
+  filter(pop == "halfpounder") %>%
+    group_by(year) %>%
+  summarise(winter_assigned = sum((LD1 < CIs$hiCI[4])), summer_assigned = sum(( LD1 > CIs$loCI[3])), unassigned = sum((LD1 <= CIs$loCI[3] & LD1 >= CIs$hiCI[4])) ), caption = "True Classifier - Half Pounders")
+
+kable(ld1 %>%
+  filter(pop == "fall") %>%
+    group_by(year) %>%
+  summarise(winter_assigned = sum((LD1 < CIs$hiCI[4])), summer_assigned = sum((LD1 > CIs$loCI[3])), unassigned = sum((LD1 <= CIs$loCI[3] & LD1 >= CIs$hiCI[4])) ), caption = "True Classifier - Fall Run")
 
 ```
 
@@ -2331,4 +2358,48 @@ write_tsv(to_exp, "genotype_data/chr28_polarized_allele_counts_2.txt")
 
 ```
 
+### statistical vs physical linkage
 
+```{r}
+filtered <- names(genind_2.1$loc.n.all[(!(names(genind_2.1$loc.n.all) %in% names(unlinked_genind$loc.n.all)))])
+
+filtered <- as.data.frame(filtered) %>%
+  left_join(marker_summary, by = c("filtered" = "marker"))
+
+
+# let's look at the pairs
+
+#first add names to the LD report
+ldreport[ldreport$R2>0.2,]
+
+ld_lookup_table <- as.data.frame(genind_2.1$loc.n.all) %>%
+  rownames_to_column(var = "loc_name") %>%
+  rowid_to_column(var = "loc_number") %>%
+  select(loc_name,loc_number )
+
+links <- ldreport[ldreport$R2>0.2] %>%
+  left_join(ld_lookup_table, by = c("loc1" = "loc_number")) %>% 
+  rename(loc1_name = loc_name) %>%
+  left_join(ld_lookup_table, by = c("loc2" = "loc_number")) %>% 
+  rename(loc2_name = loc_name) 
+
+linked_genind <- genind_2.1[loc=unique(ldreport[ldreport$R2>0.2,]$loc2)]
+```
+
+Couldn’t find the results from the last time I did this, so ran it again.
+
+-	7 are run-timing markers on Omy28, where linkage was to other run-timing markers
+-	 4 are residency markers on Omy5, where linkage was to other Omy5 markers, or the group below
+-	 3 are neutral but very near residency markers, linkage was high between markers in this group or the group above
+-	1 (LDH) is associated with residency in other studies and maps to different locations, sometimes to Omy 5, tossed because of linkage to other LDH marker that has similar mapping results
+
+So at least 15 of the 23 are likely physically linked
+
+3 have no good mapping results
+5 map to other locations, some pairs that got tossed mapped to different locations
+
+So there’s evidence of statistical linkage without physical linkage.
+
+As for the opposite pattern, where two markers map close together but are not strongly linked, I only looked closely at the Omy28 markers and Omy5 markers. 
+
+All of the Omy5 markers are in tight linkage, but this is not the case for Omy28 (these results are in the notebook – under section LD). The uninformative Omy28 markers are not in strong linkage with others in the region using r^2 or a similar metric r(bar)d, but both metrics are sensitive to allele frequency, and since there was little variation between groups and low maf at these markers, it’s not surprising they would have low r^2 even if they are physically linked.
