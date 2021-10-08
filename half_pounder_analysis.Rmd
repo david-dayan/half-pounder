@@ -25,6 +25,7 @@ require(graph4lg)
 require(knitr)
 require(pegas)
 require(cowplot)
+require(magrittr)
 ```
 
 
@@ -1618,6 +1619,106 @@ ldreport_total <- dartR::gl.report.ld(dartR::gi2gl(res_genind, verbose = 0), nam
 ```
 
 
+## R2
+The approach above uses r(bar)D, for convenience, but we should probably use a more appropriate measure of LD and be consistent with the filtering approach we used for structure. Let's take the time to properly plot r2
+
+```{r, cache=TRUE, message=FALSE, warning=FALSE}
+
+ldreport_sw <- dartR::gl.report.ld(dartR::gi2gl(chr28_genind[pop = c("Summer", "Winter")], verbose = 0), name = NULL, save = FALSE, verbose = 0 )
+
+
+#now we need to add loci names back to this report
+name_key <- data.frame(names(chr28_genind$loc.n.all), c(1:12))
+colnames(name_key) <- c("marker", "id")
+
+ldreport_sw %<>%
+  left_join(name_key, by = c("loc1"="id")) %>%
+  rename(marker_1 = marker) %>%
+  left_join(name_key, by = c("loc2"="id")) %>%
+  rename(marker_2 = marker) 
+
+#now get Omy28 marker info
+
+
+ldreport_sw %<>%
+  left_join(select(marker_mapping2, marker, CRITFC_SNP_pos_genome), by = c("marker_1" = "marker")) %>%
+  rename(marker1_position = CRITFC_SNP_pos_genome) %>%
+  left_join(select(marker_mapping2, marker, CRITFC_SNP_pos_genome), by = c("marker_2" = "marker")) %>%
+  rename(marker2_position = CRITFC_SNP_pos_genome) %>%
+  mutate(marker_1 = fct_reorder(marker_1, marker1_position)) %>%
+  mutate(marker_2 = fct_reorder(marker_2, marker2_position))
+
+#mapping failed for one marker, let's put it in manually
+ldreport_sw %<>%
+  mutate(marker1_position = case_when(marker_1 == "Chr28_11702210" ~ "11702210",
+                                      TRUE ~ marker1_position)) %>%
+  mutate(marker2_position = case_when(marker_2 == "Chr28_11702210" ~ "11702210",
+                                      TRUE ~ marker2_position))
+
+
+# some markers are on the wrong side of the diagonal, let's print both sides
+ldreport_sw_rev <- ldreport_sw
+ldreport_sw_rev[, c("marker_1", "marker_2", "marker1_position", "marker2_position")] <- ldreport_sw_rev[, c("marker_2", "marker_1", "marker2_position", "marker1_position")]
+
+ldreport_sw <- rbind(ldreport_sw, ldreport_sw_rev)
+
+
+ldreport_sw %<>%
+  mutate(marker_1 = fct_reorder(marker_1, marker1_position)) %>%
+  mutate(marker_2 = fct_reorder(marker_2, marker2_position))
+
+
+#half and fall
+ldreport_hf <- dartR::gl.report.ld(dartR::gi2gl(chr28_genind[pop = c("fall", "halfpounder")], verbose = 0), name = NULL, save = FALSE, verbose = 0 )
+
+
+#now we need to add loci names back to this report
+name_key <- data.frame(names(chr28_genind$loc.n.all), c(1:12))
+colnames(name_key) <- c("marker", "id")
+
+ldreport_hf %<>%
+  left_join(name_key, by = c("loc1"="id")) %>%
+  rename(marker_1 = marker) %>%
+  left_join(name_key, by = c("loc2"="id")) %>%
+  rename(marker_2 = marker) 
+
+#now get Omy28 marker info
+
+
+ldreport_hf %<>%
+  left_join(select(marker_mapping2, marker, CRITFC_SNP_pos_genome), by = c("marker_1" = "marker")) %>%
+  rename(marker1_position = CRITFC_SNP_pos_genome) %>%
+  left_join(select(marker_mapping2, marker, CRITFC_SNP_pos_genome), by = c("marker_2" = "marker")) %>%
+  rename(marker2_position = CRITFC_SNP_pos_genome) %>%
+  mutate(marker_1 = fct_reorder(marker_1, marker1_position)) %>%
+  mutate(marker_2 = fct_reorder(marker_2, marker2_position))
+
+#mapping failed for one marker, let's put it in manually
+ldreport_hf %<>%
+  mutate(marker1_position = case_when(marker_1 == "Chr28_11702210" ~ "11702210",
+                                      TRUE ~ marker1_position)) %>%
+  mutate(marker2_position = case_when(marker_2 == "Chr28_11702210" ~ "11702210",
+                                      TRUE ~ marker2_position))
+
+
+# some markers are on the wrong side of the diagonal, let's print both sides
+ldreport_hf_rev <- ldreport_hf
+ldreport_hf_rev[, c("marker_1", "marker_2", "marker1_position", "marker2_position")] <- ldreport_hf_rev[, c("marker_2", "marker_1", "marker2_position", "marker1_position")]
+
+ldreport_hf <- rbind(ldreport_hf, ldreport_hf_rev)
+
+
+ldreport_hf %<>%
+  mutate(marker_1 = fct_reorder(marker_1, marker1_position)) %>%
+  mutate(marker_2 = fct_reorder(marker_2, marker2_position))
+
+
+#plot
+ggplot(data = filter(ldreport_sw ))+geom_tile(aes(marker_1, marker_2, fill = R2), size = 2)+scale_fill_viridis_c(option = "C")+theme_classic()+theme(axis.text.x = element_text(angle = 90))+ggtitle("Early-Summer\nand Winter Run")+coord_equal() 
+
+ggplot(data = filter(ldreport_hf ))+geom_tile(aes(marker_1, marker_2, fill = R2), size = 2)+scale_fill_viridis_c(option = "C")+theme_classic()+theme(axis.text.x = element_text(angle = 90))+ggtitle("Late-Summer\nand Half-pounders")+coord_equal()
+
+```
 
 
 # haplotypes
@@ -2360,7 +2461,7 @@ write_tsv(to_exp, "genotype_data/chr28_polarized_allele_counts_2.txt")
 
 ### statistical vs physical linkage
 
-```{r}
+```{r, eval = FALSE}
 filtered <- names(genind_2.1$loc.n.all[(!(names(genind_2.1$loc.n.all) %in% names(unlinked_genind$loc.n.all)))])
 
 filtered <- as.data.frame(filtered) %>%
@@ -2403,3 +2504,30 @@ So there’s evidence of statistical linkage without physical linkage.
 As for the opposite pattern, where two markers map close together but are not strongly linked, I only looked closely at the Omy28 markers and Omy5 markers. 
 
 All of the Omy5 markers are in tight linkage, but this is not the case for Omy28 (these results are in the notebook – under section LD). The uninformative Omy28 markers are not in strong linkage with others in the region using r^2 or a similar metric r(bar)d, but both metrics are sensitive to allele frequency, and since there was little variation between groups and low maf at these markers, it’s not surprising they would have low r^2 even if they are physically linked.
+
+### HOR NOR differences within Winter
+
+Here we check if we can discriminate between NOR and HOR winter run samples.
+
+```{r}
+#assign the origin status as a population
+winds <- as.data.frame(row.names(n.pop$Winter$tab))
+colnames(winds) <- "sample"
+
+hor_stat <- readxl::read_xlsx("metadata/2019_winter/StW Scales for DNA (06 17 19).xlsx", sheet = 3)
+
+winds %<>%
+  left_join(select(hor_stat, 'SFGL ID', 'WorH'), by = c("sample" = "SFGL ID"))
+
+n.pop$Winter@pop <- as.factor(winds$WorH)
+
+dapc_hor <- dapc(n.pop$Winter, n.pca = 41, n.da = 1)
+mat <- as.matrix(scaleGen(n.pop$Winter, NA.method="mean", scale=FALSE, center=FALSE))
+xpop <- pop(n.pop$Winter)
+xval <- xvalDapc(mat, xpop, n.pca.max = 41, training.set = 0.9, result = "overall", center = TRUE, scale = FALSE, n.pca = seq(1,41), n.rep = 50, xval.plot = TRUE)
+which.max(xval$`Mean Successful Assignment by Number of PCs of PCA`)
+dapc_hor <- dapc(n.pop$Winter, n.pca = 1, n.da = 1)
+
+scatter.dapc(dapc_hor)
+```
+
