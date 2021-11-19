@@ -650,7 +650,7 @@ plot_data <- k5 %>%
 
 d <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
   geom_col(width=1.0) +
-  facet_grid(~pop, scales = 'free', space = 'free', switch = "x", labeller = labeller( pop =  c("fall" ="Late-Summer",  "halfpounder"= "Half-Pounder", "summer" =  "Early-Summer", "winter" =  "Winter"))) +
+  facet_grid(~pop, scales = 'free', space = 'free', switch = "x", labeller = labeller( pop =  c("fall" ="Late-Summer",  "half"= "Half-Pounder", "summer" =  "Early-Summer", "winter" =  "Winter"))) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(expand = expand_scale(add = 1)) +
   theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white")) +
@@ -947,10 +947,10 @@ kable(marker_mapping2 %>%
   select(marker, `Presumed Type`, chr, start), caption = "Markers that load strongly onto the second DA")
 
 # for ms figures
-#plot_data %<>%
+# plot_data %<>%
 #  mutate(pop = as.factor(plot_data$pop)) %>%
 #  mutate(pop = fct_relevel(pop, "Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
-#plot_data$pop <- as.factor(plot_data$pop)
+# plot_data$pop <- as.factor(plot_data$pop)
 # ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, size = 2)+theme_classic()+scale_color_viridis_d(name = "Run",labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter" ))+stat_ellipse(aes(x=LD1, y=LD2, color = pop))
 
 #for ms tables with loading value
@@ -969,9 +969,33 @@ loads <- loads %>%
   arrange(desc(loads))
 ```
 
+Let's also check where all the migration timing markers in the dataset fall in the distribution of variable loadings, as an ad hoc association test.
+
+```{r, message = FALSE, warning=FALSE}
+all_loadings <- loadingplot(dapc_full_apriori$var.contr, axis=1,thres=.00000001)
+
+all_loads <- all_loadings$var.values*2
+all_loads <- as.data.frame(all_loads)
+all_loads <- all_loads %>%
+ rownames_to_column(var = "marker") %>% 
+ mutate(marker = str_sub(marker, 1, nchar(marker)-2)) %>%
+  left_join(marker_mapping2) %>%
+  select(marker, all_loads, `Presumed Type`) %>%
+  filter(row_number() %% 2 == 0) %>%
+  arrange(desc(all_loads))
+
+all_loads %>%
+  mutate(percentile = ntile(all_loads, 100)) %>%
+  filter(marker %in% run_timing_loci_names) %>%
+  select(marker, percentile)
 
 
 
+```
+
+
+
+__Summary__
 DAPC largely discriminates among groups along the first discriminant axis. Fall and half pounder fish demonstrate little to no differentiation along any DA. The first DA strongly separates winter and summer run fish, and is driven by by 9 markers including 8 run timing associated markers and a neutral marker (Omy_128996-481). The second da captures much less variation among groups (78% vs 17%), and is driven largely by 5 residency markers and 13 additional markers including  neutral markers and several associated with run timing and other adapative traits. Interstingly one of the "neutral" annotated markers (Omy_LDHB-2...) have been associated with residency vs anadromy in an association study in the klickitat river (doi.org/10.1080/00028487.2011.588131).
 
 
@@ -1084,6 +1108,30 @@ kable(ld1 %>%
   summarise(winter_assigned = sum((LD1 < CIs$hiCI[4])), summer_assigned = sum((LD1 > CIs$loCI[3])), unassigned = sum((LD1 <= CIs$loCI[3] & LD1 >= CIs$hiCI[4])) ), caption = "True Classifier - Fall Run")
 
 ```
+
+Let's look at the loadings of alleles that create this discriminant axis.
+```{r, message = FALSE, warning=FALSE}
+class_loadings <- loadingplot(classifier$var.contr, axis=1,thres=-1)
+
+class_loads <- class_loadings$var.values*2
+class_loads <- as.data.frame(class_loads)
+class_loads <- class_loads %>%
+ rownames_to_column(var = "marker") %>% 
+ mutate(marker = str_sub(marker, 1, nchar(marker)-2)) %>%
+  left_join(marker_mapping2) %>%
+  select(marker, class_loads, `Presumed Type`) %>%
+  filter(row_number() %% 2 == 0) %>%
+  arrange(desc(class_loads))
+
+class_loads %>%
+  mutate(percentile = ntile(class_loads, 100)) %>%
+  filter(marker %in% run_timing_loci_names) %>%
+  select(marker, percentile)
+
+
+
+```
+
 
 When we use the original DAPC _(not the classifier, still need to make a decision here)_ we attempt to classify fish into winter or summer like using the first DA which accounts for ~80% of the among group variance and is driven almost exclusively by known run timing associated markers. We then draw 95% credible intervals for winter and summer run and count how many fall and half pounder fish fall beyond the lower bounds for these intervals (i.e. at least as winter-like or summer-like as the 95% CI). For fall fish, the majority  are unassigned, nearly as many are winter assigned and a small portion are summer assignmed. The same pattern is observed among the half pounders, but ratio number of unassigned fish is somewhat lower.
 
@@ -1209,9 +1257,9 @@ run_timing_freqs <- as.data.frame(do.call(rbind, run_timing_freqs))
 run_timing_freqs <- as.data.frame(cbind(run_timing_freqs, run_timing_counts))
 
 ##### get only minor allele
-#then put the marker names in the same order as the allele.dist (exlude the missing marker first)
-run_timing_loci_names <- run_timing_loci_names[run_timing_loci_names != "Omy_RAD52458-17"]
-run_timing_freqs$marker <- rep(run_timing_loci_names[order(run_timing_loci_names[-c(8,10)])], each = 2)
+#then put the marker names in the same order as the allele.dist (exlude the missing marker and duplicate marker first)
+run_timing_loci_names <- run_timing_loci_names[run_timing_loci_names %in% colnames(genos_2.3)]
+run_timing_freqs$marker <- rep(run_timing_loci_names[order(run_timing_loci_names)], each = 2)
 #now group by marker and keep the minor allele, then convert counts to 
 run_timing_maf <- run_timing_freqs %>%
   group_by(marker) %>%
