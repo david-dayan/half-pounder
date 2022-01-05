@@ -38,7 +38,7 @@ To conduct the analyses on your computer, edit or run code: clone this repositor
 
 # Rationale 
 
-In addition to winter early-summer and late-summer runs, some steelhead on the Rogue express a "half-pounder" life-history. Half-pounders exhibit a false-spawning run (although some precocious males may spawn) as juveniles during the summer months, then reutrn to sea to continue the marine growth phase. There is great interest in half-pounders from a management perspective, because (i) half pounder abundance should integrate juvenile freshwater and early ocean conditions for steelhead regardless of whether they express the half pounder phenotype (ii) half pounder abundance is predictive of steelhead abundance in historical dam passage counts, and (iii) half-pounders are a unique fishery of great cultural and economic value. However, the relative proportion of winter vs early summer vs late-summer run life histories expressed by half pounders later in life is unknown. Furthermore there is limited genetic information about the three adult runs of steelhead on the Rogue.
+In addition to winter early-summer and late-summer runs, some steelhead on the Rogue express a "half-pounder" life-history. Half-pounders exhibit a false-spawning run (although some precocious males may spawn) as juveniles during the summer months, then return to sea to continue the marine growth phase. There is great interest in half-pounders from a management perspective, because (i) half pounder abundance should integrate juvenile freshwater and early ocean conditions for steelhead regardless of whether they express the half pounder phenotype (ii) half pounder abundance is predictive of steelhead abundance in historical dam passage counts, and (iii) half-pounders are a unique fishery of great cultural and economic value. However, the relative proportion of winter vs early summer vs late-summer run life histories expressed by half pounders later in life is unknown. Furthermore there is limited genetic information about the three adult runs of steelhead on the Rogue, so improving our understanding of the relationships between these runs is key to our research objectives regarding half-pounders.
 
 This study attempts to use neutral and adaptive GTseq markers to examine population structure and run timing among Rogue River steelhead. We also attempt to classify half-pounders into run-timing groups on the basis of run-timing associated genetic markers.
 
@@ -97,10 +97,10 @@ select(genos_2.3, Sample, run, year, Date) %>%
 
 Throughout the notebook we refer to subsets of markers based on annotations provided by CRITFC. To my knowledge these annotations come from decisions made when the panel was assembled and edited (i.e. a run timing associated marker came out of a GWAS fro run timing). Broadly we examine 4 subsets of markers:  
 
-(1) All markers: all 390 GTseq markers available in the full SFGL O mykiss GTseq panel. (The dataset here has fewer markers due to filtering - see genotyping notebook) (355 markers) 
-(2) Neutral Markers: Any markers annotated as "neutral," with no other annotations. From my understanding these were mostly selected from broad spatial scale RADseq studies that refelct broad scale geographic structure and may or may not be in linkage with unkownn adaptive loci. (226 markers) 
-(3) Adaptive Markers: any markers with a known adaptive functional annotation. (129 markers)   
-(4) Run-timing markers: a subset of adaptive markers with specific associations with run-timing in O. mykiss. (14 markers) 
+(1) All markers: all 390 GTseq markers available in the full SFGL O mykiss GTseq panel. (The dataset here has fewer markers due to filtering - see genotyping notebook) (353 markers) 
+(2) Neutral Markers: Any markers annotated as "neutral," with no other annotations. From my understanding these were mostly selected from broad spatial scale RADseq studies that refelct broad scale geographic structure and may or may not be in linkage with unkownn adaptive loci. 
+(3) Adaptive Markers: any markers with a known adaptive functional annotation.  
+(4) Run-timing markers: a subset of adaptive markers with specific associations with run-timing in O. mykiss. 
 
 The table below demonstrates the annotations 
 
@@ -188,12 +188,12 @@ ggplot(data=marker_divs[marker_divs$neutral=="adaptive",])+geom_boxplot(aes(x=ru
 ggplot(data=marker_divs[marker_divs$run_timing_marker=="run",])+geom_boxplot(aes(x=run, y=H, fill = obs_exp))+scale_fill_viridis_d()+theme_classic()+ggtitle("run-timing markers")
 
 #publication plot fig. 1
-#ggplot(data=drop_na(marker_divs[marker_divs$run_timing_marker=="run",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
+#ggplot(data=drop_na(marker_divs[marker_divs$run_timing_marker=="run",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme(axis.text.x = element_text(size = 10, angle = 90))
 
 # publication plot suppl fig. 1
-# a <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="neutral",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme(legend.position = "none")
+# a <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="neutral",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme(legend.position = "none")+theme(axis.text.x = element_text(size = 10, angle = 90))
 # 
-# b <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="adaptive",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+ylim(0,0.68)
+# b <- ggplot(data=drop_na(marker_divs[marker_divs$neutral=="adaptive",]))+geom_boxplot(aes(x=run, y=H, fill = obs_exp), alpha = 0.8)+scale_fill_viridis_d(labels = c(expression(H[E]), expression(H[O])), name = " ")+theme_classic()+xlab("")+scale_x_discrete(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+ylim(0,0.68)+theme(axis.text.x = element_text(size = 10, angle = 90))
 # 
 # plot_grid(a,b, rel_widths = c(0.83,1), labels = c("(a)", "(b)"))
 
@@ -322,7 +322,7 @@ kable(a, caption = "Number of markers significantly out of HWE")
 
 ```
 
-Yes, see table above for number of SNPs outside of HWE (fdr < 0.1) per "population" 
+Yes, see table above for number of SNPs outside of HWE (fdr < 0.1) per "population" Note that this may differ from the publication numbers because this notebook rendering was not the one used for final results (e.g. other runs of the monte-carlo simulations may produce slighlty different results)
 
 ```{r , warning=FALSE, message=FALSE}
 #lets check if there is an enrichment of run-timing and adaptive markers in markers out of HWE in fall and half-pounders
@@ -384,7 +384,7 @@ kable(df, caption = "enrichment (fisher's exact test) of marker types among mark
 
 Markers significantly out of HWE (Ho < He: excess of homozygotes) are enriched for run-timing markers in half-pounders only.
 
-Now let's make a nice visual representation of this information (half pounder demonstrate a dearth of heterozygotes at run ting markers)
+Now let's make a nice visual representation of this information (half pounder demonstrate a dearth of heterozygotes at run timing markers)
 ```{r , warning=FALSE, message=FALSE}
 plot_data_half <- marker_divs %>%
   filter(run == "halfpounder") %>%
@@ -404,7 +404,7 @@ The results in halfpounders are very clear.
 
 ### Heterozygosity results summary
 
-At neutral markers, there is a slight reduction of observed from expected heterozygosity, most pronounced among summer run fish. At run timing markers, there is a significant reduction in diversity (Ho) relative to neutral markers among the summer run and winter run fish (one-sided t-test), and increased diversity at fall run and half-pounders (not significant). Furthermore, there is an excess of homozygosity at run timing associated SNPs in the half-pounders (but not fall fish) suggesting some structure within this group. Among markers with significant departures from HWE within half-pounders, there is a significant enrichment of run-timing associated markers, but not significant enrichment for markers annotated as adaptive overall.
+At neutral markers, there is a slight reduction of observed from expected heterozygosity, most pronounced among summer run fish. At run timing markers, there is a significant reduction in diversity (He) relative to neutral markers among the summer run and winter run fish (one-sided t-test), and increased diversity at fall run and half-pounders (not significant). Furthermore, there is an excess of homozygosity at run timing associated SNPs in the half-pounders (but not fall fish) suggesting some structure within this group. Among markers with significant departures from HWE within half-pounders, there is a significant enrichment of run-timing associated markers, but not significant enrichment for markers annotated as adaptive overall. Fall run fish also had some markers out of HWE, including both neutral and adaptive markers.
 
 
 ## Fst
@@ -457,24 +457,32 @@ Yes, there are some clear fst outlier loci in the dataset. These outliers are co
 Let's collect genetic distance info on pairs of pops as well (Weir and Cochran 1984). 
 
 First, the full dataset:
-```{r, cache = TRUE}
+```{r, cache = TRUE, warning = FALSE, message = FALSE}
 genet.dist(fstat, method="WC84")
 ```
 
 Then just neutral loci:
-```{r, cache = TRUE}
+```{r, cache = TRUE, warning = FALSE, message = FALSE}
 genet.dist(fstat_neutral, method="WC84")
 ```
 
 
 Let's split the year classes and run again
-```{r, cache = TRUE}
+
+First for full dataset:  
+```{r, cache = TRUE, warning = FALSE, message = FALSE}
 genind_year <- genind_2.1
 
 genind_year@pop <- as.factor(paste(genos_2.3$run, genos_2.3$year, sep = "_"))
 
 fstat_year <- genind2hierfstat(genind_year)
 colnames(fstat_year) <- c(pop, names(genind_year$loc.n.all))
+
+```
+
+
+Then for neutral only:  
+```{r, cache = TRUE, warning = FALSE, message = FALSE}
 # and also lets make datasets at different sets of loci, because hierfstat doesn't easily retain loci names for later use
 fstat_neutral_year <- genind2hierfstat(genind_year[loc=neutral_loci_names])
 colnames(fstat_neutral_year) <- c(pop, names(genind_year[loc=neutral_loci_names]$loc.n.all))
@@ -486,11 +494,9 @@ genet.dist(fstat_neutral_year, method="WC84")
 ```
 
 
-Next let's test these Fst results to see if they are significant
-
-To accomplish this we'll randomize over populations 1000 fold and then conduct a monte-carlo test. Note this approach is very computationally intensive, should find another one if we really want a significance test on Fst, skipped for now.
-
 ```{r, cache=TRUE, eval=FALSE}
+#this was for Fst sig testing, but decided to skip this
+
 mat.obs <- pairwise.WCfst(as.data.frame(cbind((genind_2.1$pop),genind_2.1$tab)))
 
 NBPERM <- 100 # this is the number of permutations used for the p-values; for a publication at least 999 would be required.
@@ -507,7 +513,7 @@ allTests <- list()
 
 ### Fst Results Summary
 
-Moderate differentiation between most pairwise pop comps (not fall and halfpounder), but as suspected, this is driven mostly by the run timing markers. When examining only neutral annotated loci, differentiation is extremely low (less than 1%). Also of note here is that both the neutral and total estimates of differentiation between early and late summer (fall) populations (XX% and XX%, respectively) is quite high. Mean Fst over all loci is about half the level of differentation between early summer and winter populations (XX%) and nearly the same when examining only neutral loci (XX%). Indeed, the late summer run fish  demonstrate lower differentiation from winter run than early summer run fish at both neutral and all loci.
+Moderate differentiation between most pairwise pop comps (not fall and halfpounder), but as suspected, this is driven mostly by the run timing markers. When examining only neutral annotated loci, differentiation is extremely low (less than 1%). Also of note here is that both the neutral and total estimates of differentiation between early and late summer (fall) runs is quite high. Mean Fst over all loci is about half the level of differentation between early summer and winter runs and nearly the same when examining only neutral loci. Indeed, the late summer run fish  demonstrate lower differentiation from winter run than early summer run fish at both neutral and all loci.
 
 # Population Structure
 
@@ -544,10 +550,10 @@ Note that the final structure data file did not differ between when this run the
 
 Structure was run in a GUI outside this computation notebook's environment.   
 __admixture model:__ admixture, with correlated allele frequency  
-__burnin/mcmc:__ ran with k=1-3 for 100k iteration to check for convergence of alpha, strong convergence after a few hundred burn-in iterations, used 10,000/20,000 for final runs   
+__burnin/mcmc:__ ran with k=1-6 for 100k iteration to check for convergence of alpha, strong convergence after a few hundred burn-in iterations, used 10,000/20,000 for final runs   
 __replicates:__ did 10 replicates for k=1-6 
 
-Best K was chosen by the evanno method, and estimated in structure harvester.    
+Best K was not chosen, but best k according to the evanno method was estimated in structure harvester for inclusing in the manuscript in case anyone wanted to see it.    
 Replicate results within each K were clumpp'd using the clumpak algorithm on the clumpak webserver  
 
 ### Results
@@ -558,13 +564,15 @@ __Best K__
 
 Best K was 2 according to the Evanno (delta K) method, however, it's important to remember the bias toward k=2 when differentiation is low or there is no population structure using this method. Delta k literally cannot evaluate K=1. (see note below)
 
-note: delta K suggests best k is two, however, particularly at low differentiation, the delta k method is biased towards k=2 (cullingham 2020), seems like a good place to remind myself that k is a model that doesn't always fully catpure biological reality and comparing results across different levels of k can proide interesting insights, even when best k is unknown, particularly in the case of low differentiation. Also a note that it might be good to review the literature again on bayesian clustering methods for low levels of differentation, e.g. that gagnaire paper and latch 2006. 
+note: delta K suggests best k is two, however, particularly at low differentiation, the delta k method is biased towards k=2 (cullingham 2020), seems like a good place to remind myself that k is a model that doesn't always fully catpure biological reality and comparing results across different levels of k can proide interesting insights, even when best k is unknown, particularly in the case of low differentiation. Also see gagnaire 20xx and latch 2006. 
 
 
 
 __Structure Plots__
 
 Next let's take the clumppd results and make some publication-ready figures. First plot is downsampled to 42 samples per "population", second plot is full dataset.
+
+As with other sampling procedures, the run presented in the final rendered notebook here may not be the run used in the publication (i.e. a different set of 42 samples may be presented here)
 
 ```{r,message=FALSE,warning=FALSE}
 #import clump results into dataframes
@@ -593,7 +601,7 @@ a <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
   facet_grid(~pop, scales = 'free', space = 'free', switch = "x") +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(expand = expand_scale(add = 1)) +
-  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white"), strip.text.x = element_blank()) +
+  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white"), strip.text.x = element_blank()) +
   scale_fill_manual(values = viridisLite::viridis(2))
 
 plot_data <- k3 %>% 
@@ -613,7 +621,7 @@ b <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
   facet_grid(~pop, scales = 'free', space = 'free', switch = "x") +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(expand = expand_scale(add = 1)) +
-  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white"), strip.text.x = element_blank()) +
+  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white"), strip.text.x = element_blank()) +
   scale_fill_manual(values = viridisLite::viridis(3))
 
 plot_data <- k4 %>% 
@@ -633,7 +641,7 @@ c <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
   facet_grid(~pop, scales = 'free', space = 'free', switch = "x") +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(expand = expand_scale(add = 1)) +
-  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white"), strip.text.x = element_blank()) +
+  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white"), strip.text.x = element_blank()) +
   scale_fill_manual(values = viridisLite::viridis(4))
 
 plot_data <- k5 %>% 
@@ -650,10 +658,10 @@ plot_data <- k5 %>%
 
 d <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
   geom_col(width=1.0) +
-  facet_grid(~pop, scales = 'free', space = 'free', switch = "x", labeller = labeller( pop =  c("fall" ="Late-Summer",  "half"= "Half-Pounder", "summer" =  "Early-Summer", "winter" =  "Winter"))) +
+  facet_grid(~pop, scales = 'free', space = 'free', switch = "x", labeller = labeller( pop =  c("fall" ="Late-Summer",  "halfpounder"= "Half-Pounder", "summer" =  "Early-Summer", "winter" =  "Winter"))) +
   scale_y_continuous(expand = c(0, 0)) +
   scale_x_discrete(expand = expand_scale(add = 1)) +
-  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white")) +
+  theme(panel.spacing=unit(0.1, "lines"), axis.title.x=element_blank(), axis.text=element_blank(), axis.ticks.x=element_blank(), legend.position = "none", axis.title.y=element_blank(), strip.background = element_rect(color = "white", fill = "white"), strip.text.x = element_text(size = 10, angle = 90)) +
   scale_fill_manual(values = viridisLite::viridis(5))
 
 
@@ -826,6 +834,8 @@ In the first three most important axes of genetic differentiation using the full
 
 Also, just like the neutral PCA, this captures some variation unique to fall/halfpounders. This time this variance is pushed back to the third PC, instead of the first.
 
+Second also, remember that many closely linked run timing SNPs inflates the eigenvalue for the PC that captures variation at those SNPs, so the distribution of eigenvalues represents the data NOT the genome.
+
 ## DAPC
 
 Here we pull a little harder to find some population structure. We conduct a discriminant analysis on PCA transformed genetic variation (DAPC). 
@@ -890,6 +900,13 @@ kable(marker_mapping2 %>%
 kable(marker_mapping2 %>%
   filter(marker %in% markers2 ) %>%
   select(marker, `Presumed Type`), caption = "markers heavily loaded into second discriminant axis")
+
+# pub figure
+# a <- ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=pop), alpha = 0.8)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("DAPC by k-means cluster, color by a priori population")+guides(color=guide_legend("Run-Type")) 
+# 
+# b <- ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=grp), alpha = 0.8)+scale_color_viridis_d()+theme_classic()+ggtitle("DAPC by cluster, color by k-means cluster")+guides(color=guide_legend("K-means cluster")) 
+# 
+# plot_grid(a, b, ncol = 1, labels = "auto")
 ```
 
 As suspected, given the the fact that fall and halfpounder fish do not fall into a single genetic cluster, de novo assigned genetic cluters do not do a great job of differentiating among a priori assigned run-timing groups. When breaking the fish into four groups these groups are mostly defined by covariation at ~15 markers including run timing markers, 2 neutral markers (linked to residency markers), and residency markers. Note that the loadings on the first axis for the run-timing markers are ~2 fold greater than other markers included in the table above and that this cutoff is arbitrary.
@@ -897,10 +914,12 @@ As suspected, given the the fact that fall and halfpounder fish do not fall into
 ### DAPC a priori
 
 __A note on the best number of pcs__  
-Given that (a) we are using a priori assigned groups to assess differences among said groups and (b) the number of predictors is only slightly less than the number of object (n = 1000 and p= ~350), we have to be really cautious about overfitting here, so we're going to run both cross-fold validation and the "a.score" procedure to determine the correct number of pcs to retain, then we will retain pcs according to which optimization strategy suggests the lower number of pcs. One issue here is that previous results suggest that at least one and potentially two (fall and half pounders) of our a priori groups is a synthetic (i.e. non exclusively genetic) assemblage of individuals. If this is the case, even using approaches such as the a score or cross validation will lead to overfitting w respect to the underlying biology and our choice of n.pc should attempt to limit overfitting by choosing the minimum PCs possible that still strongly discriminate. 
+Given that (a) we are using a priori assigned groups to assess differences among said groups and (b) the number of predictors is only somewhat less than the number of objects (n = 1000 and p= ~350), we have to be really cautious about overfitting here, so we're going to run both cross-fold validation and the "a.score" procedure to determine the correct number of pcs to retain, then we will retain pcs according to which optimization strategy suggests the lower number of pcs. One issue here is that previous results suggest that at least one and potentially two (fall and half pounders) of our a priori groups is a synthetic (i.e. non exclusively genetic) assemblage of individuals. If this is the case, overfitting might cause some real issues and results might not the underlying biology. Therefore our choice of n.pc should attempt to limit overfitting by choosing the minimum PCs.
 
-These are the results from the original run (with two additional run-timing markers):  
-The best pca according to optim.a.score was 103, but there was only extremely slight improvement at each pc beyond 12, where we observed a local maximum. Best pca according to cross validation using overall group assignment success was 16, however cross validation using mean group assignment per group was 121. Similar to the a.score approach, there is not a strong "arc" pattern in the latter as one might suspect for a cross validation procedure, instead fit improves rapidly after the first few pcs, declines, then and continues a gradual improvement. WE considered this to be a potential example of double descent, as once the number of PCs exceeds the group sample size, the model is overparametized (p > n). We chose the number of PCs that correspond to this first peak in both the xval and optim.a.score procedure: 12. However, it should be noted that running DAPC with widely varying PCs did not qualitatively change the pattern of results. The degree of discrimination increased with increasing PCs and loadings on individual markers varied, but not the qualitative relationships among a priori assigned populations.  
+```{r, include=FALSE}
+#these are the results from the original run (with two additional run-timing markers, didn't use these data):  
+# The best pca according to optim.a.score was 103, but there was only extremely slight improvement at each pc beyond 12, where we observed a local maximum. Best pca according to cross validation using overall group assignment success was 16, however cross validation using mean group assignment per group was 121. Similar to the a.score approach, there is not a strong "arc" pattern in the latter as one might suspect for a cross validation procedure, instead fit improves rapidly after the first few pcs, declines, then and continues a gradual improvement. WE considered this to be a potential example of double descent, as once the number of PCs exceeds the group sample size, the model is overparametized (p > n). We chose the number of PCs that correspond to this first peak in both the xval and optim.a.score procedure: 12. However, it should be noted that running DAPC with widely varying PCs did not qualitatively change the pattern of results. The degree of discrimination increased with increasing PCs and loadings on individual markers varied, but not the qualitative relationships among a priori assigned populations. 
+```
 
 Final results:  
 The best pca according to optim.a.score was 103. After pc 7 however, there was only a gradual improvement with each aditional PC, two local maxima at pc 15 and pc 45 are also present. Best pca according to cross validation using overall group assignment success was 7, however cross validation using mean group assignment per group was 187, although there are local maxima at 7, and 16 pcs. Similar to the a.score approach, there is not a strong "arc" pattern in the latter as one might suspect for a cross validation procedure, instead fit improves rapidly after the first few pcs, declines, then and continues a gradual improvement. WE considered this to be a potential example of double descent, as once the number of PCs exceeds the group sample size, the model is overparametized (p > n). We chose the number of PCs that correspond to best value from the xval procedure using overall asignment, because of our concern with overfitting. This value also represents the last value that is a substantial increase from the previous in both other procedures. However, it should be noted that running DAPC with widely varying PCs did not qualitatively change the pattern of results. The degree of discrimination increased with increasing PCs and loadings on individual markers varied, but not the qualitative relationships among a priori assigned populations.  
@@ -932,10 +951,10 @@ ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, s
 
 scatter(dapc_full_apriori)
 
-marker_loadings1 <- loadingplot(dapc_full_apriori$var.contr, axis=1,thres=.01, lab.jitter=1, main = "laoding plot for DA 1")
+marker_loadings1 <- loadingplot(dapc_full_apriori$var.contr, axis=1,thres=.01, lab.jitter=1, main = "loading plot for DA 1")
 markers1 <- unique(substr(names(marker_loadings1$var.values),1,nchar(names(marker_loadings1$var.values))-2))
 
-marker_loadings2 <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.006, lab.jitter=1, main = "laoding plot for DA 2")
+marker_loadings2 <- loadingplot(dapc_full_apriori$var.contr, axis=2,thres=.006, lab.jitter=1, main = "loading plot for DA 2")
 markers2 <- unique(substr(names(marker_loadings2$var.values),1,nchar(names(marker_loadings2$var.values))-2))
 
 kable(marker_mapping2 %>%
@@ -946,7 +965,7 @@ kable(marker_mapping2 %>%
   filter(marker %in% markers2 ) %>%
   select(marker, `Presumed Type`, chr, start), caption = "Markers that load strongly onto the second DA")
 
-# for ms figures
+# #for ms figures
 # plot_data %<>%
 #  mutate(pop = as.factor(plot_data$pop)) %>%
 #  mutate(pop = fct_relevel(pop, "Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
@@ -995,7 +1014,7 @@ all_loads %>%
 
 
 
-__Summary__
+__Summary__  
 DAPC largely discriminates among groups along the first discriminant axis. Fall and half pounder fish demonstrate little to no differentiation along any DA. The first DA strongly separates winter and summer run fish, and is driven by by 9 markers including 8 run timing associated markers and a neutral marker (Omy_128996-481). The second da captures much less variation among groups (78% vs 17%), and is driven largely by 5 residency markers and 13 additional markers including  neutral markers and several associated with run timing and other adapative traits. Interstingly one of the "neutral" annotated markers (Omy_LDHB-2...) have been associated with residency vs anadromy in an association study in the klickitat river (doi.org/10.1080/00028487.2011.588131).
 
 
@@ -1029,9 +1048,11 @@ ld1_2 <- as.data.frame(dapc_full_apriori$ind.coord) %>%
   left_join(pops_info)
     
 #plot
-ggplot(data=ld1)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("True Classifier")+labs(color = "Run", fill = "Run")
+a <- ggplot(data=ld1)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("True Classifier")+labs(color = "Run", fill = "Run")
 
-ggplot(data=ld1_2)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("A priori DAPC results")+labs(color = "Run", fill = "Run")
+b <- ggplot(data=ld1_2)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("A priori DAPC results")+labs(color = "Run", fill = "Run")
+
+plot_grid(b,a, labels = "auto", ncol = 1)
 
 # assignments using classifier
 CIs <- ld1 %>%
@@ -1133,7 +1154,7 @@ class_loads %>%
 ```
 
 
-When we use the original DAPC _(not the classifier, still need to make a decision here)_ we attempt to classify fish into winter or summer like using the first DA which accounts for ~80% of the among group variance and is driven almost exclusively by known run timing associated markers. We then draw 95% credible intervals for winter and summer run and count how many fall and half pounder fish fall beyond the lower bounds for these intervals (i.e. at least as winter-like or summer-like as the 95% CI). For fall fish, the majority  are unassigned, nearly as many are winter assigned and a small portion are summer assignmed. The same pattern is observed among the half pounders, but ratio number of unassigned fish is somewhat lower.
+When we use the original DAPC _(not the classifier)_ we attempt to classify fish into winter or summer like using the first DA which accounts for ~80% of the among group variance and is driven almost exclusively by known run timing associated markers. We then draw 95% credible intervals for winter and summer run and count how many fall and half pounder fish fall beyond the lower bounds for these intervals (i.e. at least as winter-like or summer-like as the 95% CI). For fall fish, the majority  are unassigned, nearly as many are winter assigned and a small portion are summer assignmed. The same pattern is observed among the half pounders, but ratio number of unassigned fish is somewhat lower.
 
 
 ### Neutral DAPC
@@ -1158,15 +1179,15 @@ ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, s
 
 ```
 
-DA axis 1 separates summer from half pounder, fall and winter. DA 2 separates summer from the rest. DA3 also separates summer from the rest. Interestingly this is the same pattern as obsevred using the full dataset, despite the fact that the first DA was driven almost exclusively by run timing markers. This suggests either LD in our dataset between run timing and neutral markers, or that restricted gene flow tied to run timing leads differentiation at neutral markers. In any case it follows with the neutral Fst a that half pounders and fall run fish are more similar to winter run than summer run across the genome. I'll also add that this pattern looks like overfitting to me.
+DA axis 1 separates summer from half pounder, fall and winter. DA 2 separates summer from the rest. DA3 also separates summer from the rest. Interestingly this is the same pattern as obsevred using the full dataset, despite the fact that the first DA was driven almost exclusively by run timing markers. This suggests either LD in our dataset between run timing and neutral markers, or that restricted gene flow tied to run timing leads differentiation at neutral markers. In any case it follows with the neutral Fst a that half pounders and fall run fish are more similar to winter run than summer run across the genome. 
 
 ### DAPC Results Summary
 
 K means clustering always assigned half pounders and fall run fish to all genetic clusters, while always segregating winter and summer run fish. This suggests there is substantial structure with fall and half pounder fish. Similarly, when we attempt to discriminate among a priori assigned groups, the genetic variation contained within adults that make a fall run, as well as half-pounders is nearly entirely inclusive of winter run fish, and partially inclusive of summer run fish, however, winter and summer run fish are well discriminated. 
 
 In other words:  
-(a) winter and summer run fish can clearly be distinguished from one another using the genetic variation captured by our GTseq panel. Genetic variation among these two groups is driven by markers with known run-timing associations
-(b) fall run and half pounder fish can not be discriminated from each other using the genetic information we half available   
+(a) winter and summer run fish can clearly be distinguished from one another using the genetic variation captured by our GTseq panel. Genetic variation among these two groups is driven by markers with known run-timing associations  
+(b) fall run and half pounder fish can not be discriminated from each other using the genetic information we have available   
 (c) fall run and half pounder fish demonstrate substantial within-"population" structure, and include fish that demonstrate a high degree of genetic similarity with both winter run and summer run fish, hwoever, most individuals demonstrate intermediate genetic charactistics. interestingly,this within population structure is driven neutral markers and residency associated markers   
 
 
@@ -1429,6 +1450,7 @@ c = pheatmap(half_pac_diag[,-8], cluster_cols = FALSE, show_rownames = FALSE, ma
 #sum(rowSums(half_pac_diag_mo_miss_2019[,-c(1,9,10)], na.rm = TRUE) ==0)
 ```
 
+Definitely some interesting patterns here. It might be more useful to explore this with inferred haplotypes, so we'll hold off for now.
 
 # Omy05 Markers
 
@@ -1465,13 +1487,13 @@ residency_freqs$marker <- rep(residency_loci_names[order(residency_loci_names)],
 
 # the residency markers were switched on the probe seqs file during genotype calling, let's fix this here, since none of the published results share marker names up to this point, let's leave the analysis as is and fix at this stage. 
 # here the info from the corrections
-"
-R40252 and R40319 are correct.
-What I labeled R19198 is actually R14589.
-What I labeled R14589 is actually R33562.
-What I labeled R33562 is actually R24370.
-What I labeled R24370 is actually R19198.
-"
+# "
+# R40252 and R40319 are correct.
+# What I labeled R19198 is actually R14589.
+# What I labeled R14589 is actually R33562.
+# What I labeled R33562 is actually R24370.
+# What I labeled R24370 is actually R19198.
+# "
 #and here we rename
 residency_freqs$marker[c(3,4)] <- "OmyR14589"
 residency_freqs$marker[c(1,2)] <- "OmyR33562"
@@ -1569,11 +1591,11 @@ ggplot(data = res_genos)+geom_boxplot(aes(x = OmyY1_2SEXY, y = res_sum))
 
 
 
-So variation is high within all the runs (least so at fall run), with expected heterozygosity all the way near 0.5. Interestingly there is a dearth of heterozygotes in all but summer run, however, this is significant only for halfpounder where it is the strongest. This pattern suggests that there is some structuring with the halfpounders and to a lesser extent fall run (but not summer and winter run fish), with reduced interbreeding between individuals expressing alternative residency alleles. interpreting the differences across populations suggests there's varying degrees of introgression between anadromous and resident fish across the run types, with the highest proportion of resident alleles in the late-summer run samples. this may be explained by the temporal and spatial variation in spawning between run types. 
+So variation is high within all the runs (least so at fall run), with expected heterozygosity all the way near 0.5. Interestingly there is a dearth of heterozygotes in all but summer run, however, this is significant only for halfpounder where it is the strongest. This pattern suggests that there is some structuring with the halfpounders and to a lesser extent fall run (but not summer and winter run fish), with reduced interbreeding between individuals expressing alternative residency alleles. interpreting the differences across populations suggests there's varying degrees of gene flow between anadromous and resident fish across the run types, with the highest proportion of resident alleles in the late-summer run samples. this may be explained by the temporal and spatial variation in spawning between run types. hard to say for sure without better sampling, but worth discussing. 
 
-also something to think about here is that there is an observed tendency of hatchery released smolts to residualize over the summer, winter fish are graded (i.e. precocially mature males are not released) so it is likely to be the summer hatchery fish contributing the residuals.
+also something to think about here is that some state there is a tendency of hatchery released smolts to residualize over the summer, winter fish are graded (i.e. precocially mature males are not released) so is it likely to be the summer hatchery fish contributing the residuals? also of note here is that our winter sample includes both hatchery and natural origin fish, while our other samples contain only natural origin, so the pattern here could be due to hatchery alleles. ultimately we need better sampling to get at these questions.
 
-also of note here is that our winter sample includes both hatchery and natural origin fihs, while our other samples contain only natural origin, so the pattern here could be due to hatchery alleles.
+
 
 # LD
 
@@ -1760,11 +1782,17 @@ ldreport_hf %<>%
   mutate(marker_1 = fct_reorder(marker_1, marker1_position)) %>%
   mutate(marker_2 = fct_reorder(marker_2, marker2_position))
 
-
-#plot
 ggplot(data = filter(ldreport_sw ))+geom_tile(aes(marker_1, marker_2, fill = R2), size = 2)+scale_fill_viridis_c(option = "C")+theme_classic()+theme(axis.text.x = element_text(angle = 90))+ggtitle("Early-Summer\nand Winter Run")+coord_equal() 
 
 ggplot(data = filter(ldreport_hf ))+geom_tile(aes(marker_1, marker_2, fill = R2), size = 2)+scale_fill_viridis_c(option = "C")+theme_classic()+theme(axis.text.x = element_text(angle = 90))+ggtitle("Late-Summer\nand Half-pounders")+coord_equal()
+
+# 
+# #plot
+# a <- ggplot(data = filter(ldreport_sw ))+geom_tile(aes(marker_1, marker_2, fill = R2), size = 2)+scale_fill_viridis_c(option = "C")+theme_classic()+theme(axis.text.x = element_text(angle = 90))+ggtitle("Early-Summer\nand Winter Run")+coord_equal() 
+# 
+# b <- ggplot(data = filter(ldreport_hf ))+geom_tile(aes(marker_1, marker_2, fill = R2), size = 2)+scale_fill_viridis_c(option = "C")+theme_classic()+theme(axis.text.x = element_text(angle = 90))+ggtitle("Late-Summer\nand Half-pounders")+coord_equal()
+# 
+# plot_grid(a,b,ncol=1,labels="auto")
 
 ```
 
@@ -2254,6 +2282,8 @@ where do halfpounders come in here?
 
 # Discussion
 
+_note that this reflects an initial discussion at the point of time of conducting the initial analysis logged here and is NOT the authors' final interpretation of the results, which is presented in the manuscript _
+
 Two multivariate approaches (unconstrained ordination (PCA) and constrained ordination (DAPC)) as well as a model-based bayesian clustering approach (STRUCTURE) were used to interrogate population genetic structure among 3 runs of adult Rogue River steelhead as well as half-pounders. We also estimated genetic distances among run types using Fst. These approaches attempt to identify structure either (a) among a priori assigned grouping of organisms (in our case run timing), or (b) among de novo identified genetic clusters. We draw inferences on population genetic structure within the Rogue River based on the strong agreement among multivariate and bayesian as well as de novo and a priori approaches to characterizing population genetic structure. However, it is important to note that our results are based on the small portion of total genetic variation represented by our GTseq panel markers, and that these markers do not represent an unbiased representation of genetic variation among Rogue River steelhead. For example, "neutral" markers in our panel were chosen to capture genetic variation at wide spatial scales and not within individual drainages, so our study may underestimate the extent of population differentiation at neutral markers. Similarly, the inclusion of multiple markers associated with run-timing phenotypes allows us to capture strong differentiation at these genomic regions, but these regions are strong outliers across many population genetic parameters, are likely over represented in our dataset relative to neutral markers and generally will overestimate genome-wide genetic differentiation. Most critically, our dataset may exclude genetic variants that drive adaptive phenotypic variation within the Rogue River. As many of our approaches utilize different subsets of markers, and differ in their sensitivity to various biases in the dataset, it is important to consider each in light of its respective caveats and underlying assumptions.
 
 __No Difference Among Late-Summer Adults and Half-Pounders__  
@@ -2267,7 +2297,7 @@ When using the full dataset, structure among winter and early summer run fish is
 __Structure within Late-Summer and Half-Pounders__  
 The matter of separating late-summer and half-pounder steelhead from early-summer and winter runs is less clear. While all analyses that identified structure within the Rogue River steelhead place half-pounder and late-summer run steelhead as intermediate between winter and early-summer steelhead at the group-level, there is (a) substantial overlap in genetic variation among both half-pounder and fall run steelhead with winter and early summer run steelhead and (b) evidence of population structure within half-pounder and late-summer run steelhead. 
 
-Inference of structure within both fall and half-pounder fish comes from several lines of evidence. Among half-pounders, and to a lesser extent late-summer run steelhead, many markers were out of HWE with a significant excess of homozygosity, suggestive of Wahlund effects. These markers were significantly enriched for run-timing associated markers, suggesting that structure within half-pounders and fall run fish is due in part to groups of either early-summer-like or winter-like individuals. Also, de novo identification of population genetic structure via k means clustering always separated late-summer and half-pounder individuals into genetic clusters with both late-summer and winter run adults, regardless of the number of clusters used. Finally, unlike k-means clustering, in STRUCTURE, individuals may derive their ancestry from multiple clusters, and we see that while there are no strong differences at the group level in ancestry, there is a high level of variation within each group.
+Inference of structure within both fall and half-pounder fish comes from several lines of evidence. Among half-pounders, and to a lesser extent late-summer run steelhead, many markers were out of HWE with a significant excess of homozygosity, suggestive of Wahlund effects. These markers were significantly enriched for run-timing associated markers, suggesting that structure within half-pounders is due in part to groups of either early-summer-like or winter-like individuals. Also, de novo identification of population genetic structure via k means clustering always separated late-summer and half-pounder individuals into genetic clusters with both late-summer and winter run adults, regardless of the number of clusters used. Finally, unlike k-means clustering, in STRUCTURE, individuals may derive their ancestry from multiple clusters, and we see that while there are no strong differences at the group level in ancestry, there is a high level of variation within each group.
 
 Indeed, when we attempt to classify both half-pounder and late-summer run fish as winter-like or early-summer like using a linear combination of alleles that strongly discriminate winter and early summer run fish (discriminant axis 1), we observe a group of strongly winter-like fish, a second group of intermeditate fish and a small number of early-summer-like fish. Direct examination of genotypes at known-run timing markers reveals the same pattern.   _One caveat here that might be worth including in anything published for a wider audience: Methods like the DAPC, and even the association analyses that are the basis of the annotations for our panel, operate under an assumption of additivity. Without a clear, mechaninistic understanding of the g -> p map for run timing, we can not predict run-timing phenotypes from such heterozygous and discordant genotypes at run-timing associated markers. Variation in effect size among loci, dominance, epistasis, the effects of un-genotyped causal loci and plasticity all may be at play here._
 
@@ -2285,36 +2315,39 @@ Taken together, we propose that both late-summer run and half-pounders are a mix
 
 This section is a dumping ground for ideas if we want to move forward with this investigation, and stray thoughts that might warrant returning to in the future. Not edited, remove before sharing widely.
 
-__Intermediate freq Ch28__  
-How is it possible to have intermediate MAFs within the Ch28 region at a small subset of markers, when the rest are nearly fixed within the region within winter/early summer runs? These "discordant" genotypes suggests either (a) multiple haplotypes (more than two) segregating within the region, (b) two (or more) separate haplotype blocks with the "RoSA" that are not coinherited (i.e. wildly high recombination in a region that seems to have low recombination in the rest of the species...unlikely), (c) extremely strong balancing selection at the genomic region level (also would be a wild thing to observe) or (d) major genotyping error (Need to go in and check out the allele correction values / genotyping plot for these markers: Chr28_11607954, Chr28_11632591, Ch28_11773194, Omy_GREB1_09)
+```{r, include = FALSE}
+# __Intermediate freq Ch28__  
+# How is it possible to have intermediate MAFs within the Ch28 region at a small subset of markers, when the rest are nearly fixed within the region within winter/early summer runs? These "discordant" genotypes suggests either (a) multiple haplotypes (more than two) segregating within the region, (b) two (or more) separate haplotype blocks with the "RoSA" that are not coinherited (i.e. wildly high recombination in a region that seems to have low recombination in the rest of the species...unlikely), (c) extremely strong balancing selection at the genomic region level (also would be a wild thing to observe) or (d) major genotyping error (Need to go in and check out the allele correction values / genotyping plot for these markers: Chr28_11607954, Chr28_11632591, Ch28_11773194, Omy_GREB1_09)
+# 
+# - checked out the genotyping plots for these markers, nothing looks out of whack. however, Omy_GREB1_09 is a poorly mapping marker by both SFGL and CRITFC mapping results.  
+# 
+# Should also think about whether or not the sequencing data we have might be used to call statistically phased haplotypes for this region (it's pretty densely genotyped). Conducting an analysis with information with the provided by haplotypes can probably get to the bottom of this, but should think more seriously about what it will provide before investing the time to figure it out.
+# 
+# Is an extremely recent duplication even another possible explanation for this weird pattern that we see.
+# 
+# __Neutral structure outliers (strays) in halfpounders__  
+# There is evidence that half pounders may return to Rogue despite being native to a different stream, then return to the their natal stream during their subsequent adult spawning run(s). Do we see evidence of any half-pounders from other streams (i.e. outlier fish at neutral loci). This behavior is also predicted as a consequence of the proposed explanation of the half pounder lifestyle as a behavioral adaptation to avoid a recurring region of high SSTs near the Klamath and Rogue basins
+# 
+# 
+# >Quote from Eversest 1971: 
+# Additional evidence of this behavior was noted when
+# returns from "half-pounders" tagged in 1968 were analyzed.
+# Thirty-one fish were tagged in one seine-haul on August 14,
+# 1968, and five were recaptured in the Rogue the sane year.
+# On subsequent migrations in 1969 and 1970, only one of the
+# fish was recaptured in the Rogue while two were taken outside
+# the system, one in the Smith River, and one from the Trinity
+# River, both in northern California.
+# 
+# 
+# __Evolutionary explanation for maintenance of half-pounders__  
+# The results as presented here leave us with something of a problem, if field studies suggest there is limited gene flow among early-summer and winter fish, then (i) why are fall run fish more closely related to winter fish, and (ii) how is the existence of the half pounder or fall run lifestyle maintained. Temporally balancing selection is generally invoked to maintain the existence of multiple life-histories in salmonids, but in this case we may have an example of true balancing selection (heterozygote advantage) as the half-pounder lifehistory (at least at the tiny number of markers considered here) seems to be driven by high heterozygosity at run timing associated markers. The same goes for fall run fish. If return to the rogue in late summer is driven by unfavorable sea surface conditions and a SST "trap," it would follow that both half pounders and fall run life histories are behavioral adaptations under strong selection, and the alternative life-histories are less fit, but maintained as a short term (non-equilibrium) consequence of balancing selection. In other words, the SST trap leads to strong selection for a fall run and this has different impacts depending on the level of maturity for an individual: for juveniles a fall run results in a false spawingn run (half pounder), for adults, this results in a fall run. Individuals that fail to make the fall run (either as half pounders or mature adults) face selection. This would be a pretty shocking result, but I'm failing to find an alternative explanation. It definitely motivates further study either via a GWAS or a genome wide perspective of demography and selection within the Rogue. I'd be particularly interested in collecting haplotypic data to examine recent demographic histories and evidence of selection. At the very least looking for balancing selection using outlier approaches within fall run fish.
+# 
+# 
+# __Proportions__  
+# do the assignment proportions in half pounder and fall run fish match with the run counts for the appropriately matched year?
+```
 
-- checked out the genotyping plots for these markers, nothing looks out of whack. however, Omy_GREB1_09 is a poorly mapping marker by both SFGL and CRITFC mapping results.  
-
-Should also think about whether or not the sequencing data we have might be used to call statistically phased haplotypes for this region (it's pretty densely genotyped). Conducting an analysis with information with the provided by haplotypes can probably get to the bottom of this, but should think more seriously about what it will provide before investing the time to figure it out.
-
-Is an extremely recent duplication even another possible explanation for this weird pattern that we see.
-
-__Neutral structure outliers (strays) in halfpounders__  
-There is evidence that half pounders may return to Rogue despite being native to a different stream, then return to the their natal stream during their subsequent adult spawning run(s). Do we see evidence of any half-pounders from other streams (i.e. outlier fish at neutral loci). This behavior is also predicted as a consequence of the proposed explanation of the half pounder lifestyle as a behavioral adaptation to avoid a recurring region of high SSTs near the Klamath and Rogue basins
-
-
->Quote from Eversest 1971: 
-Additional evidence of this behavior was noted when
-returns from "half-pounders" tagged in 1968 were analyzed.
-Thirty-one fish were tagged in one seine-haul on August 14,
-1968, and five were recaptured in the Rogue the sane year.
-On subsequent migrations in 1969 and 1970, only one of the
-fish was recaptured in the Rogue while two were taken outside
-the system, one in the Smith River, and one from the Trinity
-River, both in northern California.
-
-
-__Evolutionary explanation for maintenance of half-pounders__  
-The results as presented here leave us with something of a problem, if field studies suggest there is limited gene flow among early-summer and winter fish, then (i) why are fall run fish more closely related to winter fish, and (ii) how is the existence of the half pounder or fall run lifestyle maintained. Temporally balancing selection is generally invoked to maintain the existence of multiple life-histories in salmonids, but in this case we may have an example of true balancing selection (heterozygote advantage) as the half-pounder lifehistory (at least at the tiny number of markers considered here) seems to be driven by high heterozygosity at run timing associated markers. The same goes for fall run fish. If return to the rogue in late summer is driven by unfavorable sea surface conditions and a SST "trap," it would follow that both half pounders and fall run life histories are behavioral adaptations under strong selection, and the alternative life-histories are less fit, but maintained as a short term (non-equilibrium) consequence of balancing selection. In other words, the SST trap leads to strong selection for a fall run and this has different impacts depending on the level of maturity for an individual: for juveniles a fall run results in a false spawingn run (half pounder), for adults, this results in a fall run. Individuals that fail to make the fall run (either as half pounders or mature adults) face selection. This would be a pretty shocking result, but I'm failing to find an alternative explanation. It definitely motivates further study either via a GWAS or a genome wide perspective of demography and selection within the Rogue. I'd be particularly interested in collecting haplotypic data to examine recent demographic histories and evidence of selection. At the very least looking for balancing selection using outlier approaches within fall run fish.
-
-
-__Proportions__  
-do the assignment proportions in half pounder and fall run fish match with the run counts for the appropriately matched year?
 
 __pattern within fall__  
 we have dates for approximate freshwater entry for the fall run fish. is there a correlation in the winter-vs-summer genetic axis and date of entry? there is substantial overlap in the entry timing of fish referred to as winter and late-summer run, and substantial interannual variation in the peak of run timing within a group, taken together this suggests that some late late-summer fish could instead be early-arriving winter run fish. this would show up as a correlation between run timing genotype and arrival date with the fall fish. let's check. 
