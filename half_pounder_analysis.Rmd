@@ -2454,9 +2454,10 @@ ggplot(pred.mm) +
    labs(x = "LD1 score\n(negative is more winter-like)", y = "Sample Date") + 
    theme_classic()+geom_rect(aes(xmin = 1.58, xmax=3, ymin = -Inf, ymax = Inf), fill = "#35B77980", alpha = 0.05)+geom_rect(aes(xmin = -3, xmax=-0.337, ymin = -Inf, ymax = Inf), fill = "#FDE72580", alpha = 0.05)+ scale_fill_manual(values = c("white", "black"))+scale_shape(solid = FALSE)
 
+
 ```
 
-"To understand if there was an increasing number of winter-like alleles over time among late-summer run fish we fit a linear mixed effects model using lme4 (Bates,	 Maechler & Bolker,	2012). We fit a model of julian date of sampling at river kilometer 8 to approximate freshwater entry timing, using the individual score on the first discriminant axis of the a priori DAPC as a fixed effect and sample year as a random intercept. We examined residual plots for deviations from	 homoscedasticity or	normality and evaluated significance of the fixed effect using a likelihood ratio test."
+"To understand if there was an increasing number of winter-like alleles over time among late-summer run fish we fit a linear mixed effects model using lme4 (Bates,	 Maechler & Bolker,	2012). We fit a model of julian date of sampling at river kilometer 8 to approximate freshwater entry timing, using the individual score on the first discriminant axis of the a priori DAPC as a fixed effect and sample year as a random intercept. We examined residual plots for deviations from	 homoscedasticity or normality and evaluated significance of the fixed effect using a likelihood ratio test."
 
 
 ## other
