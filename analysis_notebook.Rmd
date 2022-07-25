@@ -26,6 +26,7 @@ require(knitr)
 require(pegas)
 require(cowplot)
 require(magrittr)
+require(kableExtra)
 ```
 
 
@@ -521,10 +522,17 @@ pca_vals <- pca_vals %>%
   left_join(select(genos_2.3, Sample, run)) %>%
   mutate(run = if_else(run == "fall", "Late-Summer", run)) %>%
   mutate(run = if_else(run == "halfpounder", "Half-Pounder", run)) %>%
-  mutate(run = if_else(run == "Summer", "Early-Summer", run))
+  mutate(run = if_else(run == "Summer", "Early-Summer", run)) %>%
+  mutate(run = fct_relevel(run, "Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
+  
 
-ggplot(data = pca_vals, aes(Axis1, Axis2, color = run))+geom_point(alpha = 0.5)+stat_ellipse()+theme_classic()+scale_color_viridis_d(name = "")+xlab("Principal Component 1")+ylab("Principal Component 2")
-barplot(pca1$eig[1:10],main="PCA eigenvalues")
+a <- ggplot(data = pca_vals, aes(Axis1, Axis2, color = run))+geom_point(alpha = 0.5)+stat_ellipse()+theme_classic()+scale_color_viridis_d(name = "")+xlab("Principal Component 1")+ylab("Principal Component 2")
+
+eig <- as.data.frame(bind_cols(pca1$eig[1:10], seq(1, 10)))
+colnames(eig) <- c("eigenvalue", "pca")
+b <- ggplot(data = eig)+geom_bar(aes(pca, eigenvalue), stat = "identity")+theme_classic()+xlab("")+ylab("")+theme(axis.text.x = element_blank())
+
+plot_grid(a, b, ncol = 1, rel_heights = c(3,1), labels = "auto")
 
 ```
 
@@ -534,7 +542,40 @@ Let's also make an interactive 3d plot, since the third PC is not much less info
 plot_ly(x=pca1$li$Axis1, y=pca1$li$Axis2, z=pca1$li$Axis3, type="scatter3d", mode="markers", color=genind_2.3$pop, alpha = 0.8)
 ```
 
-Not terribly interesting 3rd axis, primarily captures differences between a few outlier individuals. We can expect this pattern to continue as we proceed down less informative eigenvectors.
+Not terribly interesting 3rd axis, primarily captures differences between a few outlier individuals. We can expect this pattern to continue as we proceed down less informative eigenvectors, but let's demonstrate this using kaiser-guttman or broken stick.
+
+```{r}
+#kaiser guttman
+cutoff<-mean(pca1$eig)
+kg <- length((pca1$eig)[(pca1$eig)>cutoff])
+barplot(pca1$eig, main = "PCA eigenvalues\nKaiser-Guttman Criteria (red line)")
+abline(h = cutoff, col = "red")
+
+#broken stick
+n <- length(pca1$eig)
+bsm <- data.frame(j=seq(1:n), p = 0)
+bsm$p[1] <- 1/n
+for (i in 2:n){
+  bsm$p[i] <- bsm$p[i-1]+(1/(n+1-i))
+
+}
+bsm$p <- 100*bsm$p/n
+
+pca_eigs_to_plot <- as.data.frame(cbind(100*pca1$eig/sum(pca1$eig)), rev(bsm$p))
+pca_eigs_to_plot %<>%
+  rownames_to_column(var = "bsm") %>%
+  rename(pca_eig_perc = V1) %>%
+  mutate(pca_eig_perc = as.numeric(pca_eig_perc))
+
+pca_eigs_to_plot %<>%
+  rowid_to_column("row_n") %>%
+  mutate(bsm = as.numeric(bsm)) %>%
+  pivot_longer(!row_n, names_to = "bsm_or_eig", values_to = "percent_variance")
+
+ggplot(data = pca_eigs_to_plot[1:71,])+geom_bar(aes(x = as.factor(row_n), y = percent_variance, color = bsm_or_eig, fill = bsm_or_eig), stat = "identity", position=position_dodge())+theme_classic()+xlab("Eigenvector")+ylab("percent of variance")+ggtitle("Broken Stick Model")
+```
+
+Kaiser-Guttman is generally considered liberal, while broken stick is more conservative. We can see that pretty clearly playing out here, where KG selects suggests PC well into the portion of the screeplot where each successive PC explains only a tiny portion of variance less than the former, and Broken Stick suggests no PCs. Examining the screeplot ourselves we can see that there is a major break after the first PC, and a second after the third, This suggests we should pay the most attention to the first three PCs. 
 
 __Summary__
 
@@ -809,11 +850,32 @@ d <- ggplot(plot_data, aes(id, prob, fill = cluster)) +
 cowplot::plot_grid(a,b,c,d, rel_heights = c(1,1,1,1.5) ,ncol=1)
 ```
 
+Let's also summarise the mean and variance of individual ancestry proportions amogn phenotypic groups.
+
+```{r}
+kable(k2 %>%
+        group_by(pop) %>%
+        summarise(mean_clust1 = mean(clust1), sd_clust1 = sd(clust1), mean_clust2 = mean(clust2), sd_clust2 = sd(clust2)), digits =  3) %>%
+  kable_classic(full_width = F, html_font = "Cambria") 
+
+kable(k3 %>%
+        group_by(pop) %>%
+        summarise(mean_clust1 = mean(clust1), sd_clust1 = sd(clust1), mean_clust2 = mean(clust2), sd_clust2 = sd(clust2), mean_clust3 = mean(clust3), sd_clust3 = sd(clust3)), digits =  3) %>%
+  kable_classic(full_width = F, html_font = "Cambria") 
+
+kable(k4 %>%
+        group_by(pop) %>%
+        summarise(mean_clust1 = mean(clust1), sd_clust1 = sd(clust1), mean_clust2 = mean(clust2), sd_clust2 = sd(clust2), mean_clust3 = mean(clust3), sd_clust3 = sd(clust3),  mean_clust4 = mean(clust4), sd_clust4 = sd(clust4)), digits =  3) %>%
+  kable_classic(full_width = F, html_font = "Cambria") 
+```
+
+
 __STRUCTURE Results Summary__
 
 (1) Regardless of number of putative ancestral genetic clusters (k) modeled, there was a high degree of admixture within individuals, consistent with the observation of high gene flow among a priori assigned groupings.  
 (2) at K=3 and greater, there is a clear summer associated genetic cluster and awinter associated genetic cluster with highly variable amounts of introgression of these genetic clusters into fall and half pounder assigned fish.  
 (3) Similar to the results from k means clustering (see dapc below), as k increases, there is decreasing shared cluster membership among winter and summer run fish, while half pounder and fall run fish continue to split evenly among clusters  
+(4) There is also a genetic cluster that never reaches high ancestry proportion in early-summer and winter, but is hgihlighy variable among late-summer run fish
 
 ### _De Novo_ DAPC
 
@@ -851,7 +913,7 @@ clusts4 <- find.clusters(unlinked_genind, n.pca = 330, n.clust = 4)
 kable(table(pop(unlinked_genind), clusts4$grp), caption = "a priori 'population' (phenotype) vs genetic cluster" )
 ```
 
-The model fit is best at k=3. BIC tends to decrease until best fit only in a perfect island model, in practice, best K is often found at the lowest K that is a substantial improvement from the last (in this case 2). Here we use k=3, 
+The model fit is best at k=3 according to BIC. BICof k-means clustering tends to decrease until best fit only in a perfect island model, in practice, best K is often found at the lowest K that is a substantial improvement from the last (in this case 2). Here we use k=3, but we should also consider the k = 2 results.
 
 This result fits with our previous findings, there is structure and high diversity within fall and halfpounders (see heterozygosity section and PCA) in the unliked dataset and substantial overlap between fall-halfpounders and both winter and summer fish, but not between winter and summer fish. 
 
@@ -859,15 +921,17 @@ This creates a complex scenario for conducting the DAPC, should we use a priori 
 
 __Fit DAPC__
 
+The optim.a.score approach found very different optimal n.pcs from run to run. This seems to be because a.score increases up to about 3 pcs and then has a long plateau. Different values are chosen as the "best" along this plateau from run to run. We chose 3 pcs, but there was littel qualitative difference in the DAPC results using any number of PCs in or near the a.score plateau 3 - 100 pcs.
+
 ```{r, message=FALSE, warning=FALSE}
 #first optimize the PCs retained based on the a.score, so run dapc on the full pcs
-#invisible(dapc_full_denovo <- dapc(unlinked_genind, clusts$grp, n.pca = 330, n.da = 3 ))
+#invisible(dapc_full_denovo <- dapc(unlinked_genind, clusts3$grp, n.pca = 330, n.da = 2 ))
 #optim_a_denovo <- optim.a.score(dapc_full_denovo, n = 20)
 # now we know that optim number of PCs way less that 330, let's cut the n-pca down and run with the "smart" option off
-# dapc_full_denovo <- dapc(unlinked_genind, clusts3$grp, n.pca = 50, n.da = 2 )
-#optim_a_denovo <- optim.a.score(dapc_full_denovo, n = 20, smart = FALSE)
+# dapc_full_denovo <- dapc(unlinked_genind, clusts3$grp, n.pca = 100, n.da = 2 )
+#optim_a_denovo <- optim.a.score(dapc_full_denovo, n = 50, smart = FALSE)
 #nice now we use the optimized a score to run our dapc for real
-dapc_full_denovo <- dapc(unlinked_genind, clusts3$grp, n.pca = 7, n.da = 3 )
+dapc_full_denovo <- dapc(unlinked_genind, clusts3$grp, n.pca = 3, n.da = 2 )
 
 plot_data <- as.data.frame(cbind(dapc_full_denovo$ind.coord, unlinked_genind$pop, clusts3$grp))
 colnames(plot_data) <- c("LD1", "LD2", "pop", "grp")
@@ -893,11 +957,13 @@ kable(marker_mapping2 %>%
   select(marker, `Presumed Type`), caption = "markers heavily loaded into second discriminant axis")
 
 #pub figure
-a <- ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=pop), alpha = 0.8)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("DAPC by k-means cluster, color by a priori population")+guides(color=guide_legend("Run-Type"))
+a <- ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=pop), alpha = 0.6)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic(base_size = 8)+guides(color=guide_legend("Run-Type"))+stat_ellipse(aes(x=LD1, y=LD2, color = pop))
 
-b <- ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=grp), alpha = 0.8)+scale_color_viridis_d()+theme_classic()+ggtitle("DAPC by cluster, color by k-means cluster")+guides(color=guide_legend("K-means cluster"))
+b <- ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=grp), alpha = 0.6)+scale_color_viridis_d()+theme_classic(base_size = 8)+guides(color=guide_legend("K-means cluster"))+stat_ellipse(aes(x=LD1, y=LD2, color = grp))
 
-plot_grid(a, b, ncol = 1, labels = "auto")
+plot_grid(b, a, ncol = 1, labels = "auto")
+
+#ideal ratio for 84mm figure (single column) 3.31  x 4.2
 ```
 
 The de novo DAPC on the ld-thinned dataset was able to constrain 7.1% of the total variance in the dataset to differences between three genetic clusters. The first DA captures 59% of of the constrained variation and is driven mostly by a set of ~23 markers including mostly "neutral" annotated markers and a small number of EAA markers. This DA largely discriminates cluster 3 from clusters 1 and 2. The second DA captures 41% of the constrained ordination, is driven mostly by variation at the migration timing markers and separates cluster 1 and 2, with cluster 3 intermediate and overlapping.
@@ -1067,12 +1133,12 @@ kable(marker_mapping2 %>%
   filter(marker %in% markers2 ) %>%
   select(marker, `Presumed Type`, chr, start), caption = "Markers that load strongly onto the second DA")
 
-# #for ms figures
-# plot_data %<>%
-#  mutate(pop = as.factor(plot_data$pop)) %>%
-#  mutate(pop = fct_relevel(pop, "Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
-# plot_data$pop <- as.factor(plot_data$pop)
-# ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, size = 2)+theme_classic()+scale_color_viridis_d(name = "Run",labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter" ))+stat_ellipse(aes(x=LD1, y=LD2, color = pop))
+#for ms figures
+plot_data %<>%
+ mutate(pop = as.factor(plot_data$pop)) %>%
+ mutate(pop = fct_relevel(pop, "Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
+plot_data$pop <- as.factor(plot_data$pop)
+ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, size = 2)+theme_classic(base_size = 10)+scale_color_viridis_d(name = "Run",labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter" ))+stat_ellipse(aes(x=LD1, y=LD2, color = pop)) # 6.85 x 4 in
 
 #for ms tables with loading value
 #marker_loadings2a <- loadingplot(dapc_full_apriori_unl$var.contr, axis=2,thres=.00000001, lab.jitter=1, main = "laoding plot for DA 2")
@@ -1189,16 +1255,13 @@ all_loads %>%
 DAPC largely discriminates among groups along the first discriminant axis. Fall and half pounder fish demonstrate little to no differentiation along any DA. The first DA strongly separates winter and summer run fish, and is driven by by 9 markers including 8 run timing associated markers and a neutral marker (Omy_128996-481). The second da captures much less variation among groups (78% vs 17%), and is driven largely by 5 residency markers and 13 additional markers including  neutral markers and several associated with run timing and other adapative traits. Interstingly one of the "neutral" annotated markers (Omy_LDHB-2...) have been associated with residency vs anadromy in an association study in the klickitat river (doi.org/10.1080/00028487.2011.588131).
 
 
-### Classification
-
-Here we attempt to classify half-pounder and late-summer individuals into early-summer-like or winter-like genetic groups. 
-
-DAPC largely discriminates among groups along the first discriminant axis. Fall and half pounder fish demonstrate little to no differentiation along any DA. The first DA strongly separates winter and summer run fish, and is driven by by 9 markers including 8 run timing associated markers and a neutral marker (Omy_128996-481). The second da captures much less variation among groups (78% vs 17%), and is driven largely by 5 residency markers and 13 additional markers including  neutral markers and several associated with run timing and other adapative traits. Interstingly one of the "neutral" annotated markers (Omy_LDHB-2...) have been associated with residency vs anadromy in an association study in the klickitat river (doi.org/10.1080/00028487.2011.588131).
 
 
 ### DAPC Classification
 
-Next we use this a priori DAPC to attempt to classify half pounders into early-summer-like, winter-like or intermediate groups. 
+Next we use DAPC to attempt to classify half pounders into early-summer-like, winter-like or intermediate groups. 
+
+We build a genetic axis that discriminates between our samples of early summer and winter runs, then examine where half-pounders and late-summers lie along this axis and attempt to classify them into categories based on 99% credible intervals around known early-summer adn winter individuals.
 
 > Note: we did this two ways in a pilot analysis, in the first we run a true classification scheme: exclude the fall and half pounder fish, create a classifier using winter and summer samples only, then predict the fall and half pounder membership based on this classifier. 
 However if fall run fish represent are a real group, the classifier should include all three or four groups and therefore would default back to the original DAPC. As we have already seen from the PCA, STRUCTURE and DAPC results so far, there is no evidence that late-summer run fish represent a distinct genetic lineage, so this approach (use the a priori DAPC on all four groups) is not valid. I only present the true classifier here and in the manuscript. In any case, the effect on the end result is small, qualitatively the results were similar because the first DA in the a priori DAPC is largely driven by migration timing markers anyway
@@ -1226,7 +1289,7 @@ ld1 <- as.data.frame(classifier$ind.coord) %>%
 
     
 #plot
-ggplot(data=ld1)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+ggtitle("True Classifier")+labs(color = "Run", fill = "Run")
+ggplot(data=ld1)+geom_density(aes(LD1, fill=pop, color=pop), alpha = 0.2)+scale_color_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+scale_fill_viridis_d(labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))+theme_classic()+labs(color = "Run", fill = "Run")
 
 
 # assignments using classifier
@@ -2159,7 +2222,7 @@ ggplot(pred.mm) +
                fill = "lightgrey", alpha = 0.5) +  # error band
    geom_point(data = filter(cor_data, run =="fall"),                      # adding the raw data (scaled values)
               aes(x = LD1, y = jdate, fill = year.x), shape = 21) + 
-   labs(x = "LD1 score\n(negative is more winter-like)", y = "Sample Date") + 
+   labs(x = "LD1 score\n(negative is more winter-like)", y = "Julian Day of Sampling") + 
    theme_classic()+geom_rect(aes(xmin = 3.56, xmax=7.51, ymin = -Inf, ymax = Inf), fill = "#35B77980", alpha = 0.05)+geom_rect(aes(xmin = -8, xmax=-4.46, ymin = -Inf, ymax = Inf), fill = "#FDE72580", alpha = 0.05)+ scale_fill_manual(values = c("white", "black"), name = "Year")+scale_shape(solid = FALSE)
 
 
