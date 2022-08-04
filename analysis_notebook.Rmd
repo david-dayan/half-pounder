@@ -64,6 +64,7 @@ We sampled, 50 winter and 45 early-run summer run fish. Adult summer steelhead w
 
 All but 4 early-summer run adults are marked and assumed to hatchery origin fish. The final filtered dataset contained 1 natural origin and 41 hatchery origin fish. Winter run fish include NOR and HOR fish. After filtering the final dataset contains 18 HOR and 22 NOR fish. Early summer run fish are all unmarked and assumed NOR. All late-summer fish were unmarked and assumed NOR.
 
+
 ## Genotype Data
 
 Information about sequencing data, genotype calling and filtering is available in the relevant R notebook (2021_genotyping_notebook.Rmd) in this repository. In this notebook we begin from the fully filtered final dataset.
@@ -896,7 +897,7 @@ First we will use k-means clustering to infer the number of genetic clusters in 
 
 Below are plots of bayesian information criterion across different numbers of clusters and cluster membership across a range of most-likely clusters:
 ```{r, message=FALSE, warning=FALSE, cache=TRUE, fig.cap="BIC for k-means clustering across different numbers of genetic clusters"}
-#k means clustering, keep a lot (330 pcs) (kmeans won't overfit with two many pcs)
+#k means clustering, keep a lot (350 pcs) (kmeans won't overfit with two many pcs)
 #note the number of clusters was chosen interactively, the code below executes the clustering using the best k
 
 clusts <- find.clusters(unlinked_genind, n.pca = 330, choose.n.clust = FALSE)
@@ -931,6 +932,7 @@ The optim.a.score approach found very different optimal n.pcs from run to run. T
 # dapc_full_denovo <- dapc(unlinked_genind, clusts3$grp, n.pca = 100, n.da = 2 )
 #optim_a_denovo <- optim.a.score(dapc_full_denovo, n = 50, smart = FALSE)
 #nice now we use the optimized a score to run our dapc for real
+clusts3 <- find.clusters(unlinked_genind, n.pca = 330, n.clust = 3)
 dapc_full_denovo <- dapc(unlinked_genind, clusts3$grp, n.pca = 3, n.da = 2 )
 
 plot_data <- as.data.frame(cbind(dapc_full_denovo$ind.coord, unlinked_genind$pop, clusts3$grp))
@@ -964,6 +966,29 @@ b <- ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color=grp), alpha = 0.6
 plot_grid(b, a, ncol = 1, labels = "auto")
 
 #ideal ratio for 84mm figure (single column) 3.31  x 4.2
+
+#make into publication table
+# loading_table1 <- as.data.frame(marker_loadings1$var.values) 
+# colnames(loading_table1) <- "loading"
+# loading_table1 %<>%
+#   rownames_to_column(var = "marker") %>%
+#   mutate(marker = substr(marker,1,nchar(marker)-2))
+# 
+# loading_table2 <- as.data.frame(marker_loadings2$var.values) 
+# colnames(loading_table2) <- "loading"
+# loading_table2 %<>%
+#   rownames_to_column(var = "marker") %>%
+#   mutate(marker = substr(marker,1,nchar(marker)-2))
+#   
+# 
+# loading_table <- bind_rows(loading_table1, loading_table2, .id = "axis")
+# rm(loading_table1)
+# rm(loading_table2)
+
+#write_tsv(loading_table %>%
+#  left_join(select(marker_mapping2, marker, chr, "Panel Origin", "Presumed Type")) %>%
+#  distinct(marker, axis, .keep_all = TRUE), file = "loading.txt")
+
 ```
 
 The de novo DAPC on the ld-thinned dataset was able to constrain 7.1% of the total variance in the dataset to differences between three genetic clusters. The first DA captures 59% of of the constrained variation and is driven mostly by a set of ~23 markers including mostly "neutral" annotated markers and a small number of EAA markers. This DA largely discriminates cluster 3 from clusters 1 and 2. The second DA captures 41% of the constrained ordination, is driven mostly by variation at the migration timing markers and separates cluster 1 and 2, with cluster 3 intermediate and overlapping.
@@ -1010,6 +1035,7 @@ __fit DAPC__
 #invisible(dapc_full_denovo <- dapc(genind_2.3, clusts$grp, n.pca = 330, n.da = 3 ))
 #optim_a_denovo <- optim.a.score(dapc_full_denovo, n = 20)
 #nice now we use the optimized a score to run our dapc for real
+clusts4 <- find.clusters(genind_2.3, n.pca = 330, n.clust = 4)
 dapc_full_denovo <- dapc(genind_2.3, clusts4$grp, n.pca = 25, n.da = 3 )
 
 plot_data <- as.data.frame(cbind(dapc_full_denovo$ind.coord, genind_2.3$pop, clusts4$grp))
@@ -1135,9 +1161,12 @@ kable(marker_mapping2 %>%
 
 #for ms figures
 plot_data %<>%
- mutate(pop = as.factor(plot_data$pop)) %>%
- mutate(pop = fct_relevel(pop, "Late-Summer", "Half-Pounder", "Early-Summer", "Winter"))
-plot_data$pop <- as.factor(plot_data$pop)
+  #mutate(pop = case_when(pop == "halfpounder" ~ "Half-Pounder",
+   #                      pop == "Summer" ~ "Early-Summer",
+  #                       pop == "fall" ~ "Late-Summer",
+  #                       TRUE ~ pop)) %>%
+  mutate(pop = as.factor(plot_data$pop)) %>%
+ mutate(pop = fct_relevel(pop, "fall", "halfpounder", "Summer", "Winter"))
 ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, size = 2)+theme_classic(base_size = 10)+scale_color_viridis_d(name = "Run",labels = c("Late-Summer", "Half-Pounder", "Early-Summer", "Winter" ))+stat_ellipse(aes(x=LD1, y=LD2, color = pop)) # 6.85 x 4 in
 
 #for ms tables with loading value
@@ -2218,7 +2247,7 @@ pred.mm <- ggpredict(fall_mixed, terms = c("LD1"))  # this gives overall predict
 
 ggplot(pred.mm) + 
    geom_line(aes(x = x, y = predicted)) +          # slope
-   geom_ribbon(aes(x = x, ymin = predicted - std.error, ymax = predicted + std.error), 
+   geom_ribbon(aes(x = x, ymin = conf.low, ymax = conf.high), 
                fill = "lightgrey", alpha = 0.5) +  # error band
    geom_point(data = filter(cor_data, run =="fall"),                      # adding the raw data (scaled values)
               aes(x = LD1, y = jdate, fill = year.x), shape = 21) + 
@@ -2240,5 +2269,40 @@ ld1 %>%
 
 
 The most "winter-like" score observed among the late summer run fish in the dataset was -6.51. The most summer-like score was 5.53. The estimated effect size was -1.32 (LD1 score from the classifer per day). This means that among fish with late-summer run phenotypes, possessing a early-summer like genotype is associated with an freshwater entry 15.89 days earlier than a fish with a winter-like genotype.
+
+Let's also present an alternative figure that presents the data in a way that is easy to understand (time along x axis, right is later)
+
+```{r}
+
+fall_mixed <- lme4::lmer(LD1 ~ jdate + (1|year.x), data = filter(cor_data, run =="fall"))
+fall_reduced <- lme4::lmer(LD1 ~ 1 + (1|year.x), data = filter(cor_data, run =="fall"))
+
+anova(fall_reduced, fall_mixed)
+
+summary(fall_mixed)
+
+ggplot(data = filter(cor_data, run =="fall"))+geom_point(aes( jdate, LD1, color = year.x))+geom_smooth(aes( jdate, LD1, color = year.x), method = "lm")+ggtitle("plot highlighting year effect")
+
+#lme4::ranef(fall_mixed)
+#lme4::fixef(fall_mixed)
+
+require(ggeffects)
+# Extract the prediction data frame
+pred.mm <- ggpredict(fall_mixed, terms = c("jdate"))  # this gives overall predictions for the model
+
+# Plot the predictions 
+
+ggplot(pred.mm) + 
+   geom_line(aes(x = x, y = predicted)) +          # slope
+   geom_ribbon(aes(x = x, ymin = conf.low, ymax = conf.high), 
+               fill = "lightgrey", alpha = 0.5) +  # error band
+   geom_point(data = filter(cor_data, run =="fall"),                      # adding the raw data (scaled values)
+              aes(y = LD1, x = jdate, fill = year.x), shape = 21) + 
+   labs(y = "LD1 score\n(negative is more winter-like)", x = "Julian Day of Sampling") + 
+   theme_classic()+geom_rect(aes(ymin = 3.56, ymax=7.51, xmin = -Inf, xmax = Inf), fill = "#35B77980", alpha = 0.05)+geom_rect(aes(ymin = -8, ymax=-4.46, xmin = -Inf, xmax = Inf), fill = "#FDE72580" , alpha = 0.05)+ scale_fill_manual(values = c("white", "black"), name = "Year")+scale_shape(solid = FALSE)
+
+
+
+```
 
 
