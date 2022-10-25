@@ -896,7 +896,7 @@ __k means__
 First we will use k-means clustering to infer the number of genetic clusters in the dataset without applying a priori assumptions about the number of clusters or population assignments in the sample datset. Then we will check if these groups match well with phenotypic groupings
 
 Below are plots of bayesian information criterion across different numbers of clusters and cluster membership across a range of most-likely clusters:
-```{r, message=FALSE, warning=FALSE, cache=TRUE, fig.cap="BIC for k-means clustering across different numbers of genetic clusters"}
+```{r, message=FALSE, warning=FALSE, fig.cap="BIC for k-means clustering across different numbers of genetic clusters"}
 #k means clustering, keep a lot (350 pcs) (kmeans won't overfit with two many pcs)
 #note the number of clusters was chosen interactively, the code below executes the clustering using the best k
 
@@ -967,25 +967,25 @@ plot_grid(b, a, ncol = 1, labels = "auto")
 
 #ideal ratio for 84mm figure (single column) 3.31  x 4.2
 
-#make into publication table
-# loading_table1 <- as.data.frame(marker_loadings1$var.values) 
+# #make into publication table
+# loading_table1 <- as.data.frame(marker_loadings1$var.values)
 # colnames(loading_table1) <- "loading"
 # loading_table1 %<>%
 #   rownames_to_column(var = "marker") %>%
 #   mutate(marker = substr(marker,1,nchar(marker)-2))
 # 
-# loading_table2 <- as.data.frame(marker_loadings2$var.values) 
+# loading_table2 <- as.data.frame(marker_loadings2$var.values)
 # colnames(loading_table2) <- "loading"
 # loading_table2 %<>%
 #   rownames_to_column(var = "marker") %>%
 #   mutate(marker = substr(marker,1,nchar(marker)-2))
-#   
+# 
 # 
 # loading_table <- bind_rows(loading_table1, loading_table2, .id = "axis")
 # rm(loading_table1)
 # rm(loading_table2)
-
-#write_tsv(loading_table %>%
+# 
+# write_tsv(loading_table %>%
 #  left_join(select(marker_mapping2, marker, chr, "Panel Origin", "Presumed Type")) %>%
 #  distinct(marker, axis, .keep_all = TRUE), file = "loading.txt")
 
@@ -1145,10 +1145,10 @@ ggplot(data=plot_data)+geom_point(aes(x=LD1, y=LD2, color = pop), alpha = 0.5, s
 
 
 
-marker_loadings1 <- loadingplot(dapc_full_apriori_unl$var.contr, axis=1,thres=.01, lab.jitter=1, main = "loading plot for DA 1")
+marker_loadings1 <- loadingplot(dapc_full_apriori_unl$var.contr, axis=1,thres=.02, lab.jitter=1, main = "loading plot for DA 1")
 markers1 <- unique(substr(names(marker_loadings1$var.values),1,nchar(names(marker_loadings1$var.values))-2))
 
-marker_loadings2 <- loadingplot(dapc_full_apriori_unl$var.contr, axis=2,thres=.006, lab.jitter=1, main = "loading plot for DA 2")
+marker_loadings2 <- loadingplot(dapc_full_apriori_unl$var.contr, axis=2,thres=.008, lab.jitter=1, main = "loading plot for DA 2")
 markers2 <- unique(substr(names(marker_loadings2$var.values),1,nchar(names(marker_loadings2$var.values))-2))
 
 kable(marker_mapping2 %>%
@@ -1750,6 +1750,8 @@ ggplot(data = filter(ldreport_hf ))+geom_tile(aes(marker_1, marker_2, fill = R2)
 
 Yes, there is a easily observed haplotype block with near perfect LD in the early-summer and winter samples, but we can see recombination in late-summer and half-pounders.
 
+"Our LD-pruned dataset excluded 23 highly linked markers (r2 > 0.2), including seven of the 12 migration timing markers, four of the five residency vs. anadromy associated markers and three neutral markers physically close to the residency vs. anadromy associated markers. Investigating the pattern of LD among the migration timing markers (Supplemental Figure 7) reveals that there are two blocks in this region in strong LD, with SNPs on the border of these blocks demonstrating minor LD with any other SNP. Therefore the five migration timing markers retained after LD filtering include one SNP from each high LD block, a SNP physically in between these blocks and two SNPs on the border of the entire genomic region."
+
 # Haplotypes
 
 The identification of "discordant" genotypes at markers in the region on chromosome 28 associated with run timing (i.e. winter and summer run fish demonstrate near perfect linkage among markers in this region, but fall and halfpounders demonstrate reduced LD), suggests that recombination can occur within this region. If we can phase our data we should be able to identify chr28 haplotypes to gain more inference into the evolutionary origin/maintenance of fall/halfpounders.
@@ -2251,8 +2253,10 @@ ggplot(pred.mm) +
                fill = "lightgrey", alpha = 0.5) +  # error band
    geom_point(data = filter(cor_data, run =="fall"),                      # adding the raw data (scaled values)
               aes(x = LD1, y = jdate, fill = year.x), shape = 21) + 
-   labs(x = "LD1 score\n(negative is more winter-like)", y = "Julian Day of Sampling") + 
-   theme_classic()+geom_rect(aes(xmin = 3.56, xmax=7.51, ymin = -Inf, ymax = Inf), fill = "#35B77980", alpha = 0.05)+geom_rect(aes(xmin = -8, xmax=-4.46, ymin = -Inf, ymax = Inf), fill = "#FDE72580", alpha = 0.05)+ scale_fill_manual(values = c("white", "black"), name = "Year")+scale_shape(solid = FALSE)
+   labs(x = "LD1 score\n(negative is more similar to late-migrator)", y = "Julian day of sampling") + 
+   theme_classic()+geom_rect(aes(xmin = 3.56, xmax=7.51, ymin = -Inf, ymax = Inf), fill = "#35B77980", alpha = 0.05)+geom_rect(aes(xmin = -8, xmax=-4.46, ymin = -Inf, ymax = Inf), fill = "#FDE72580", alpha = 0.05)+ scale_fill_manual(values = c("white", "black"), name = "Year")+scale_shape(solid = FALSE)+ theme(text = element_text(size = 10))
+
+
 
 
 ```

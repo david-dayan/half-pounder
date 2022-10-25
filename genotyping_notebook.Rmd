@@ -75,6 +75,9 @@ grViz("digraph flowchart {
 
 ```
 
+# Summary
+
+The raw dataset had high read quality (average quality > 37). After demultiplexing, 441 million reads remained. The first round of quality filtering removed eight individuals with greater than 30% missingness and three sites with > 50% missingness. The second round removed 42 individuals with greater than 30% missingness, 14 sites with greater than 20% missingness and a single individual with IFI greater than 2.5. We removed 10 sites with skewed allele correction values or potential reads from a paralogous sequence, 14 monomorphic sites, one redundant site, one site with strong differences in missingness among populations and 39 duplicated half-pounders. After filtering and quality control, our final dataset consisted of 1000 samples genotyped at 350 markers (Table 2, Supplemental File GTseq_panel.xlsx). Median read depth per sample per locus in the final dataset was 191, and the mean was 328 ± 428 (s.d.). All groups demonstrated a bias towards female sex genotypes (Table 2), but this bias was lowest among the half-pounders. The XX:XY ratio among half-pounders was 1.18, and The XX:XY ratio among all other groups was 1.55.
 
 # Data Summary
 
